@@ -1,0 +1,7 @@
+.album-art
+  img src=@album.get('icon') crossorigin="anonymous"
+.text
+  .album-name
+    = @album.get('name')
+  .artist-name
+    = @album.get('artist')

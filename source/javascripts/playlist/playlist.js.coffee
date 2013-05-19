@@ -1,0 +1,1 @@
+class App.Playlist extends Backbone.Collection

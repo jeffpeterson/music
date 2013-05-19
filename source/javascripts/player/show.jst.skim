@@ -1,0 +1,6 @@
+a.icon.prev href="#"
+- if R?.player? and R.player.playState() is R.player.PLAYSTATE_PLAYING
+  a.icon.pause href="#"
+- else
+  a.icon.play href="#"
+a.icon.next href="#"

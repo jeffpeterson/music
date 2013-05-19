@@ -1,0 +1,318 @@
+@import url("http://fonts.googleapis.com/css?family=Raleway:300")
+
+$red: #dd777a
+$blue: #79c
+$green: #8c8
+$brown: #7F6A5B
+$color: #888
+
+$background-color: #eee
+
+@import "icons"
+
+html, body
+  width: 100%
+  height: 100%
+  padding: 0
+  margin: 0
+
+body
+  font-weight: 300
+  font-family: Raleway, sans-serif
+  background-color: #eee
+  color: $color
+  overflow: hidden
+  font-size: 20px
+  line-height: 40px
+
+  -webkit-overflow-scrolling: touch
+  -webkit-user-select: none
+  -webkit-touch-callout: none
+  -webkit-tap-highlight-color: rgba(0,0,0,0)
+
+a
+  text-decoration: none
+  color: inherit
+  border-bottom: 1px solid transparent
+  &:hover
+    border-bottom-color: $blue
+    color: $blue
+
+h1
+  color: rgba(0, 0, 0, .3)
+  font-weight: bold
+  font-size: 32px
+  letter-spacing: -1px
+  text-transform: uppercase
+  padding: 350px 0 10px
+
+.clear
+  clear: both
+
+ul
+  margin: 0
+  padding: 0
+li
+  list-style-type: none
+
+#bar
+  height: 75px
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  z-index: 1
+  background-color: rgba(255,255,255, 0.85)
+  display: -webkit-flex
+  -webkit-align-items: center
+
+  > .icon
+    padding: 0 10px
+    &:hover
+      border-bottom-width: 2px
+
+
+#logo
+  width: 75px
+  text-align: center
+  cursor: pointer
+
+#search
+  -webkit-flex-grow: 1
+  margin: 0
+  padding-left: 10px
+
+  height: 100%
+  background: none
+  transition: background-color 0.2s
+
+  &:focus
+    background-color: white
+
+#player
+  background-color: rgba(255,255,255, 0.85)
+  position: absolute
+  top: 0
+  right: 0
+  left: 0
+  height: 75px
+  z-index: 2
+  display: -webkit-flex
+  -webkit-align-items: center
+  -webkit-justify-content: space-around
+  > .icon
+    padding: 10px
+    border: none
+
+#progress
+  position: absolute
+  left: 0
+  right: 0
+  bottom: 0
+  height: 10px
+  cursor: pointer
+  z-index: 1
+
+  > .position
+    height: 2px
+    position: absolute
+    bottom: 0
+    left: 0
+    z-index: 1
+    background-color: $blue
+    width: 0
+    transition: height 0.2s, width 1s linear
+
+#bar:hover
+  .position
+    height: 5px
+
+#main
+  -webkit-backface-visibility: hidden
+  -webkit-transition: translate3d(0,0,0)
+  overflow: hidden
+  position: fixed
+  left: 0
+  right: 300px
+  top: 0
+  bottom: 0
+  z-index: 1
+
+#content
+  overflow: auto
+  padding-top: 75px
+  height: 100%
+  box-sizing: border-box
+  background-color: white
+
+#sidebar
+  background-color: white
+  overflow: hidden
+  position: fixed
+  width: 300px
+  right: 0
+  top: 0
+  bottom: 0
+
+.album
+  display: inline-block
+  position: relative
+  width: 16.66%
+
+  @media (max-width: 1200px + 300px)
+    width: 20%
+  @media (max-width: 1000px + 300px)
+    width: 25%
+  @media (max-width: 800px + 300px)
+    width: 33.33%
+  @media (max-width: 500px)
+    width: 50%
+  @media (max-width: 300px)
+    width: 100%
+  > .text
+    font-size: 15px
+    padding: 50% 0 10px 10px
+    line-height: 1em
+    background-image: -webkit-linear-gradient(bottom, black, transparent)
+    background-image: linear-gradient(to top, black, transparent)
+    color: white
+    position: absolute
+    bottom: 0
+    left: 0
+    right: 0
+    > .track-name, > .album-name, > .artist-name
+      display: block
+  > .album-art
+    width: 100%
+    position: relative
+    height: auto
+
+.text
+  display: -webkit-flex
+  white-space: nowrap
+  -webkit-flex-grow: 1
+  padding: 0 10px
+  // transition: all 0.4s
+
+.track-name, .album-name, .artist-name
+  overflow: hidden
+  text-overflow: ellipsis
+  text-overflow: '...'
+
+.unavailable
+  > .text
+    color: $red
+  > .album-art
+    opacity: 0.3
+  .play, .queue
+    display: none
+
+.track, .artist
+  background-color: $background-color
+  position: relative
+  height: 75px
+  display: -webkit-flex
+  -webkit-align-items: center
+
+.album-art
+  cursor: pointer
+  width: 75px
+  > img
+    width: 100%
+    display: block
+
+.artist-name
+  color: $color + #333
+
+.buttons
+  display: none
+  position: absolute
+  right: 0
+  top: 0
+  padding: 0 10px
+
+.remove
+  padding: 0 10px
+  font-size: 30px
+  cursor: pointer
+  &:hover
+    color: $red
+
+.track:hover
+  .buttons
+    display: block
+
+
+#queue
+  position: relative
+  overflow: auto
+  height: 100%
+  box-sizing: border-box
+
+  font-size: 15px
+  padding-top: 75px
+
+  .track
+    > .text
+      > .track-name, > .artist-name
+        display: block
+
+#current-track
+  background: none
+  padding: 0
+  height: 300px
+
+  > .text
+    position: absolute
+    bottom: 0
+    left: 0
+    right: 0
+    padding: 10px 10px
+    top: 0
+    background-image: -webkit-linear-gradient(bottom, transparent, black)
+    background-image: linear-gradient(to top, transparent, black)
+    color: white
+    z-index: 1
+    line-height: 1em
+    > .buttons
+      display: none
+    > .track-name, > .artist-name
+      line-height: 1em
+      margin: 0
+    > .track-name
+      font-size: 25px
+
+  > .album-art
+    position: relative
+    width: 100%
+    height: 300px
+
+input
+  border: none
+  color: inherit
+  font-size: inherit
+  font-family: inherit
+  line-height: 1em
+  outline: none
+  &:focus
+    color: $blue
+
+@media (max-width: 800px)
+  .buttons
+    display: block
+  #progress, #bar:hover #progress
+    height: 15px
+    > .position
+      height: 5px
+  .track-name, .album-name
+    display: block
+  #logo
+    line-height: 50px
+  #queue, #content
+    padding-top: 50px
+@media (max-width: 800px)
+  #main
+    width: 100%
+    left: auto
+    right: 0
+    box-shadow: 0 0 10px rgba(0,0,0,0.8)
