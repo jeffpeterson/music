@@ -8,7 +8,8 @@ class App.AlbumView extends Backbone.View
 
   template: JST['album/show']
 
-  # events:
+  events:
+    'click': 'click'
   #   'dragstart':        "drag"
 
   initialize: ->
@@ -23,6 +24,8 @@ class App.AlbumView extends Backbone.View
     #     color: "rgb(#{primaryColor})"
 
     this
+  click: (event) ->
+    # @$el.find(".album-art").transit(scale: 3, zIndex: 10)
 
   # drag: (event) ->
   #   event.originalEvent.dataTransfer.setData "text/json", JSON.stringify(@model)

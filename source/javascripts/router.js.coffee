@@ -9,17 +9,20 @@ class App.Router extends Backbone.Router
     Backbone.history.navigate "collection", trigger: true
 
   artists: ->
+    $("#content").attr class: "artists"
     if App.collection.artists.isEmpty()
       R.ready => App.collection.artists.fetch()
     new App.ArtistIndexView(collection: App.collection.artists).render()
 
   albums: ->
+    $("#content").attr class: "albums"
     if App.collection.albums.isEmpty()
       R.ready => App.collection.albums.fetch()
     new App.AlbumIndexView(collection: App.collection.albums).render()
 
   tracks: ->
+    $("#content").attr class: "tracks"
     if App.collection.tracks.isEmpty()
-      R.ready => App.collection.tracks.request(count: 100)
+      R.ready => App.collection.tracks.fetch()
     new App.TrackIndexView(collection: App.collection.tracks).render()
 

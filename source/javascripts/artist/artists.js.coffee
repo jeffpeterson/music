@@ -1,4 +1,6 @@
 #= require artist
-class App.Artists extends Backbone.Collection
+#= require item/items
+class App.Artists extends App.Items
   # localStorage: new Backbone.LocalStorage("App.collection.artists")
+  url: 'getArtistsInCollection'
   model: App.Artist

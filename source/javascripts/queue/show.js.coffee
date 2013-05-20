@@ -4,13 +4,11 @@ class App.QueueView extends Backbone.View
   events:
     'dragover':   'dragover'
     'drop':       'drop'
-    # 'touchstart': 'touchstart'
 
   initialize: ->
     @listenTo @collection, "reset", @render
-    @listenTo @collection, "add", @render
-    @listenTo @collection, "remove", @render
-    @listenTo @collection, "change:playingTrack", @render
+    @listenTo @collection, "add", @add
+    @listenTo @collection, "change:playingTrack", @change_playing_track
 
   render: ->
     @$ul = $("<ul>")
@@ -27,8 +25,13 @@ class App.QueueView extends Backbone.View
           top: -75
     this
 
-  add: (track) ->
-    @$ul.append new App.QueueTrackShow(model: track).render().el
+  add: (track, queue) ->
+    $el = new App.QueueTrackShow(model: track).render().el
+    @$ul.append $el
+
+  change_playing_track: ->
+    $("#current-track").removeAttr("id")
+    @collection.current_track().trigger("current")
 
   dragover: (event) ->
     dt = event.originalEvent.dataTransfer

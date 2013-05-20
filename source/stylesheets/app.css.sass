@@ -133,6 +133,7 @@ li
   top: 0
   bottom: 0
   z-index: 1
+  box-shadow: 0 0 10px black
 
 #content
   overflow: auto
@@ -150,25 +151,26 @@ li
   top: 0
   bottom: 0
 
+.albums > ul
+  display: -webkit-flex
+  -webkit-flex-wrap: wrap
+  -webkit-justify-content: space-around
+  -webkit-align-items: flex-start
+
 .album
   display: inline-block
   position: relative
-  width: 16.66%
+  width: 200px
+  -webkit-flex-shrink: 0
+  // -webkit-flex-grow: 0
+  margin: 0 0.5% 20px
+  -webkit-transition: translate3d(0,0,0)
 
-  @media (max-width: 1200px + 300px)
-    width: 20%
-  @media (max-width: 1000px + 300px)
-    width: 25%
-  @media (max-width: 800px + 300px)
-    width: 33.33%
-  @media (max-width: 500px)
-    width: 50%
-  @media (max-width: 300px)
-    width: 100%
   > .album-art
     width: 100%
     position: relative
     height: auto
+    box-shadow: 0 0 7px black
 
 .track-name, .album-name, .artist-name
   white-space: nowrap
@@ -190,9 +192,17 @@ li
     color: $color + #333
     display: none
     -webkit-flex-shrink: 0
+    &:hover
+      color: $blue
   &:hover
     > .play, > .queue
       display: block
+
+.artist-art
+  width: 75px
+
+.unavailable
+  opacity: 0.3
 
 .album-art
   cursor: pointer
@@ -204,8 +214,9 @@ li
   -webkit-flex-grow: 1
 
 .remove
-  padding: 0 10px
+  padding: 0 15px
   cursor: pointer
+  line-height: 75px
   -webkit-flex-shrink: 0
   &:hover
     color: $red
@@ -215,34 +226,42 @@ li
   overflow: auto
   height: 100%
   box-sizing: border-box
-
-  font-size: 15px
   padding-top: 75px
+  .track
+    background-size: 100% auto
+    box-shadow: 0 0 10px black
+    transition: height 0.1s
+    -webkit-align-items: flex-start
+    > .text
+      height: 75px
+    &:hover
+      height: 100px
+    &.expanded
+      height: 300px
+    > .remove
+      display: none
+    &:hover > .remove
+      display: block
+
+  .album-art
+    display: none
 
 .text
+  font-size: 15px
   display: -webkit-flex
+  -webkit-align-self: flex-start
   -webkit-flex-direction: column
-  -webkit-justify-content: space-around
   -webkit-flex-grow: 1
-  > .artist-name, > .track-name
-    line-height: 1.5em
+  -webkit-justify-content: center
+  line-height: 1.5em
+  > .artist-name, > .track-name, > .album-name
+    -webkit-flex-grow: 0
 
 
 #current-track
-  background: none
-  padding: 0
-  height: 300px
-
-  > .track-name, > .artist-name
-    line-height: 1em
-    margin: 0
-  > .track-name
-    font-size: 25px
-
-  > .album-art
-    position: relative
-    width: 100%
-    height: 300px
+  height: 300px !important
+  > .remove
+    display: none !important
 
 input
   border: none
@@ -254,20 +273,20 @@ input
   &:focus
     color: $blue
 
-// @media (max-width: 800px)
-//   #progress, #bar:hover #progress
-//     height: 15px
-//     > .position
-//       height: 5px
-//   .track-name, .album-name
-//     display: block
-//   #logo
-//     line-height: 50px
-//   #queue, #content
-//     padding-top: 50px
-// @media (max-width: 800px)
-//   #main
-//     width: 100%
-//     left: auto
-//     right: 0
-//     box-shadow: 0 0 10px rgba(0,0,0,0.8)
+@media (max-width: 800px)
+  #progress, #bar:hover #progress
+    height: 15px
+    > .position
+      height: 5px
+  .track-name, .album-name
+    display: block
+  #logo
+    line-height: 50px
+  #queue, #content
+    padding-top: 50px
+@media (max-width: 800px)
+  #main
+    width: 100%
+    left: auto
+    right: 0
+    box-shadow: 0 0 10px rgba(0,0,0,0.8)

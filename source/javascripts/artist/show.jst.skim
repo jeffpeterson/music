@@ -1,4 +1,3 @@
-.album-art
-  img src={@artist.get('icon')}
+img.album-art src={@artist.get('icon')}
 .artist-name
-  a href="#" = @artist.get('name')
+  = @artist.get('name')

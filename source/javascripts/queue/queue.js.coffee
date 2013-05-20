@@ -12,8 +12,9 @@ class App.Queue extends App.Playlist
 
     @on 'reset', (collection) =>
       @state.current_key = null
-
     @on 'add', ->
+      @save()
+    @on 'remove', ->
       @save()
 
     R.ready =>
