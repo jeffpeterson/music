@@ -65,17 +65,14 @@ li
   background-color: rgba(255,255,255, 0.85)
   display: -webkit-flex
   -webkit-align-items: center
-
   > .icon
-    padding: 0 10px
-    &:hover
-      border-bottom-width: 2px
-
+    -webkit-flex-shrink: 0
 
 #logo
   width: 75px
   text-align: center
   cursor: pointer
+  -webkit-flex-shrink: 0
 
 #search
   -webkit-flex-grow: 1
@@ -85,6 +82,8 @@ li
   height: 100%
   background: none
   transition: background-color 0.2s
+  overflow: hidden
+  text-overflow: ellipsis
 
   &:focus
     background-color: white
@@ -100,9 +99,6 @@ li
   display: -webkit-flex
   -webkit-align-items: center
   -webkit-justify-content: space-around
-  > .icon
-    padding: 10px
-    border: none
 
 #progress
   position: absolute
@@ -169,79 +165,50 @@ li
     width: 50%
   @media (max-width: 300px)
     width: 100%
-  > .text
-    font-size: 15px
-    padding: 50% 0 10px 10px
-    line-height: 1em
-    background-image: -webkit-linear-gradient(bottom, black, transparent)
-    background-image: linear-gradient(to top, black, transparent)
-    color: white
-    position: absolute
-    bottom: 0
-    left: 0
-    right: 0
-    > .track-name, > .album-name, > .artist-name
-      display: block
   > .album-art
     width: 100%
     position: relative
     height: auto
 
-.text
-  display: -webkit-flex
-  white-space: nowrap
-  -webkit-flex-grow: 1
-  padding: 0 10px
-  // transition: all 0.4s
-
 .track-name, .album-name, .artist-name
+  white-space: nowrap
   overflow: hidden
   text-overflow: ellipsis
-  text-overflow: '...'
+  margin: 0 10px
 
-.unavailable
-  > .text
-    color: $red
-  > .album-art
-    opacity: 0.3
-  .play, .queue
-    display: none
+.artist-name
+  -webkit-flex-shrink: 100000
 
 .track, .artist
+  overflow: hidden
   background-color: $background-color
   position: relative
   height: 75px
   display: -webkit-flex
   -webkit-align-items: center
+  > .play, > .queue
+    color: $color + #333
+    display: none
+    -webkit-flex-shrink: 0
+  &:hover
+    > .play, > .queue
+      display: block
 
 .album-art
   cursor: pointer
   width: 75px
-  > img
-    width: 100%
-    display: block
+  -webkit-flex-shrink: 0
 
 .artist-name
   color: $color + #333
-
-.buttons
-  display: none
-  position: absolute
-  right: 0
-  top: 0
-  padding: 0 10px
+  -webkit-flex-grow: 1
 
 .remove
   padding: 0 10px
-  font-size: 30px
   cursor: pointer
+  -webkit-flex-shrink: 0
   &:hover
     color: $red
-
-.track:hover
-  .buttons
-    display: block
-
 
 #queue
   position: relative
@@ -252,35 +219,25 @@ li
   font-size: 15px
   padding-top: 75px
 
-  .track
-    > .text
-      > .track-name, > .artist-name
-        display: block
+.text
+  display: -webkit-flex
+  -webkit-flex-direction: column
+  -webkit-justify-content: space-around
+  -webkit-flex-grow: 1
+  > .artist-name, > .track-name
+    line-height: 1.5em
+
 
 #current-track
   background: none
   padding: 0
   height: 300px
 
-  > .text
-    position: absolute
-    bottom: 0
-    left: 0
-    right: 0
-    padding: 10px 10px
-    top: 0
-    background-image: -webkit-linear-gradient(bottom, transparent, black)
-    background-image: linear-gradient(to top, transparent, black)
-    color: white
-    z-index: 1
+  > .track-name, > .artist-name
     line-height: 1em
-    > .buttons
-      display: none
-    > .track-name, > .artist-name
-      line-height: 1em
-      margin: 0
-    > .track-name
-      font-size: 25px
+    margin: 0
+  > .track-name
+    font-size: 25px
 
   > .album-art
     position: relative
@@ -297,22 +254,20 @@ input
   &:focus
     color: $blue
 
-@media (max-width: 800px)
-  .buttons
-    display: block
-  #progress, #bar:hover #progress
-    height: 15px
-    > .position
-      height: 5px
-  .track-name, .album-name
-    display: block
-  #logo
-    line-height: 50px
-  #queue, #content
-    padding-top: 50px
-@media (max-width: 800px)
-  #main
-    width: 100%
-    left: auto
-    right: 0
-    box-shadow: 0 0 10px rgba(0,0,0,0.8)
+// @media (max-width: 800px)
+//   #progress, #bar:hover #progress
+//     height: 15px
+//     > .position
+//       height: 5px
+//   .track-name, .album-name
+//     display: block
+//   #logo
+//     line-height: 50px
+//   #queue, #content
+//     padding-top: 50px
+// @media (max-width: 800px)
+//   #main
+//     width: 100%
+//     left: auto
+//     right: 0
+//     box-shadow: 0 0 10px rgba(0,0,0,0.8)

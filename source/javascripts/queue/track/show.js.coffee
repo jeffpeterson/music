@@ -26,10 +26,8 @@ class App.QueueTrackShow extends App.TrackView
               text-shadow: 0 0 1px rgb(#{bgColor}), 0 0 3px rgb(#{bgColor});
             }
             #queue .track {
-              background-color: rgb(#{bgColor});
-            }
-            #queue .text {
               color: rgb(#{primaryColor});
+              background-color: rgb(#{bgColor});
             }
             #queue .artist-name {
               color: rgb(#{secondaryColor});
