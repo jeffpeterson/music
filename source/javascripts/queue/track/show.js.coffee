@@ -9,7 +9,7 @@ class App.QueueTrackShow extends App.TrackView
 
   events:
     'click .remove': 'remove'
-    'click': 'expand'
+    'click .text': 'expand'
     'dragstart': 'drag'
     'drop': 'drop'
 
