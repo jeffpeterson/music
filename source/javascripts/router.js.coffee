@@ -1,28 +1,22 @@
-class App.Router extends Backbone.Router
+class App.Router extends BetterRouter
   routes:
     '': 'index'
-    'collection/artists': 'artists'
-    'collection/albums': 'albums'
-    'collection(/tracks)':    'tracks'
+    'collection/artists':  'artists'
+    'collection/albums':   'albums'
+    'collection(/tracks)': 'tracks'
+
+  initialize: ->
+    @el = '#content'
 
   index: ->
-    Backbone.history.navigate "collection", trigger: true
+    Backbone.history.navigate "collection/tracks", trigger: true
 
   artists: ->
-    $("#content").attr class: "artists"
-    if App.collection.artists.isEmpty()
-      R.ready => App.collection.artists.fetch()
-    new App.ArtistIndexView(collection: App.collection.artists).render()
+    @swap new App.ArtistIndexView(collection: App.collection.artists)
 
   albums: ->
-    $("#content").attr class: "albums"
-    if App.collection.albums.isEmpty()
-      R.ready => App.collection.albums.fetch()
-    new App.AlbumIndexView(collection: App.collection.albums).render()
+    @swap new App.AlbumIndexView(collection: App.collection.albums)
 
   tracks: ->
-    $("#content").attr class: "tracks"
-    if App.collection.tracks.isEmpty()
-      R.ready => App.collection.tracks.fetch()
-    new App.TrackIndexView(collection: App.collection.tracks).render()
+    @swap new App.TrackIndexView(collection: App.collection.tracks)
 

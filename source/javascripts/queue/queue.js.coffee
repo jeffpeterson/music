@@ -24,9 +24,13 @@ class App.Queue extends App.Playlist
           @next()
 
   play: (track = @current_track()) ->
-    @state.current_key = track.get('key')
-    @save()
+    index = @relative(1)
 
+    unless @get(track.id)
+      @add track, at: index
+
+    @state.current_key = track.id
+    @save()
     R.player.play source: @state.current_key
 
   next: ->

@@ -9,11 +9,12 @@ class App.PlayerShow extends Backbone.View
     'click .play':  -> @model.play()
     'click .next':  -> @model.next()
     'click .prev':  -> @model.prev()
+    'input #volume': 'update_volume'
 
   initialize: ->
-    @model.on "change", @render, this
+    @model.on "change:playState", @render, this
     @model.on "change:position", @render_position, this
-    $(window).on 'keypress', @keypress
+    $(window).on 'keydown', @keypress
 
     $("#progress").click (event) =>
       event.preventDefault()
@@ -22,13 +23,29 @@ class App.PlayerShow extends Backbone.View
 
   render: ->
     @$el.html @template()
+    @render_volume()
     this
 
   render_position: =>
     $("#progress .position").css width: @model.position() + "%"
 
+  render_volume: =>
+    $("#volume").val(@model.volume())
+  
+  update_volume: =>
+    @model.volume $("#volume").val()
+
   keypress: (event) =>
-    console.log event.which
+    return if event.target isnt document.body
+    console.log event
+
     switch event.which
       when 32
+        event.preventDefault()
         @model.toggle()
+      when 37#, 38
+        event.preventDefault()
+        @model.prev()
+      when 39#, 40
+        event.preventDefault()
+        @model.next()

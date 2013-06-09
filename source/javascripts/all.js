@@ -1,6 +1,9 @@
-//= require jquery-1.9.1
-//= require jquery.scrollTo
-//= require underscore
-//= require backbone
+//= require vendor/debounce
+//= require vendor/jquery-1.9.1
+//= require vendor/jquery.scrollTo
+//= require vendor/underscore
+//= require vendor/backbone
+//= require vendor/better_router
+//= require vendor/computed_attributes
 //= require app
 //= require_tree .

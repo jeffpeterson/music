@@ -1,9 +1,10 @@
 class App.CollectionIndex extends Backbone.View
-  el: "#content"
+  tagName: "ul"
   events:
-    "touchstart": "touchstart"
-    "touchmove":  "touchmove"
-    "touchend":  "touchend"
+    'touchstart': 'touchstart'
+    'touchmove':  'touchmove'
+    'touchend':   'touchend'
+    'scroll':     'scroll'
 
   initialize: ->
     @filter = ""
@@ -19,13 +20,19 @@ class App.CollectionIndex extends Backbone.View
       @filter = @clean($("#search").val())
       @input_timeout_id = setTimeout(@render, 10)
 
-  render: =>
-    @$ul = $("<ul>")
-    @$el.html @$ul
+  in: ->
+    @$el.css opacity: 0
+    @$el.transit opacity: 1
 
+  out: ->
+    @$el.transit opacity: 0
+
+  leave: ->
+    @remove()
+
+  render: =>
     @collection.each (model) =>
       @add(model)
-
     this
 
   clean: (str) ->
@@ -55,14 +62,8 @@ class App.CollectionIndex extends Backbone.View
 
     if not @swiping and Math.abs(movement_x) > 30 and Math.abs(movement_x) > Math.abs(movement_y)
       @swiping = true
-      # @touch_start_x = x
-      # @touch_start_y = y
-
-      # movement_x = x - @touch_start_x
-      # movement_y = y - @touch_start_y
 
     return unless @swiping
-
 
     if @$main.offset().left isnt 0
       event.preventDefault()
@@ -81,11 +82,6 @@ class App.CollectionIndex extends Backbone.View
     return if event.originalEvent.touches.length isnt 0
     left  = @$main.offset().left
 
-    # touch_x  = event.originalEvent.touches[0].pageX - @$main.offset().left
-    # touch_y  = event.originalEvent.touches[0].pageY - @$main.offset().top
-
-    # if left is 300 and touch_x is @touch_start_x and touch_y is @touch_start_y
-    #   x = 0
     if left + @pixels_per_sec < -150
       x = -300
     else
@@ -93,18 +89,16 @@ class App.CollectionIndex extends Backbone.View
 
     @$main.transit x: x, 200
 
-  # scroll: (event) =>
-  #   time = event.timeStamp
-  #   y = @el.scrollTop
-  #   pixels_per_sec = 0
+  scroll: (event) =>
+    time = event.timeStamp
+    y = @el.scrollTop
+    pixels_per_sec = 0
 
-  #   if @previous_time and @previous_y
-  #     pixels_per_sec = (y - @previous_y) / (time - @previous_time) * 1000
+    if @previous_time and @previous_y
+      pixels_per_sec = (y - @previous_y) / (time - @previous_time) * 500
 
-  #     # if y + pixels_per_sec * 2 >= (@el.scrollHeight - @el.offsetHeight)
-  #       # @collection.request(start: @collection.length, count: 20)
-  #       # @$ul.css height: "+=7500px"
+      if y + pixels_per_sec >= (@el.scrollHeight - @el.offsetHeight)
+        @collection.fetch()
 
-  #   @previous_time = time
-  #   @previous_y    = y
-
+    @previous_time = time
+    @previous_y    = y

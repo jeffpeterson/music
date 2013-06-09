@@ -4,6 +4,7 @@ class App.Player extends Backbone.Model
     R.ready =>
       R.player.on "change:position", => @trigger('change:position')
       R.player.on "change:playState", => @trigger('change change:playState')
+      R.player.on "change:volume", => @trigger("change change:volume")
       this
   play: ->
     if R.player.playingTrack()
@@ -17,7 +18,14 @@ class App.Player extends Backbone.Model
   next: ->
     App.queue.next()
   toggle: ->
-    R.player.togglePause()
+    if R.player.playingTrack()
+      R.player.togglePause()
+    else
+      App.queue.play()
+  volume: (percent) ->
+    if percent
+      R.player.volume(percent / 100)
+    Math.round(R.player.volume() * 100)
   position: (percent) ->
     if percent
       R.player.position percent / 100 * R.player.playingTrack().get("duration")

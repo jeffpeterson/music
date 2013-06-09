@@ -3,14 +3,14 @@ window.App =
     App.router = new App.Router
 
     App.collection = {}
-    App.collection.artists = new App.Artists
-    App.collection.albums = new App.Albums
-    App.collection.tracks  = new App.Tracks #JSON.parse(localStorage.tracks || '[]')
+    App.collection.artists = new App.Artists JSON.parse(localStorage.artists || null)
+    App.collection.albums = new App.Albums JSON.parse(localStorage.albums || null)
+    App.collection.tracks  = new App.Tracks JSON.parse(localStorage.tracks || null)
 
     App.player = new App.Player
-    App.queue  = new App.Queue JSON.parse(localStorage.queue || '[]')
+    App.queue  = new App.Queue JSON.parse(localStorage.queue || null)
 
-    new App.QueueView(collection: App.queue).render()
+    $("#queue").append new App.QueueView(collection: App.queue).render().el
     R.ready ->
       new App.PlayerShow(model: App.player).render()
 
@@ -21,7 +21,18 @@ window.App =
     fn(args...)
     console.timeEnd name
 
+  local_set: (key, value) ->
+    localStorage[key] = JSON.stringify(value)
 
+  local_get: (key, def = null) ->
+    JSON.parse(localStorage[key] || null) || def
+
+  memo: (key, property, value) ->
+    cached_object = App.local_get(key, {})
+    if value
+      cached_object[property] = value
+      App.local_set(key, cached_object)
+    cached_object[property]
 
 console.time "R.ready"
 $(document).ready ->

@@ -1,9 +1,17 @@
 class App.QueueView extends Backbone.View
-  el: "#queue"
+  tagName: "ul"
+  children: []
 
   events:
-    'dragover':   'dragover'
-    'drop':       'drop'
+    'dragover': 'dragover'
+    'drop':     'drop'
+    'scroll':   'scroll'
+    'click #current-track-fixed': ->
+      try
+        @$el.scrollTo "#current-track",
+          duration: 500
+          offset:
+            top: -300
 
   initialize: ->
     @listenTo @collection, "reset", @render
@@ -11,27 +19,28 @@ class App.QueueView extends Backbone.View
     @listenTo @collection, "change:playingTrack", @change_playing_track
 
   render: ->
-    @$ul = $("<ul>")
+    @$el.append $("<li>").attr("id", "current-track-fixed")
     @previous_icon = null
-
     @collection.each (track) =>
       @add track
-
-    @$el.html @$ul
-    try
-      @$el.scrollTo ".current-track",
-        duration: 500
-        offset:
-          top: -75
     this
 
   add: (track, queue) ->
-    $el = new App.QueueTrackShow(model: track).render().el
-    @$ul.append $el
+    $el       = new App.QueueTrackShow(model: track).render().$el
+    index     = @collection.indexOf(track)
+    $children = @$el.children()
+
+    if $children.length > 0
+      $el.insertAfter $children[index - 1]
+    else
+      @$el.append $el
 
   change_playing_track: ->
     $("#current-track").removeAttr("id")
     @collection.current_track().trigger("current")
+
+    $("#current-track-fixed").replaceWith(
+      $("#current-track").clone().attr("id", "current-track-fixed"))
 
   dragover: (event) ->
     dt = event.originalEvent.dataTransfer
@@ -42,7 +51,14 @@ class App.QueueView extends Backbone.View
 
     data = event.originalEvent.dataTransfer.getData("text/json")
     App.queue.add JSON.parse(data)
-  # touchstart: (event) =>
-  #   @$el.scrollTo("+=1")
-  #   @$el.scrollTo("-=1")
 
+  scroll: (event) ->
+    $ct = $("#current-track")
+    $ctf = $("#current-track-fixed")
+
+    if $ct.offset().top < 75
+      $ctf.addClass("top")
+    else if $ct.offset().top > $("#queue").height() - 75
+      $ctf.addClass("bottom")
+    else
+      $ctf.removeClass("top bottom")

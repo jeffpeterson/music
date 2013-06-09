@@ -1,0 +1,42 @@
+#queue
+  position: relative
+  overflow: none
+  height: 100%
+  > ul
+    box-sizing: border-box
+    padding: 100px 0
+    overflow: auto
+    height: 100%
+    > .track
+      background-size: 100% auto
+      box-shadow: 0 0 5px rgba(0,0,0, 0.9), inset 10px 0 5px -10px rgba(0,0,0, 0.9)
+      transition: all 0.2s
+      &:hover
+        height: 95px
+        margin-top: -20px
+
+#current-track
+  height: 300px !important
+  margin-top: 0 !important
+  transition: none !important
+  > .remove
+    display: none !important
+
+li#current-track-fixed.track
+  height: 75px !important
+  margin-top: 0 !important
+  position: fixed
+  width: 300px
+  right: 0
+  z-index: 1
+  display: none
+  box-shadow: 0 0 5px rgba(0,0,0, 0.9)
+  > .icon.remove
+    display: none
+  &.top
+    display: block
+    top: 75px !important
+  &.bottom
+    display: block
+    bottom: 0 !important
+

@@ -1,7 +1,4 @@
-img.album-art src={@track.get('icon')} crossorigin="anonymous"
-
 .text
   .track-name = @track.get('name')
   .artist-name = @track.get('artist')
-
 a.icon.remove

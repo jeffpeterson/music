@@ -20,13 +20,14 @@ class App.QueueTrackShow extends App.TrackView
     if @model is App.queue.current_track()
       @$el.attr id: "current-track"
 
-    ImageAnalyzer @model.get('icon'), (bgColor, primaryColor, secondaryColor, detailColor) =>
+    ImageAnalyzer.analyze @model.get('icon'), (colors) =>
+      bg = colors.background
       @$el.css
-        backgroundImage: "-webkit-linear-gradient(top, rgba(#{bgColor}, 1.0) 0px, rgba(#{bgColor}, 0.10) 300px, rgba(#{bgColor}, 0.0) 300px), url(#{@model.get('icon')})"
-        textShadow: "0 0 1px rgb(#{bgColor}), 0 0 3px rgb(#{bgColor})"
-        color: "rgb(#{primaryColor})"
+        backgroundImage: "-webkit-linear-gradient(top, rgba(#{bg}, 1.0) 0px, rgba(#{bg}, 0.10) 300px, rgba(#{bg}, 0.0) 300px), url(#{@model.get('icon')})"
+        textShadow: "0 0 3px rgb(#{bg})"
+        color: "rgb(#{colors.primary})"
       @$el.find(".artist-name").css
-        color: "rgb(#{secondaryColor})"
+        color: "rgb(#{colors.secondary})"
     this
 
   play: (event) ->
@@ -43,20 +44,22 @@ class App.QueueTrackShow extends App.TrackView
   expand: (event) =>
     event.preventDefault()
     App.queue.play(@model)
-    # if @$el.hasClass("expanded")
-    #   App.queue.play(@model)
-    # $("#queue .expanded").removeClass("expanded")
-    # @$el.addClass("expanded")
 
   remove: (event) =>
     event.preventDefault()
     @model.collection.remove @model
 
   removed: (model) ->
-    if model is @model
-      @$el.transit
-        height: 0
-        complete: =>
-          @remove()
+    return if model isnt @model
+
+    @$el.transit
+      height: 0
+      complete: =>
+        @remove()
   current: =>
     @$el.attr id: 'current-track'
+    try
+      $("#queue").scrollTo "#current-track",
+        duration: 500
+        offset:
+          top: -300

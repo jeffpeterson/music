@@ -1,171 +1,111 @@
-@ImageAnalyzer = (image, callback) ->
-    bgcolor = primaryColor = secondaryColor = detailColor = null
-    init = (image, callback) ->
-        img = new Image()
-        img.crossOrigin = "anonymous"
-        img.src = image
-        img.onload = ->
-            cvs = document.createElement 'canvas'
-            cvs.width = img.width
-            cvs.height = img.height
-            ctx = cvs.getContext '2d'
-            ctx.drawImage img, 0, 0
+Array.prototype.inject = (init, fn) -> @reduce(fn, init)
 
-            bgcolor = findEdgeColor cvs, ctx
+class window.ImageAnalyzer
+  constructor: (@image_url, callback) ->
+    @colors =
+      background: "0,0,0"
+      primary:    "255,255,255"
+      secondary:  "255,255,255"
+      detail:     "255,255,255"
+    @canvas            = document.createElement 'canvas'
+    @image             = new Image
+    @ctx               = @canvas.getContext('2d')
+    @image.crossOrigin = "anonymous"
+    @image.src         = @image_url
+    @image.onload      = =>
+      @ctx.drawImage(@image, 0, 0)
+      @width  = @canvas.width
+      @height = @canvas.height
+      @set_background_color()
+      @set_text_colors()
 
-            findTextColors cvs, ctx, ->
-                callback bgcolor, primaryColor, secondaryColor, detailColor
+      App.memo(@image_url, "colors", @colors)
+      callback(@colors)
 
-    init image, callback
+  beauty_of: (color) ->
+    [r, g, b] = (parseInt(c) for c in color.split(','))
 
-    findEdgeColor = (cvs, ctx) ->
-      leftEdgeColors = ctx.getImageData(0, 0, cvs.width, 1)
+    Math.abs(r - g) +
+    Math.abs(b - r) +
+    Math.abs(g - b)
 
-      # Get most common color from the last row
-      colorCount = {}
-      for pixel in [0...cvs.height]
-          red = leftEdgeColors.data[pixel*4]
-          green = leftEdgeColors.data[pixel*4 + 1]
-          blue = leftEdgeColors.data[pixel*4 + 2]
+  image_data: (left = 0, top = 0, width = @width, height = @height) ->
+    @ctx.getImageData(left, top, width, height).data
 
-          index = red + ',' + green + ',' + blue
-          if not colorCount[index]
-              colorCount[index] = 0
-          colorCount[index]++
+  set_background_color: (edge = "top", size = 2) ->
+    color_counts = {}
+    edge_pixels  = switch edge
+      when "top"    then @image_data(0, 0, @width, size)
+      when "right"  then @image_data(@width - size, 0, size, @height)
+      when "bottom" then @image_data(0, @height - size, @width, size)
+      when "left"   then @image_data(0, 0, size, @height)
 
+    for i in [0...edge_pixels.length] by 4
+      rgb = [edge_pixels[i], edge_pixels[i+1], edge_pixels[i+2]].join(',')
+      color_counts[rgb] ||= 0
+      color_counts[rgb]  += 1
 
-        sortedColorCount = [["255,255,255", 0]]
-        for color, count of colorCount
-            if count > 2
-                sortedColorCount.push [color, count]
+    max_count = 0
+    for color, count of color_counts when count > max_count
+      @colors.background = color
+      max_count          = count
 
-        sortedColorCount.sort (a, b) ->
-            b[1] - a[1]
+  set_text_colors: (callback) ->
+    pixels = @image_data()
 
-        proposedEdgeColor = sortedColorCount[0]
-        if isBlackOrWhite proposedEdgeColor[0]
-            for nextProposedEdgeColor in sortedColorCount
-                if nextProposedEdgeColor[1] / proposedEdgeColor[1] > 0.3
-                    if not isBlackOrWhite nextProposedEdgeColor[0]
-                        proposedEdgeColor = nextProposedEdgeColor
-                        break
+    color_counts = {}
+    for i in [0...pixels.length] by 4
+      rgb = [pixels[i], pixels[i+1], pixels[i+2]].join(',')
+      color_counts[rgb] ||= 0
+      color_counts[rgb] += 1
 
-        proposedEdgeColor[0]
+    possible_colors = for color, count of color_counts when @contrasts_background(color)
+      [color, count]
 
-    findTextColors = (cvs, ctx, cb) ->
-        colors = ctx.getImageData 0, 0, cvs.width, cvs.height
+    console.log possible_colors.length
 
-        findDarkTextColor = not isDarkColor bgcolor
-        colorCount = {}
-        for row in [0...cvs.height]
-            for column in [0...cvs.width]
-                red = colors.data[((row * (cvs.width * 4)) + (column * 4))]
-                green = colors.data[((row * (cvs.width * 4)) + (column * 4)) + 1]
-                blue = colors.data[((row * (cvs.width * 4)) + (column * 4)) + 2]
+    if possible_colors.length is 0
+      unless @is_dark @colors.background
+        @colors.primary = @colors.secondary = @colors.detail = "0,0,0"
+      return
 
-                index = red + ',' + green + ',' + blue
-                if not colorCount[index]
-                    colorCount[index] = 0
-                colorCount[index]++
+    possible_colors   = _(possible_colors).sortBy (color) => @beauty_of(color[0])
+    @colors.primary = possible_colors.pop()[0]
 
+    if possible_colors.length is 0
+      unless @is_dark @colors.background
+        @colors.secondary = @colors.detail = "0,0,0"
+      return
 
-        possibleColorsSorted = []
-        for color, count of colorCount
-            curDark = isDarkColor color
-            if curDark == findDarkTextColor
-                possibleColorsSorted.push [color, count]
+    
+    possible_colors   = _(possible_colors).sortBy (color) => @contrast(@colors.primary, color[0]) * @beauty_of(color[0])
+    @colors.secondary = possible_colors.pop()[0]
 
-        possibleColorsSorted.sort (a, b) ->
-            b[1] - a[1]
+    # possible_colors   = _(possible_colors).sortBy (color) => -(@contrast(@colors.primary, color[0]) + @contrast(@colors.secondary, color[0]))
+    # @colors.detail = possible_colors.shift()?[0]
 
-        for color in possibleColorsSorted
-            if not primaryColor
-                if isContrastingColor color[0], bgcolor
-                    primaryColor = color[0]
-            else if not secondaryColor
-                if not isDistinct(primaryColor, color[0]) or not isContrastingColor(color[0], bgcolor)
-                    continue
-                secondaryColor = color[0]
-            else if not detailColor
-                if not isDistinct(secondaryColor, color[0]) or not isDistinct(primaryColor, color[0]) or not isContrastingColor(color[0], bgcolor)
-                    continue
-                detailColor = color[0]
-                break
+  luminosity_of: (color) ->
+    [r, g, b] = (Math.pow(p / 255, 2.2) for p in color.split(','))
+    (0.2126 * r) + (0.7152 * g) + (0.0722 * b)
 
-        defaultColor = if findDarkTextColor then "0,0,0" else "255,255,255"
-        primaryColor = defaultColor if not primaryColor
-        secondaryColor = defaultColor if not secondaryColor
-        detailColor = defaultColor if not detailColor
+  # 4.0 is recommended
+  are_contrasting: (a, b) ->
+    @contrast(a, b) > 1.8
 
-        cb()
+  contrast: (a, b) ->
+    high = @luminosity_of(a) + 0.05
+    low  = @luminosity_of(b) + 0.05
+    [high, low] = [low, high] if high < low
+    high / low
 
-    isBlackOrWhite = (color) ->
-        splitted = color.split(',')
-        red = splitted[0]
-        green = splitted[1]
-        blue = splitted[2]
+  contrasts_background: (color) ->
+    @are_contrasting color, @colors.background
 
-        tresholdWhite = 255*0.91
-        tresholdBlack = 255*0.09
+  is_dark: (color) ->
+    @luminosity_of(color) < 0.5
 
-        if red > tresholdWhite and green > tresholdWhite and blue > tresholdWhite
-            return true
-        if red < tresholdBlack and green < tresholdBlack and blue < tresholdBlack
-            return true
-
-        return false
-
-    isDarkColor = (color) ->
-        if color
-            splitted = color.split(',')
-            red = splitted[0] / 255
-            green = splitted[1] / 255
-            blue = splitted[2] / 255
-
-            lum = 0.2126 * red + 0.7152 * green + 0.0722 * blue
-
-            return lum < 0.5
-        return false
-
-    isContrastingColor = (color1, color2) ->
-        splitted1 = color1.split(',')
-        red1 = splitted1[0] / 255
-        green1 = splitted1[1] / 255
-        blue1 = splitted1[2] / 255
-
-        lum1 = 0.2126 * red1 + 0.7152 * green1 + 0.0722 * blue1
-
-        splitted2 = color2.split(',')
-        red2 = splitted2[0] / 255
-        green2 = splitted2[1] / 255
-        blue2 = splitted2[2] / 255
-
-        lum2 = 0.2126 * red2 + 0.7152 * green2 + 0.0722 * blue2
-
-        if lum1 > lum2
-            contrast = (lum1 + 0.05) / (lum2 + 0.05)
-        else
-            contrast = (lum2 + 0.05) / (lum1 + 0.05)
-
-        return contrast > 1.5
-
-    isDistinct = (color1, color2) ->
-        splitted1 = color1.split(',')
-        red1 = splitted1[0] / 255
-        green1 = splitted1[1] / 255
-        blue1 = splitted1[2] / 255
-
-        splitted2 = color2.split(',')
-        red2 = splitted2[0] / 255
-        green2 = splitted2[1] / 255
-        blue2 = splitted2[2] / 255
-
-        treshold = 0.25
-        # treshold = 0.2
-
-        if Math.abs(red1 - red2) > treshold or Math.abs(green1 - green2) > treshold or Math.abs(blue1 - blue2) > treshold
-            if Math.abs(red1 - green1) < .03 and Math.abs(red1 - blue1) < .03
-                if Math.abs(red2 - green2) < .03 and Math.abs(red2 - blue2) < .03
-                    return false
-            return true
-        return false
+ImageAnalyzer.analyze = (image_url, callback) ->
+  if colors = App.memo(image_url, "colors")
+    return callback(colors)
+  else
+    new ImageAnalyzer image_url, callback

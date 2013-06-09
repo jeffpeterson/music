@@ -8,7 +8,12 @@ $color: #888
 
 $background-color: #eee
 
-@import "icons"
+@import 'icons'
+@import 'tracks'
+@import 'queue'
+
+::-webkit-scrollbar
+  display: none
 
 html, body
   width: 100%
@@ -24,7 +29,6 @@ body
   overflow: hidden
   font-size: 20px
   line-height: 40px
-
   -webkit-overflow-scrolling: touch
   -webkit-user-select: none
   -webkit-touch-callout: none
@@ -36,6 +40,7 @@ a
   border-bottom: 1px solid transparent
   &:hover
     border-bottom-color: $blue
+  &:active
     color: $blue
 
 h1
@@ -46,45 +51,50 @@ h1
   text-transform: uppercase
   padding: 350px 0 10px
 
-.clear
-  clear: both
-
 ul
   margin: 0
   padding: 0
 li
   list-style-type: none
 
+.clear
+  clear: both
+
 #bar
+  display: table
+  display: -webkit-flex
+  -webkit-align-items: center
   height: 75px
   position: absolute
   top: 0
   left: 0
   right: 0
   z-index: 1
-  background-color: rgba(255,255,255, 0.85)
-  display: -webkit-flex
-  -webkit-align-items: center
+  background-color: rgba(255,255,255, 0.7)
   > .icon
     -webkit-flex-shrink: 0
+    display: table-cell
+    line-height: 75px
+    width: 2em
 
 #logo
+  display: table-cell
   width: 75px
   text-align: center
   cursor: pointer
   -webkit-flex-shrink: 0
 
 #search
-  -webkit-flex-grow: 1
+  width: 100%
+  -webkit-flex: 100px 1 1
+  display: table-cell
   margin: 0
   padding-left: 10px
-
   height: 100%
   background: none
   transition: background-color 0.2s
   overflow: hidden
   text-overflow: ellipsis
-
   &:focus
     background-color: white
 
@@ -95,10 +105,44 @@ li
   right: 0
   left: 0
   height: 75px
-  z-index: 2
+  z-index: 20
+  box-shadow: inset 10px 0 10px -10px white
+  display: table
   display: -webkit-flex
-  -webkit-align-items: center
+  -webkit-flex-flow: column nowrap
   -webkit-justify-content: space-around
+  -webkit-align-items: stretch
+  > .section
+    display: table
+    width: 100%
+    display: -webkit-flex
+    -webkit-flex-flow: row nowrap
+    -webkit-justify-content: space-around
+    -webkit-align-items: center
+    > .icon
+      display: table-cell
+    &.bottom
+      font-size: 14px
+      line-height: 14px
+      width: 100%
+      > .repeat, > .shuffle
+        -webkit-flex-grow: 1
+      > .volume-min, > .volume-max
+        width: 1em
+
+#volume
+  -webkit-appearance: none
+  background-color: $color + #444
+  height: 2px
+  border-radius: 8px
+  &::-webkit-slider-thumb
+    -webkit-appearance: none
+    background-color: $color
+    width: 10px
+    height: 10px
+    border-radius: 20px
+    &:active
+      background-color: $blue
 
 #progress
   position: absolute
@@ -133,85 +177,59 @@ li
   top: 0
   bottom: 0
   z-index: 1
-  box-shadow: 0 0 10px black
 
 #content
   overflow: auto
-  padding-top: 75px
+  padding: 95px 0
   height: 100%
   box-sizing: border-box
   background-color: white
 
 #sidebar
   background-color: white
-  overflow: hidden
   position: fixed
   width: 300px
   right: 0
   top: 0
   bottom: 0
 
-.albums > ul
+ul.albums
   display: -webkit-flex
   -webkit-flex-wrap: wrap
   -webkit-justify-content: space-around
   -webkit-align-items: flex-start
+  padding-top: 5px
 
 .album
   display: inline-block
   position: relative
   width: 200px
   -webkit-flex-shrink: 0
-  // -webkit-flex-grow: 0
   margin: 0 0.5% 20px
   -webkit-transition: translate3d(0,0,0)
-
   > .album-art
     width: 100%
     position: relative
     height: auto
-    box-shadow: 0 0 7px black
+    box-shadow: 0 0 4px black
 
 .track-name, .album-name, .artist-name
   white-space: nowrap
   overflow: hidden
   text-overflow: ellipsis
-  margin: 0 10px
-
-.artist-name
-  -webkit-flex-shrink: 100000
-
-.track, .artist
-  overflow: hidden
-  background-color: $background-color
-  position: relative
-  height: 75px
-  display: -webkit-flex
-  -webkit-align-items: center
-  > .play, > .queue
-    color: $color + #333
-    display: none
-    -webkit-flex-shrink: 0
-    &:hover
-      color: $blue
-  &:hover
-    > .play, > .queue
-      display: block
-
-.artist-art
-  width: 75px
 
 .unavailable
   opacity: 0.3
+  &:hover
+    > .play, > .queue
+      display: none
 
 .album-art
-  cursor: pointer
   width: 75px
   -webkit-flex-shrink: 0
 
 .artist-name
   color: $color + #333
-  -webkit-flex-grow: 1
 
 .remove
   padding: 0 15px
@@ -219,49 +237,14 @@ li
   line-height: 75px
   -webkit-flex-shrink: 0
   &:hover
-    color: $red
-
-#queue
-  position: relative
-  overflow: auto
-  height: 100%
-  box-sizing: border-box
-  padding-top: 75px
-  .track
-    background-size: 100% auto
-    box-shadow: 0 0 10px black
-    transition: height 0.1s
-    -webkit-align-items: flex-start
-    > .text
-      height: 75px
-    &:hover
-      height: 100px
-    &.expanded
-      height: 300px
-    > .remove
-      display: none
-    &:hover > .remove
-      display: block
-
-  .album-art
-    display: none
+    color: inherit
 
 .text
   font-size: 15px
-  display: -webkit-flex
-  -webkit-align-self: flex-start
-  -webkit-flex-direction: column
   -webkit-flex-grow: 1
-  -webkit-justify-content: center
   line-height: 1.5em
   > .artist-name, > .track-name, > .album-name
     -webkit-flex-grow: 0
-
-
-#current-track
-  height: 300px !important
-  > .remove
-    display: none !important
 
 input
   border: none
@@ -272,6 +255,13 @@ input
   outline: none
   &:focus
     color: $blue
+@keyframes bounce
+  0%, 20%, 50%, 80%, 100%
+    transform: translateY(0)
+  40%
+    transform: translateY(-30px)
+  60%
+    transform: translateY(-15px)
 
 @media (max-width: 800px)
   #progress, #bar:hover #progress
@@ -282,8 +272,6 @@ input
     display: block
   #logo
     line-height: 50px
-  #queue, #content
-    padding-top: 50px
 @media (max-width: 800px)
   #main
     width: 100%

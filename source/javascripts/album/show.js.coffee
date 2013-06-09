@@ -10,24 +10,25 @@ class App.AlbumView extends Backbone.View
 
   events:
     'click': 'click'
-  #   'dragstart':        "drag"
-
-  initialize: ->
-    # @model.set icon: @model.get('icon').replace("square-200", "square-500")
 
   render: ->
     @$el.html @template(album: @model)
 
-    # ImageAnalyzer @model.get('icon'), (bgColor, primaryColor, secondaryColor, detailColor) =>
-    #   @$el.find(".text").css
-    #     backgroundImage: "linear-gradient(to top, rgb(#{bgColor}), transparent)"
-    #     color: "rgb(#{primaryColor})"
-
     this
+
   click: (event) ->
+    # event.preventDefault()
+    # @last_element_in_row()
+    
     # @$el.find(".album-art").transit(scale: 3, zIndex: 10)
+    
 
   # drag: (event) ->
   #   event.originalEvent.dataTransfer.setData "text/json", JSON.stringify(@model)
   #   event.originalEvent.dataTransfer.setData "text/plain", @model.full()
+  # last_element_in_row: ->
+  #   $sibling = @$el
+  #   while ($next = $sibling.next(@tagName))[0]
+  #     $sibling = $next
+      
 
