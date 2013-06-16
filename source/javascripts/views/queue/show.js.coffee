@@ -56,9 +56,9 @@ class App.QueueView extends Backbone.View
     $ct = $("#current-track")
     $ctf = $("#current-track-fixed")
 
-    if $ct.offset().top < 75
-      $ctf.addClass("top")
-    else if $ct.offset().top > $("#queue").height() - 75
-      $ctf.addClass("bottom")
+    if $ct.offset().top < $("#player").height()
+      $ctf.addClass("top").removeClass("bottom")
+    else if $ct.offset().top + $ctf.height() > $("#queue").height()
+      $ctf.addClass("bottom").removeClass("top")
     else
       $ctf.removeClass("top bottom")

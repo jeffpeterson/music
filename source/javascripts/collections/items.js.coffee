@@ -6,7 +6,6 @@ class App.Items extends Backbone.Collection
       sort: 'dateAdded'
       extras: ""
       start: collection.length
-    console.log options
     switch method
       when "read"
         @current_request ||= R.request

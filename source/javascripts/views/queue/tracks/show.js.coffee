@@ -15,19 +15,18 @@ class App.QueueTrackShow extends App.TrackView
 
   render: ->
     @$el.html @template(track: @model)
-    @model.set icon: @model.get('icon').replace("square-200", "square-500")
 
     if @model is App.queue.current_track()
       @$el.attr id: "current-track"
 
-    ImageAnalyzer.analyze @model.get('icon'), (colors) =>
-      bg = colors.background
-      @$el.css
-        backgroundImage: "-webkit-linear-gradient(top, rgba(#{bg}, 1.0) 0px, rgba(#{bg}, 0.10) 300px, rgba(#{bg}, 0.0) 300px), url(#{@model.get('icon')})"
-        textShadow: "0 0 3px rgb(#{bg})"
-        color: "rgb(#{colors.primary})"
-      @$el.find(".artist-name").css
-        color: "rgb(#{colors.secondary})"
+    colors = @model.artwork.colors()
+    bg = colors.background
+    @$el.css
+      backgroundImage: "-webkit-linear-gradient(top, rgba(#{bg}, 1.0) 0px, rgba(#{bg}, 0.10) 300px, rgba(#{bg}, 0.0) 300px), url(#{@model.artwork.get('icon-500')})"
+      textShadow: "0 0 3px rgb(#{bg})"
+      color: "rgb(#{colors.primary})"
+    @$el.find(".artist-name").css
+      color: "rgb(#{colors.secondary})"
     this
 
   play: (event) ->
@@ -46,7 +45,7 @@ class App.QueueTrackShow extends App.TrackView
     App.queue.play(@model)
 
   remove: (event) =>
-    event.preventDefault()
+    event?.preventDefault()
     @model.collection.remove @model
 
   removed: (model) ->

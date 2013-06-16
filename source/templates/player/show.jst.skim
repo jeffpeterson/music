@@ -5,7 +5,7 @@
   - else
     a.icon.play href="#"
   a.icon.next href="#"
-.section.bottom
+/.section.bottom
   a.icon.shuffle href="#"
   a.icon.volume-min href="#"
   input#volume type='range' min='0' max='100'

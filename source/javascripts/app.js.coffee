@@ -4,7 +4,7 @@ window.App =
 
     App.collection = {}
     App.collection.artists = new App.Artists JSON.parse(localStorage.artists || null)
-    App.collection.albums = new App.Albums JSON.parse(localStorage.albums || null)
+    App.collection.albums  = new App.Albums JSON.parse(localStorage.albums || null)
     App.collection.tracks  = new App.Tracks JSON.parse(localStorage.tracks || null)
 
     App.player = new App.Player

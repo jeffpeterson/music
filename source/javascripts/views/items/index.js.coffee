@@ -1,4 +1,5 @@
-class App.CollectionIndex extends Backbone.View
+class App.ItemsIndex extends Backbone.View
+  filter: ''
   tagName: "ul"
   events:
     'touchstart': 'touchstart'
@@ -7,11 +8,11 @@ class App.CollectionIndex extends Backbone.View
     'scroll':     'scroll'
 
   initialize: ->
-    @filter = ""
     @$main = $("#main")
 
     @listenTo @collection, "reset", @render
     @listenTo @collection, "add", @add
+
     $("#logo").on 'click', (event) =>
       @$el.scrollTo(0, duration: 200)
 
@@ -90,15 +91,16 @@ class App.CollectionIndex extends Backbone.View
     @$main.transit x: x, 200
 
   scroll: (event) =>
-    time = event.timeStamp
-    y = @el.scrollTop
+    time = new Date().getTime()
+    pixels_scrolled = @el.scrollTop
     pixels_per_sec = 0
 
-    if @previous_time and @previous_y
-      pixels_per_sec = (y - @previous_y) / (time - @previous_time) * 500
+    if @previous_time and @previous_pixels_scrolled
+      pixels_per_sec = (pixels_scrolled - @previous_pixels_scrolled) / (time - @previous_time) * 1000
+      console.log "Scrolling at: #{pixels_per_sec} pixels/sec. Time diff: #{time - @previous_time}"
 
-      if y + pixels_per_sec >= (@el.scrollHeight - @el.offsetHeight)
+      if pixels_scrolled + pixels_per_sec >= (@el.scrollHeight - @el.offsetHeight)
         @collection.fetch()
 
-    @previous_time = time
-    @previous_y    = y
+    @previous_time            = time
+    @previous_pixels_scrolled = pixels_scrolled

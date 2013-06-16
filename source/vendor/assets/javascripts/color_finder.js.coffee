@@ -1,6 +1,6 @@
 Array.prototype.inject = (init, fn) -> @reduce(fn, init)
 
-class window.ImageAnalyzer
+class window.ColorFinder
   constructor: (@image_url, callback) ->
     @colors =
       background: "0,0,0"
@@ -104,8 +104,8 @@ class window.ImageAnalyzer
   is_dark: (color) ->
     @luminosity_of(color) < 0.5
 
-ImageAnalyzer.analyze = (image_url, callback) ->
+ColorFinder.analyze = (image_url, callback) ->
   if colors = App.memo(image_url, "colors")
     return callback(colors)
   else
-    new ImageAnalyzer image_url, callback
+    new ColorFinder image_url, callback

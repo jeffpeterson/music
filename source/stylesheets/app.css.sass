@@ -14,6 +14,10 @@ $background-color: #eee
 
 ::-webkit-scrollbar
   display: none
+  // width: 2px
+  // background-color: rgba(255, 255, 255, 0.2)
+// ::-webkit-scrollbar-thumb
+  // background-color: $blue
 
 html, body
   width: 100%
@@ -60,6 +64,13 @@ li
 .clear
   clear: both
 
+.blur
+  -webkit-filter: blur(5px)
+  // -webkit-transition: -webkit-filter 0.2s
+
+.invisible
+  visibility: hidden
+
 #bar
   display: table
   display: -webkit-flex
@@ -69,7 +80,7 @@ li
   top: 0
   left: 0
   right: 0
-  z-index: 1
+  z-index: 10
   background-color: rgba(255,255,255, 0.7)
   > .icon
     -webkit-flex-shrink: 0
@@ -99,28 +110,24 @@ li
     background-color: white
 
 #player
-  background-color: rgba(255,255,255, 0.85)
+  // background-color: rgba(255,255,255, 0.85)
+  background-color: white
   position: absolute
   top: 0
   right: 0
   left: 0
   height: 75px
   z-index: 20
-  box-shadow: inset 10px 0 10px -10px white
-  display: table
   display: -webkit-flex
+  box-shadow: 1px -29px 30px 30px black
   -webkit-flex-flow: column nowrap
   -webkit-justify-content: space-around
   -webkit-align-items: stretch
   > .section
-    display: table
-    width: 100%
     display: -webkit-flex
     -webkit-flex-flow: row nowrap
     -webkit-justify-content: space-around
     -webkit-align-items: center
-    > .icon
-      display: table-cell
     &.bottom
       font-size: 14px
       line-height: 14px
@@ -152,7 +159,6 @@ li
   height: 10px
   cursor: pointer
   z-index: 1
-
   > .position
     height: 2px
     position: absolute
@@ -176,14 +182,20 @@ li
   right: 300px
   top: 0
   bottom: 0
-  z-index: 1
+  z-index: 0
 
 #content
-  overflow: auto
-  padding: 95px 0
+  overflow: hidden
   height: 100%
-  box-sizing: border-box
   background-color: white
+  // box-shadow: inset -30px 0 30px -30px black
+  > ul
+    box-sizing: border-box
+    overflow: auto
+    height: 100%
+    padding: 75px 0
+    &.albums
+      padding: 95px 0
 
 #sidebar
   background-color: white
@@ -192,6 +204,8 @@ li
   right: 0
   top: 0
   bottom: 0
+  overflow: hidden
+  box-shadow: 0 0 50px black
 
 ul.albums
   display: -webkit-flex
@@ -208,10 +222,19 @@ ul.albums
   margin: 0 0.5% 20px
   -webkit-transition: translate3d(0,0,0)
   > .album-art
+    border-radius: 2px
     width: 100%
     position: relative
     height: auto
     box-shadow: 0 0 4px black
+  &.expanded
+    color: white
+    text-shadow: 1px 1px 3px black
+    z-index: 5
+    > .album-art
+      box-shadow: 1px 1px 30px black
+    > .text > .artist-name
+      color: white
 
 .track-name, .album-name, .artist-name
   white-space: nowrap
