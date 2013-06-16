@@ -1,4 +1,4 @@
-#= require artwork/artwork
+#= require ./artwork
 
 class App.Track extends Backbone.Model
   idAttribute: 'key'

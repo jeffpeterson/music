@@ -1,5 +1,3 @@
-#= require ./show
-
 class App.PlayerShow extends Backbone.View
   template: JST['player/show']
   el: "#player"

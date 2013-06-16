@@ -1,6 +1,6 @@
-#= require collection/index
+#= require ../items/index
 
-class App.AlbumIndexView extends App.CollectionIndex
+class App.AlbumIndexView extends App.ItemsIndex
   className: 'albums'
   add: (album) ->
     if @clean(album.get("name") + album.get("artist")).indexOf(@filter) >= 0

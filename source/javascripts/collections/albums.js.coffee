@@ -1,5 +1,5 @@
-#= require album
-#= require item/items
+#= require models/album
+#= require ./items
 
 class App.Albums extends App.Items
   model: App.Album

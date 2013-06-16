@@ -1,9 +1,11 @@
-//= require debounce
 //= require jquery-1.9.1
 //= require jquery.scrollTo
+//= require jquery.transit
 //= require underscore
 //= require backbone
 //= require better_router
 //= require computed_attributes
+//= require color_finder
+//= require_tree ../templates
 //= require app
 //= require_tree .

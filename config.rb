@@ -49,12 +49,18 @@ require 'skim'
 #     "Helping"
 #   end
 # end
+#
+
+sprockets.append_path 'templates'
 
 set :css_dir, 'stylesheets'
+set :font_dir, 'fonts'
 
 set :js_dir, 'javascripts'
 
 set :images_dir, 'images'
+
+set :debug_assets, true
 
 # Build-specific configuration
 configure :build do

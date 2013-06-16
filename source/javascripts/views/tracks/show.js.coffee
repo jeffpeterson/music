@@ -1,12 +1,10 @@
-#= require ./show
-
 class App.TrackView extends Backbone.View
   tagName: "li"
   className: "track"
   attributes:
     draggable: true
 
-  template: JST['track/show']
+  template: JST['tracks/show']
 
   events:
     'click .play':      "play"

@@ -1,5 +1,5 @@
-#= require track
-#= require item/items
+#= require models/track
+#= require ./items
 
 class App.Tracks extends App.Items
   model: App.Track

@@ -1,4 +1,5 @@
-#= require track/track
+#= require models/track
+#= require ./playlist
 
 class App.Queue extends App.Playlist
   model: App.Track

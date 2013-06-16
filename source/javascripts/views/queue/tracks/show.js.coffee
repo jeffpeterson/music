@@ -1,8 +1,7 @@
-#= require track/show.js
-#= require ./show.jst
+#= require views/tracks/show.js
 
 class App.QueueTrackShow extends App.TrackView
-  template: JST['queue/track/show']
+  template: JST['queue/tracks/show']
   initialize: ->
     @listenTo @model.collection, "remove", @removed
     @listenTo @model, "current", @current

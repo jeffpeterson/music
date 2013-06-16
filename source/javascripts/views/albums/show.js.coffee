@@ -1,12 +1,10 @@
-#= require ./show
-
 class App.AlbumView extends Backbone.View
   tagName: "li"
   className: "album"
   attributes:
     draggable: true
 
-  template: JST['album/show']
+  template: JST['albums/show']
 
   events:
     'click': 'click'
