@@ -4,12 +4,8 @@
 class App.Queue extends App.Playlist
   model: App.Track
 
-  initialize: ->
-    @state = JSON.parse(localStorage.state || "null")
-    @state ||=
-      current_key: null
-      shuffle: false
-      repeat: "all"
+  initialize: (models) ->
+    @load()
 
     @on 'reset', (collection) =>
       @state.current_key = null
@@ -19,20 +15,26 @@ class App.Queue extends App.Playlist
       @save()
 
     R.ready =>
+      console.log @state.play_state
+      if @state.play_state is "playing" and @current_track()
+        @play @current_track(), @state.position
+
       R.player.on "change:playingTrack", => @trigger("change change:playingTrack")
       R.player.on "change:position", =>
-        if R.player.playingTrack().get("duration") - R.player.position() < 2
+        @state.position = R.player.position()
+        @save()
+
+        if R.player.playingTrack().get("duration") - @state.position < 2
           @next()
 
-  play: (track = @current_track()) ->
-    index = @relative(1)
-
-    unless @get(track.id)
-      @add track, at: index
+  play: (track = @current_track(), position = 0) ->
+    @add track, at: @relative(1) unless @get(track.id)
 
     @state.current_key = track.id
+    @state.play_state  = "playing"
+
+    R.player.play source: @state.current_key, initialPosition: position
     @save()
-    R.player.play source: @state.current_key
 
   next: ->
     @play @at(@relative(1))
@@ -54,6 +56,16 @@ class App.Queue extends App.Playlist
   save: ->
     localStorage.queue = JSON.stringify(this)
     localStorage.state = JSON.stringify(@state)
+
+  load: ->
+    @state = JSON.parse(localStorage.state or null)
+
+    @state or=
+      current_key: null
+      shuffle: false
+      repeat: "all"
+      play_state: "stopped"
+      position: 0
 
   current_track: (attr) ->
     track = @get(@state.current_key)
