@@ -1,33 +1,18 @@
 #queue
-  position: relative
-  overflow: none
+  overflow: auto
   height: 100%
-  > ul
-    box-sizing: border-box
-    padding: 75px 0 0
-    overflow: auto
-    height: 100%
-    > .track
-      border: 1px solid rgba(255,255,255, 0.2)
-      border-width: 0
-      border-left-width: 1px
-      border-top-width: 1px
-      background-size: 100% auto
-      border-radius: 2px 0 0 0
-      box-shadow: 0 5px 5px 5px rgba(0,0,0, 0.9)
-      transition: all 0.2s
-      height: 77px
-      margin-bottom: -2px
-      &:hover
-        height: 95px
-        margin-top: -20px
+  box-sizing: border-box
+  padding: 75px 0 0
+  > .track
+    height: 75px
+    position: relative
+    background-size: 100% auto
+    transition: all 0.2s
 
 #current-track
   height: 300px !important
-  margin-top: 0 !important
-  transition: none !important
   > .remove
-    display: none !important
+    display: none
 
 li#current-track-fixed.track
   height: 75px !important

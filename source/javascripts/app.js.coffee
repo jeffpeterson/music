@@ -1,4 +1,8 @@
 window.App =
+  Views:       {}
+  Models:      {}
+  Collections: {}
+
   initialize: ->
     App.router = new App.Router
 
@@ -8,9 +12,10 @@ window.App =
     App.collection.tracks  = new App.Tracks JSON.parse(localStorage.tracks || null)
 
     App.player = new App.Player
-    App.queue  = new App.Queue JSON.parse(localStorage.queue || null)
+    App.queue  = new App.Models.Queue
+    # $("body").append new App.Views.CssShow().render().el
 
-    $("#queue").append new App.QueueView(collection: App.queue).render().el
+    new App.Views.QueueShow(model: App.queue).render()
     R.ready ->
       new App.PlayerShow(model: App.player).render()
 

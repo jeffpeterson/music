@@ -1,14 +1,8 @@
-.section.top
-  a.icon.prev href="#"
-  - if R?.player? and R.player.playState() is R.player.PLAYSTATE_PLAYING
-    a.icon.pause href="#"
-  - else
-    a.icon.play href="#"
-  a.icon.next href="#"
-/.section.bottom
-  a.icon.shuffle href="#"
-  a.icon.volume-min href="#"
-  input#volume type='range' min='0' max='100'
-  a.icon.volume-max href="#"
-  a.icon.repeat href="#"
-  
+a.icon.prev href="#"
+- if R?.player? and R.player.playState() is R.player.PLAYSTATE_PLAYING
+  a.icon.pause href="#"
+- else
+  a.icon.play href="#"
+a.icon.next href="#"
+#progress
+  .position

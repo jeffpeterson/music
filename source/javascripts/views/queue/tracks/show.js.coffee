@@ -2,9 +2,12 @@
 
 class App.QueueTrackShow extends App.TrackView
   template: JST['queue/tracks/show']
+
   initialize: ->
     @listenTo @model.collection, "remove", @removed
     @listenTo @model, "current", @current
+    @listenTo @model, 'change', @render
+    @listenTo @model.artwork, 'change', @render_colors
 
   events:
     'click .remove': 'remove'
@@ -15,18 +18,24 @@ class App.QueueTrackShow extends App.TrackView
   render: ->
     @$el.html @template(track: @model)
 
-    if @model is App.queue.current_track()
-      @$el.attr id: "current-track"
+    if @model is @model.collection.get('current_track')
+      @current()
 
-    colors = @model.artwork.colors()
+    @render_colors()
+
+    this
+
+
+  render_colors: ->
+    return unless colors = @model.artwork.colors()
+
     bg = colors.background
     @$el.css
-      backgroundImage: "-webkit-linear-gradient(top, rgba(#{bg}, 1.0) 0px, rgba(#{bg}, 0.10) 300px, rgba(#{bg}, 0.0) 300px), url(#{@model.artwork.get('icon-500')})"
+      backgroundImage: "-webkit-linear-gradient(top, rgb(#{bg}) 0, rgba(#{bg}, 0.10) 300px), url(#{@model.artwork.get('icon-500')})"
       textShadow: "0 0 3px rgb(#{bg})"
       color: "rgb(#{colors.primary})"
-    @$el.find(".artist-name").css
+    @$(".artist-name").css
       color: "rgb(#{colors.secondary})"
-    this
 
   play: (event) ->
     event.preventDefault()
@@ -56,8 +65,3 @@ class App.QueueTrackShow extends App.TrackView
         @remove()
   current: =>
     @$el.attr id: 'current-track'
-    try
-      $("#queue").scrollTo "#current-track",
-        duration: 500
-        offset:
-          top: -300

@@ -22,11 +22,12 @@ class App.TrackView extends Backbone.View
 
   play: (event) =>
     event.preventDefault()
+    App.queue.tracks.add(@model, at: App.queue.relative(1))
     App.queue.play(@model)
 
   queue: (event) ->
     event.preventDefault()
-    App.queue.add @model
+    App.queue.tracks.add @model
 
   drag: (event) ->
     event.originalEvent.dataTransfer.setData "text/json", JSON.stringify(@model)

@@ -12,12 +12,39 @@
   font-style: normal
   text-decoration: none
   -webkit-font-smoothing: antialiased
+  display: inline-block
   vertical-align: bottom
   color: inherit
   speak: none
   text-align: center
   border: none
 
+.icon.loading
+  -webkit-animation: loading 0.7s infinite step-start
+  font-size: 1.5em
+
+@-webkit-keyframes loading
+  0%
+    -webkit-transform: rotate(0deg)
+  12.5%
+    -webkit-transform: rotate(45deg)
+  25%
+    -webkit-transform: rotate(90deg)
+  37.5%
+    -webkit-transform: rotate(135deg)
+  50%
+    -webkit-transform: rotate(180deg)
+  62.5%
+    -webkit-transform: rotate(225deg)
+  75%
+    -webkit-transform: rotate(270deg)
+  87.5%
+    -webkit-transform: rotate(315deg)
+  100%
+    -webkit-transform: rotate(360deg)
+
+.icon.spinner:before
+  content: '\f110'
 .icon.volume-min:before
   content: "\f026"
 .icon.volume-max:before

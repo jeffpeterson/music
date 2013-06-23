@@ -1,25 +1,29 @@
 class App.ItemsIndex extends Backbone.View
   filter: ''
   tagName: "ul"
-  events:
-    'touchstart': 'touchstart'
-    'touchmove':  'touchmove'
-    'touchend':   'touchend'
-    'scroll':     'scroll'
+  # events:
+  #   'touchstart': 'touchstart'
+  #   'touchmove':  'touchmove'
+  #   'touchend':   'touchend'
 
+  scroll_element: "body"
   initialize: ->
     @$main = $("#main")
 
     @listenTo @collection, "reset", @render
     @listenTo @collection, "add", @add
+    @listenTo @collection, "change:current_request", @loading
+
+    $(window).on 'scroll', @scroll
 
     $("#logo").on 'click', (event) =>
       @$el.scrollTo(0, duration: 200)
 
-    $("#search").on 'input', (e) =>
-      clearTimeout @input_timeout_id
-      @filter = @clean($("#search").val())
-      @input_timeout_id = setTimeout(@render, 10)
+    $("#search").on 'input', _.debounce(@set_filter, 50)
+
+  set_filter: =>
+    @filter = @clean($("#search").val())
+    @render()
 
   in: ->
     @$el.css opacity: 0
@@ -32,6 +36,7 @@ class App.ItemsIndex extends Backbone.View
     @remove()
 
   render: =>
+    @$el.empty()
     @collection.each (model) =>
       @add(model)
     this
@@ -90,17 +95,27 @@ class App.ItemsIndex extends Backbone.View
 
     @$main.transit x: x, 200
 
+  loading: (collection) ->
+    if collection.current_request
+      $("#logo").html $("<i>").addClass("icon spinner loading")
+    else
+      $("#logo").html "fst.io"
+
+
   scroll: (event) =>
     time = new Date().getTime()
-    pixels_scrolled = @el.scrollTop
+    pixels_scrolled = $(@scroll_element).scrollTop()
     pixels_per_sec = 0
+    
+    scroll_height = $(@scroll_element)[0].scrollHeight - $(@scroll_element).height()
+    pixels_to_bottom = scroll_height - pixels_scrolled
 
     if @previous_time and @previous_pixels_scrolled
       pixels_per_sec = (pixels_scrolled - @previous_pixels_scrolled) / (time - @previous_time) * 1000
-      console.log "Scrolling at: #{pixels_per_sec} pixels/sec. Time diff: #{time - @previous_time}"
 
-      if pixels_scrolled + pixels_per_sec >= (@el.scrollHeight - @el.offsetHeight)
+      if pixels_to_bottom < 4000 and pixels_to_bottom - pixels_per_sec <= 0
         @collection.fetch()
+        console.log "Scrolling at: #{pixels_per_sec} pixels/sec. Time diff: #{time - @previous_time}"
 
     @previous_time            = time
     @previous_pixels_scrolled = pixels_scrolled
