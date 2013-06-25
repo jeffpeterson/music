@@ -1,4 +1,3 @@
-img.album-art src=@album.artwork.get('icon') crossorigin="anonymous"
 .text
   .album-name
     = @album.get('name')

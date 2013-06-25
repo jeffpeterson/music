@@ -4,6 +4,9 @@ class App.Artwork extends Backbone.Model
     'icon-500': ''
 
   colors: ->
+    colors = @get('colors') or App.memo 'colors', @get('icon')
+    return colors if colors
+
     @analyze()
     @get('colors')
 
@@ -18,4 +21,4 @@ class App.Artwork extends Backbone.Model
   analyze: ->
     ColorFinder.analyze @get('icon'), (colors) =>
       @set 'colors', colors
-
+      App.memo 'colors', @get('icon'), -> colors

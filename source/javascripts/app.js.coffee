@@ -3,6 +3,8 @@ window.App =
   Models:      {}
   Collections: {}
 
+  memo_pad: {}
+
   initialize: ->
     App.router = new App.Router
 
@@ -26,17 +28,17 @@ window.App =
     fn(args...)
     console.timeEnd name
 
-  local_set: (key, value) ->
+  set_local: (key, value) ->
     localStorage[key] = JSON.stringify(value)
 
-  local_get: (key, def = null) ->
-    JSON.parse(localStorage[key] || null) || def
+  get_local: (key, default_value = null) ->
+    JSON.parse(localStorage[key] or null) or default_value
 
-  memo: (key, property, value) ->
-    cached_object = App.local_get(key, {})
-    if value
-      cached_object[property] = value
-      App.local_set(key, cached_object)
+  memo: (key, property, fn) ->
+    cached_object = App.get_local(key, {})
+    if fn? and not cached_object[property]
+      cached_object[property] = fn?()
+      App.set_local(key, cached_object)
     cached_object[property]
 
 console.time "R.ready"
