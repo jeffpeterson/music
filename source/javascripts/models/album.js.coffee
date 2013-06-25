@@ -1,7 +1,8 @@
 #=require ./artwork
 
-class App.Album extends Backbone.Model
+class App.Models.Album extends Backbone.Model
   idAttribute: "key"
-  url: "getTracksForAlbumInCollection"
   initialize: ->
-    @artwork = new App.Artwork(icon: @get('icon'))
+    @artwork    = new App.Models.Artwork(icon: @get('icon'))
+    @track_list = new App.Collections.TrackList
+    @track_list.album = this

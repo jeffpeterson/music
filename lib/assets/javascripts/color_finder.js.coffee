@@ -39,7 +39,7 @@ class window.ColorFinder
     edge_pixels  = @image_data(offset, offset, @width - offset * 2, size)
     colors = @find_colors(edge_pixels)
 
-    if colors.length < 3 and offset < @height / 4
+    if colors.length < 3 and offset < @height / 10
       return @find_background(size, offset + 1)
 
     colors[0]

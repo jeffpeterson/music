@@ -1,6 +1,6 @@
 #= require views/tracks/show.js
 
-class App.QueueTrackShow extends App.TrackView
+class App.Views.QueueTrackShow extends App.Views.TrackShow
   template: JST['queue/tracks/show']
 
   initialize: ->
@@ -11,9 +11,11 @@ class App.QueueTrackShow extends App.TrackView
 
   events:
     'click .remove': 'remove'
-    'click .text': 'expand'
-    'dragstart': 'drag'
-    'drop': 'drop'
+    'click .text':   'expand'
+    dragstart:       'dragstart'
+    dragenter:       'dragenter'
+    dragleave:       'dragleave'
+    drop:            'drop'
 
   render: ->
     @$el.html @template(track: @model)
@@ -51,6 +53,10 @@ class App.QueueTrackShow extends App.TrackView
   expand: (event) =>
     event.preventDefault()
     App.queue.play(@model)
+
+  dragstart: (event) -> true
+  dragenter: => @$el.addClass("dragover")        
+  dragleave: => @$el.removeClass("dragover")     
 
   remove: (event) =>
     event?.preventDefault()

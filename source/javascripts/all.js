@@ -3,6 +3,7 @@
 //= require jquery.transit
 //= require underscore
 //= require backbone
+//= require sync
 //= require better_router
 //= require computed_attributes
 //= require color_finder

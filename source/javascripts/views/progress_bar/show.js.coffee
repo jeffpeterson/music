@@ -1,4 +1,4 @@
-class App.Views.ProgressBar extends Backbone.View
+class App.Views.ProgressBarShow extends Backbone.View
   el: "#progress"
   events:
     click: (event) =>

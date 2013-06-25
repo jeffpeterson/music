@@ -1,4 +1,4 @@
-class App.PlayerShow extends Backbone.View
+class App.Views.PlayerShow extends Backbone.View
   template: JST['player/show']
   el: "#player"
 
@@ -16,7 +16,7 @@ class App.PlayerShow extends Backbone.View
   render: ->
     @$el.html @template()
     @render_volume()
-    new App.Views.ProgressBar(model: @model).render()
+    new App.Views.ProgressBarShow(model: @model).render()
     this
 
   render_volume: =>

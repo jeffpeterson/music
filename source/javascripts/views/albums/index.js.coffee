@@ -1,7 +1,6 @@
 #= require ../items/index
 
-class App.AlbumIndexView extends App.ItemsIndex
+class App.Views.AlbumIndex extends App.Views.ItemIndex
   className: 'albums'
   add: (album) ->
-    if @clean(album.get("name") + album.get("artist")).indexOf(@filter) >= 0
-      @$el.append new App.AlbumView(model: album).render().el
+    @$el.append new App.Views.AlbumShow(model: album).render().el

@@ -1,4 +1,4 @@
-class App.Player extends Backbone.Model
+class App.Models.Player extends Backbone.Model
   initialize: ->
     console.log "player init"
     R.ready =>

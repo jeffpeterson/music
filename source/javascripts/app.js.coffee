@@ -9,17 +9,17 @@ window.App =
     App.router = new App.Router
 
     App.collection = {}
-    App.collection.artists = new App.Artists JSON.parse(localStorage.artists || null)
-    App.collection.albums  = new App.Albums JSON.parse(localStorage.albums || null)
-    App.collection.tracks  = new App.Tracks JSON.parse(localStorage.tracks || null)
+    App.collection.artists = new App.Collections.Artists JSON.parse(localStorage.artists || null)
+    App.collection.albums  = new App.Collections.Albums JSON.parse(localStorage.albums || null)
+    App.collection.tracks  = new App.Collections.Tracks JSON.parse(localStorage.tracks || null)
 
-    App.player = new App.Player
+    App.player = new App.Models.Player
     App.queue  = new App.Models.Queue
     # $("body").append new App.Views.CssShow().render().el
 
     new App.Views.QueueShow(model: App.queue).render()
     R.ready ->
-      new App.PlayerShow(model: App.player).render()
+      new App.Views.PlayerShow(model: App.player).render()
 
     Backbone.history.start pushState: false
 

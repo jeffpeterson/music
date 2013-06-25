@@ -1,4 +1,4 @@
-class App.TrackView extends Backbone.View
+class App.Views.TrackShow extends Backbone.View
   tagName: "li"
   className: "track"
   attributes:

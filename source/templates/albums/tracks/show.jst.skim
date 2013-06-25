@@ -1,0 +1,14 @@
+.status
+  - if @track.get('inCollection')
+    .icon.phone
+  - else
+    a.icon.add   href="#"
+    /a href="#" &plus;
+
+.track-number = @track.get('trackNum')
+
+.text
+  .track-name = @track.get('name')
+
+a.icon.play  href='#'
+a.icon.queue href='#'

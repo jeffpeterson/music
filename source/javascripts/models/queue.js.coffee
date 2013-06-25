@@ -46,14 +46,14 @@ class App.Models.Queue extends App.Models.Playlist
     R.player.play source: key, initialPosition: position
 
   next: ->
-    @play @relative(1)
+    @play @tracks.at(@relative 1)
 
   prev: (restart = true) ->
     if restart and @get('position') > 3
       R.player.position(0)
       R.player.play()
     else
-      @play @relative(-1)
+      @play @at(@relative -1)
 
   pause: ->
     @set play_state: 'paused'
@@ -70,7 +70,7 @@ class App.Models.Queue extends App.Models.Playlist
     index += offset
     index %= @tracks.length
     index += @tracks.length if index < 0
-    @tracks.at(index)
+    index
 
   store: ->
     localStorage.state = JSON.stringify this

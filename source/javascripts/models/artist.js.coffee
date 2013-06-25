@@ -1,2 +1,2 @@
-class App.Artist extends Backbone.Model
+class App.Models.Artist extends Backbone.Model
   idAttribute: "key"

@@ -14,7 +14,7 @@ class App.Views.QueueShow extends Backbone.View
     this
 
   add: (track) ->
-    $el       = new App.QueueTrackShow(model: track).render().$el
+    $el       = new App.Views.QueueTrackShow(model: track).render().$el
     index     = @model.tracks.indexOf(track)
     $children = @$el.children()
 

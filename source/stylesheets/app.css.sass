@@ -34,6 +34,7 @@ body
   color: $color
   font-size: 20px
   line-height: 40px
+  transition: background-color 0.3s, width 0.4s
   -webkit-overflow-scrolling: touch
   -webkit-user-select: none
   -webkit-touch-callout: none
@@ -43,10 +44,6 @@ a
   text-decoration: none
   color: inherit
   border-bottom: 1px solid transparent
-  &:hover
-    border-bottom-color: $blue
-  &:active
-    color: $blue
 
 h1
   color: rgba(0, 0, 0, .3)
@@ -59,6 +56,7 @@ h1
 ul
   margin: 0
   padding: 0
+  display: block
 
 li
   list-style-type: none
@@ -75,6 +73,9 @@ li
 .accent
   color: $color + #555
 
+#container
+  width: 100%
+
 #bar
   display: -webkit-flex
   -webkit-align-items: center
@@ -88,7 +89,7 @@ li
   // background: linear-gradient(to top, rgba(255,255,255, 0.8), white)
   box-shadow: 0 0 30px rgba(0,0,0, 0.2)
   > .icon
-    -webkit-flex-shrink: 0
+    -webkit-flex-shrink: 1
     display: table-cell
     line-height: 75px
     width: 2em
@@ -171,7 +172,7 @@ li
   height: 100%
   > ul
     box-sizing: border-box
-    overflow: auto
+    overflow: hidden
     height: 100%
     padding: 75px 0 0
 
@@ -190,12 +191,63 @@ ul.albums
   -webkit-justify-content: space-between
   -webkit-align-items: flex-start
   padding-top: 5px
+  &.expanded
+    > .album
+      opacity: 0.3
+
+.track-list
+  width: 100%
+  padding: 40px
+  -webkit-columns: 2
+  -webkit-column-gap: 40px
+  z-index: 20
+  position: relative
+  > .track
+    -webkit-column-break-inside: avoid
+    border-radius: 4px
+    height: 40px
+    > .status
+      opacity: 0.3
+      font-size: 0.8em
+      width: 40px
+      line-height: 40px
+      text-align: center
+      -webkit-flex-shrink: 0
+      > .icon
+        vertical-align: middle
+    > .track-number
+      font-size: 14px
+      width: 40px
+      line-height: 40px
+      text-align: center
+      -webkit-flex-shrink: 0
+    > .text
+      padding: 0
+      > .track-name
+        line-height: 40px
+    > .icon
+      line-height: 40px
+    &:hover
+      background-color: rgba(255,255,255, 0.02)
+      > .status
+        opacity: 1
+        > .icon.phone
+          opacity: 0.3
+    &.not-in-collection
+      opacity: 0.5
+
+  .album-art
+    display: none
 
 .album
+  transition: opacity 0.2s, box-shadow 0.8s
   position: relative
   width: 200px
   -webkit-flex-grow: 1
   background-size: 100% auto
+  &:hover
+    box-shadow: 0 0 30px rgba(0,0,0, 0.6)
+    z-index: 10
   &:before
     content: ""
     display: block
@@ -206,7 +258,6 @@ ul.albums
     bottom: 0
     left: 0
     right: 0
-
   > .album-art
     display: block
     background: #eee url(/images/music_note.png) no-repeat 50% 50%
@@ -215,14 +266,9 @@ ul.albums
     width: 100%
     // box-shadow: 1px 1px 15px rgba(0,0,0, 0.6)
   &.expanded
-    -webkit-transform: scale(1.5)
-    color: $white
-    text-shadow: 1px 1px 3px black
-    z-index: 5
-    > .album-art
-      box-shadow: 1px 1px 30px black
-    > .text > .artist-name
-      color: $white
+    box-shadow: 0 0 30px rgba(0,0,0, 0.6)
+    opacity: 1.0 !important
+    // box-shadow: 0 0 30px rgba(0,0,0, 0.5)
 
 .track-name, .album-name, .artist-name
   white-space: nowrap
@@ -265,16 +311,16 @@ input
   outline: none
   &:focus
     color: $blue
-@keyframes bounce
-  0%, 20%, 50%, 80%, 100%
-    transform: translateY(0)
-  40%
-    transform: translateY(-30px)
-  60%
-    transform: translateY(-15px)
 
 @media (max-width: 800px)
   #progress
     height: 15px
   .track-name, .album-name
     display: block
+  .track-list
+    -webkit-columns: 1
+  #sidebar, #bar
+    right: -300px
+  #main
+    margin-right: 0
+

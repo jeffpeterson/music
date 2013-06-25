@@ -1,4 +1,4 @@
-class App.Artwork extends Backbone.Model
+class App.Models.Artwork extends Backbone.Model
   defaults:
     icon: ''
     'icon-500': ''
