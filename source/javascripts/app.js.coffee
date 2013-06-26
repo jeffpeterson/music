@@ -17,6 +17,7 @@ window.App =
     App.queue  = new App.Models.Queue
     # $("body").append new App.Views.CssShow().render().el
 
+    new App.Views.Touch
     new App.Views.QueueShow(model: App.queue).render()
     R.ready ->
       new App.Views.PlayerShow(model: App.player).render()

@@ -45,6 +45,15 @@ a
   color: inherit
   border-bottom: 1px solid transparent
 
+button
+  -webkit-appearance: none
+  display: inline-block
+  padding: 0
+  margin: 0
+  background: none
+  font-size: inherit
+  cursor: pointer
+
 h1
   color: rgba(0, 0, 0, .3)
   font-weight: bold
@@ -61,6 +70,16 @@ ul
 li
   list-style-type: none
 
+input
+  border: none
+  color: inherit
+  font-size: inherit
+  font-family: inherit
+  line-height: 1em
+  outline: none
+  &:focus
+    color: $blue
+
 .clear
   clear: both
 
@@ -72,6 +91,12 @@ li
 
 .accent
   color: $color + #555
+
+#bar > #show-sidebar.icon
+  display: none
+  -webkit-flex-shrink: 0
+  &.to-left:before
+    content: '\f054'
 
 #container
   width: 100%
@@ -86,7 +111,6 @@ li
   right: 0
   z-index: 10
   background-color: rgba(255,255,255, 0.8)
-  // background: linear-gradient(to top, rgba(255,255,255, 0.8), white)
   box-shadow: 0 0 30px rgba(0,0,0, 0.2)
   > .icon
     -webkit-flex-shrink: 1
@@ -123,6 +147,7 @@ li
   z-index: 20
   display: table
   position: relative
+  -webkit-flex-shrink: 0
   > .icon
     width: 33.33%
     display: table-cell
@@ -180,9 +205,9 @@ li
   overflow: hidden
   position: fixed
   width: 300px
-  right: 0
   top: 0
   bottom: 0
+  right: 0
   -webkit-flex-shrink: 0
 
 ul.albums
@@ -302,25 +327,28 @@ ul.albums
   > .artist-name, > .track-name, > .album-name
     -webkit-flex-grow: 0
 
-input
-  border: none
-  color: inherit
-  font-size: inherit
-  font-family: inherit
-  line-height: 1em
-  outline: none
-  &:focus
-    color: $blue
-
-@media (max-width: 800px)
+@media (max-width: 780px)
+  .album
+    width: 150px
   #progress
     height: 15px
   .track-name, .album-name
     display: block
   .track-list
     -webkit-columns: 1
-  #sidebar, #bar
+  #bar > #show-sidebar.icon
+    display: inline-block
+  #bar, #sidebar
+    -webkit-transition: right 0.5s, left 0.5s
     right: -300px
+    &.to-left
+      right: 0
+  #bar.to-left
+    left: -300px
   #main
     margin-right: 0
+    -webkit-transition: margin 0.5s
+    &.to-left
+      margin-right: 300px
+      margin-left: -300px
 

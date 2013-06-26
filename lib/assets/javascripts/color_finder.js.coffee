@@ -10,7 +10,6 @@ class window.ColorFinder
     @image             = new Image
     @image.crossOrigin = "anonymous"
 
-
   after_image_loads: (fn) ->
     @image.onload = =>
       fn?(this)
