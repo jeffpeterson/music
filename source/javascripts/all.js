@@ -7,6 +7,7 @@
 //= require better_router
 //= require computed_attributes
 //= require color_finder
+//= require polygon_breeder
 //= require form_builder
 //= require_tree ../templates
 //= require app
