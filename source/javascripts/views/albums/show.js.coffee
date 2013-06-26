@@ -9,32 +9,18 @@ class App.Views.AlbumShow extends Backbone.View
 
   initialize: ->
     @listenTo @model.artwork, 'change', @render_colors
+    @$el.css backgroundImage: "url(#{@model.artwork.get('icon')})"
 
   render: ->
     @$el.html @template(album: @model)
-    @render_colors()
     this
-
-  render_colors: ->
-    return unless colors = @model.artwork.colors()
-    @$(".album-art").addClass 'invisible'
-
-    bg = colors.background
-    @$el.css
-      backgroundImage: "linear-gradient(to top, rgb(#{bg}), rgba(#{bg}, 0.8) 30%, rgba(#{bg}, 0) 80%), url(#{@model.artwork.get('icon')})"
-      textShadow: "0 0 3px rgb(#{bg})"
-      color: "rgb(#{colors.primary})"
-    @$el.find(".artist-name").css
-      color: "rgb(#{colors.secondary})"
 
   expand: (event) ->
     event.preventDefault()
+    is_expanded = @$el.hasClass 'expanded'
 
-    is_expanded = @$el.hasClass('expanded')
-
-    $(".expanded").removeClass("expanded")
-
-    @hide_track_list()
+    $(".expanded").removeClass 'expanded'
+    $(".track-list").remove()
     if not is_expanded
       @$el.parent().addClass('expanded')
       @$el.addClass('expanded')
@@ -46,8 +32,6 @@ class App.Views.AlbumShow extends Backbone.View
 
     @first_element_in_next_row().before(@track_list_view.render().el)
     this
-
-  hide_track_list: -> $(".track-list").remove()
 
   first_element_in_next_row: ->
     offset = @$el.offset().top

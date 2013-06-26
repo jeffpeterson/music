@@ -265,7 +265,6 @@ ul.albums
     display: none
 
 .album
-  transition: opacity 0.2s, box-shadow 0.8s
   position: relative
   width: 200px
   -webkit-flex-grow: 1
@@ -275,18 +274,12 @@ ul.albums
     display: block
     padding-top: 100%
   > .text
+    display: none
     padding: 10px
     position: absolute
     bottom: 0
     left: 0
     right: 0
-  > .album-art
-    display: block
-    background: #eee url(/images/music_note.png) no-repeat 50% 50%
-    background-size: 50% auto
-    height: auto
-    width: 100%
-    // box-shadow: 1px 1px 15px rgba(0,0,0, 0.6)
   &.expanded
     box-shadow: 0 0 30px rgba(0,0,0, 0.6)
     opacity: 1.0 !important

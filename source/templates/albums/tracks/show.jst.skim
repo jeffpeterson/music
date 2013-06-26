@@ -1,8 +1,8 @@
 .status
   - if @track.get('inCollection')
-    .icon.phone
+    .icon.ok
   - else
-    a.icon.add   href="#"
+    a.icon.add href="#"
     /a href="#" &plus;
 
 .track-number = @track.get('trackNum')
