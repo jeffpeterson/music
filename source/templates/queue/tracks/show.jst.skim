@@ -1,4 +1,4 @@
 .text
-  .track-name = @track.get('name')
+  .track-name  = @track.get('name')
   .artist-name = @track.get('artist')
-a.icon.remove
+i.icon-remove-sign

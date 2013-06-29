@@ -1,8 +1,10 @@
-a.icon.prev href="#"
+i.repeat.icon-repeat
+i.prev.icon-fast-backward
 - if R?.player? and R.player.playState() is R.player.PLAYSTATE_PLAYING
-  a.icon.pause href="#"
+  i.pause.icon-pause
 - else
-  a.icon.play href="#"
-a.icon.next href="#"
+  i.play.icon-play
+i.next.icon-fast-forward
+i.shuffle.icon-random
 #progress
   .position

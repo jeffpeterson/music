@@ -4,5 +4,5 @@ img.album-art src=@track.get('icon') crossorigin="anonymous"
   .track-name = @track.get('name')
   .artist-name.accent = @track.get('artist')
 
-a.play.icon href='#'
-a.queue.icon href='#'
+i.play-now.icon-play
+i.add-to-queue.icon-share-alt

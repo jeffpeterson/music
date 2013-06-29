@@ -1,0 +1,22 @@
+.track
+  cursor: default
+  overflow: hidden
+  position: relative
+  display: -webkit-flex
+  -webkit-align-items: center
+  height: 75px
+  > .text
+    padding: 12.5px 10px
+    > .track-name
+      font-size: 20px
+      line-height: 30px
+    > .artist-name
+      font-size: 15px
+      line-height: 20px
+  > [class *= 'icon']
+    width: 2em
+    line-height: 75px
+    display: none
+  &:hover
+    > [class *= 'icon']
+      display: block

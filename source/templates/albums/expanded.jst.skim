@@ -1,0 +1,3 @@
+.card
+  .front style="background-image: url(#{@album.artwork.get('icon')})"
+  .back

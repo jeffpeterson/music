@@ -1,14 +1,12 @@
-.status
-  - if @track.get('inCollection')
-    .icon.ok
-  - else
-    a.icon.add href="#"
-    /a href="#" &plus;
+- if @track.get('inCollection')
+  i.status.icon-ok
+- else
+  i.status.add-to-collection.icon-plus-sign
 
 .track-number = @track.get('trackNum')
 
 .text
   .track-name = @track.get('name')
 
-a.icon.play  href='#'
-a.icon.queue href='#'
+i.play-now.icon-play
+i.add-to-queue.icon-share-alt

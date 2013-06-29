@@ -5,11 +5,6 @@ class App.Views.AlbumTrackIndex extends App.Views.TrackIndex
   initialize: ->
     @listenTo @collection, "reset", @render
 
-    @colors = @collection.album.artwork.colors()
-    @$el.css
-      backgroundColor: "rgb(#{@colors.background})"
-      color: "rgb(#{@colors.primary})"
-
   render: ->
     super()
     this

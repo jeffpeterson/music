@@ -3,6 +3,6 @@
 source 'https://rubygems.org'
 
 gem 'middleman', '~> 3.1.0'
-gem 'skim', git: 'git://github.com/yury/skim.git', branch: 'slim2'
-gem 'slim'
-gem 'eco'
+gem 'slim',      '~> 2.0.0'
+gem 'skim',      '~> 0.9.0'
+gem 'eco',       '~> 1.0.0'

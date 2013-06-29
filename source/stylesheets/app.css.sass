@@ -7,10 +7,9 @@ $blue: #79c
 $green: #8c8
 $brown: #7F6A5B
 $color: hsl(220, 15%, 40%)
-
+$highlight: lighten($color, 10%)
 $background-color: $white
 
-@import 'icons'
 @import 'tracks'
 @import 'queue'
 
@@ -43,7 +42,7 @@ body
 a
   text-decoration: none
   color: inherit
-  border-bottom: 1px solid transparent
+  cursor: default
 
 button
   -webkit-appearance: none
@@ -92,7 +91,7 @@ input
 .accent
   color: $color + #555
 
-#bar > #show-sidebar.icon
+#bar > #show-sidebar
   display: none
   -webkit-flex-shrink: 0
   &.to-left:before
@@ -110,12 +109,11 @@ input
   left: 0
   right: 0
   z-index: 10
-  background-color: rgba(255,255,255, 0.8)
+  background-color: rgba(245, 245, 245, 0.95)
   box-shadow: 0 0 30px rgba(0,0,0, 0.2)
-  > .icon
+  > [class *= 'icon']
     -webkit-flex-shrink: 1
     display: table-cell
-    line-height: 75px
     width: 2em
 
 #logo
@@ -123,9 +121,11 @@ input
   width: 75px
   line-height: 75px
   text-align: center
-  cursor: pointer
+  cursor: default
   -webkit-flex-shrink: 0
   box-sizing: border-box
+  &:hover
+    color: $highlight
 
 #search
   width: 100%
@@ -145,14 +145,17 @@ input
   width: 300px
   height: 100%
   z-index: 20
-  display: table
   position: relative
+  display: -webkit-flex
+  -webkit-justify-content: space-around
+  -webkit-align-items: center
   -webkit-flex-shrink: 0
-  > .icon
-    width: 33.33%
-    display: table-cell
-    height: 65px
-    vertical-align: middle
+  > i
+    -webkit-flex-grow: 2
+    text-align: center
+  > .shuffle, > .repeat
+    font-size: 0.8em
+    -webkit-flex-grow: 1
 
 #volume
   -webkit-appearance: none
@@ -220,70 +223,88 @@ ul.albums
     > .album
       opacity: 0.3
 
-.track-list
-  width: 100%
-  padding: 40px
-  -webkit-columns: 2
-  -webkit-column-gap: 40px
-  z-index: 20
-  position: relative
-  > .track
-    -webkit-column-break-inside: avoid
-    border-radius: 4px
-    height: 40px
-    > .status
-      opacity: 0.3
-      font-size: 0.8em
-      width: 40px
-      line-height: 40px
-      text-align: center
-      -webkit-flex-shrink: 0
-      > .icon
-        vertical-align: middle
-    > .track-number
-      font-size: 14px
-      width: 40px
-      line-height: 40px
-      text-align: center
-      -webkit-flex-shrink: 0
-    > .text
-      padding: 0
-      > .track-name
-        line-height: 40px
-    > .icon
-      line-height: 40px
-    &:hover
-      background-color: rgba(255,255,255, 0.02)
-      > .status
-        opacity: 1
-        > .icon.phone
-          opacity: 0.3
-    &.not-in-collection
-      opacity: 0.5
-
-  .album-art
-    display: none
-
 .album
   position: relative
   width: 200px
-  -webkit-flex-grow: 1
   background-size: 100% auto
+  -webkit-flex-grow: 1
   &:before
     content: ""
     display: block
     padding-top: 100%
-  > .text
-    display: none
-    padding: 10px
+
+.expanded-album
+  -webkit-perspective-origin: center center
+  -webkit-perspective: 500px
+  position: absolute
+  z-index: 100
+  background-size: 100% auto
+  transition: all 0.5s
+  &:before
+    content: ""
+    display: block
+    padding-top: 100%
+  &.expanded
+    width: 500px
+    height: 500px
+    max-width: 100%
+    > .card
+      -webkit-transform: rotateX(180deg)
+      > .front, > .back
+  > .card
+    transition: all 1s
+    -webkit-transition: translate3d(0,0,0)
+    -webkit-transform-style: preserve-3d
     position: absolute
-    bottom: 0
+    top: 0
     left: 0
     right: 0
-  &.expanded
-    box-shadow: 0 0 30px rgba(0,0,0, 0.6)
-    opacity: 1.0 !important
-    // box-shadow: 0 0 30px rgba(0,0,0, 0.5)
+    bottom: 0
+    > .front, > .back
+      -webkit-backface-visibility: hidden
+      background-size: 100% auto
+      width: 100%
+      height: 100%
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+    > .back
+      -webkit-transform: rotateX(180deg)
+
+.track-list
+  box-shadow: 0 0 30px rgba(0,0,0, 0.6)
+  overflow: auto
+  width: 100%
+  height: 100%
+  padding: 10px
+  position: relative
+  > .track
+    height: 40px
+    -webkit-column-break-inside: avoid
+    border-radius: 4px
+    > .status
+      opacity: 0.3
+      display: inline-block
+      font-size: 0.8em
+      width: 40px
+      text-align: center
+      -webkit-flex-shrink: 0
+      &.add-to-collection
+        visibility: hidden
+    > .track-number
+      font-size: 14px
+      width: 50px
+      text-align: center
+      -webkit-flex-shrink: 0
+    > .text
+      padding: 0
+    &:hover
+      background-color: rgba(255,255,255, 0.02)
+      > .status
+        opacity: 1
+        visibility: visible
 
 .track-name, .album-name, .artist-name
   white-space: nowrap
@@ -299,16 +320,6 @@ ul.albums
 .album-art
   width: 75px
   -webkit-flex-shrink: 0
-
-.icon.remove
-  padding: 0
-  width: auto
-  cursor: pointer
-  line-height: 30px
-  margin: 12.5px 12.5px 0 0
-  -webkit-flex-shrink: 0
-  &:hover
-    color: inherit
 
 .text
   font-size: 15px
@@ -326,7 +337,7 @@ ul.albums
     display: block
   .track-list
     -webkit-columns: 1
-  #bar > #show-sidebar.icon
+  #bar > #show-sidebar
     display: inline-block
   #bar, #sidebar
     -webkit-transition: right 0.5s, left 0.5s
