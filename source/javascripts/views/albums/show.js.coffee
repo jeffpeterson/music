@@ -33,7 +33,6 @@ class App.Views.AlbumShow extends Backbone.View
     is_expanded = @$el.hasClass('expanded')
 
     $(".expanded").removeClass("expanded")
-    $("body").css backgroundColor: ''
 
     @hide_track_list()
     if not is_expanded

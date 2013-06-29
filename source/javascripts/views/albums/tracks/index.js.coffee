@@ -12,9 +12,6 @@ class App.Views.AlbumTrackIndex extends App.Views.TrackIndex
 
   render: ->
     super()
-
-    $("body").css
-      backgroundColor: "rgb(#{@colors.background})"
     this
 
   add: (track) ->
