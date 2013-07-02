@@ -4,6 +4,7 @@ class App.Views.Touch extends Backbone.View
     touchstart: 'touchstart'
     touchmove:  'touchmove'
     touchend:   'touchend'
+    scroll:     'scroll'
     'click #show-sidebar': 'toggle_sidebar'
 
   initialize: ->
@@ -65,3 +66,9 @@ class App.Views.Touch extends Backbone.View
       x = 0
 
     @$main.transit x: x, 200
+
+  scroll: (event) ->
+    console.log('scroll')
+    if event.scrollY - @scrollHeight < 500
+      App.trigger 'infinite-scroll'
+

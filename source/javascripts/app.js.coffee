@@ -41,8 +41,8 @@ window.App =
       cached_object[property] = fn?()
       App.set_local(key, cached_object)
     cached_object[property]
+_.extend App, Backbone.Events
 
-console.time "R.ready"
 $(document).ready ->
   App.time "App.initialize"
 

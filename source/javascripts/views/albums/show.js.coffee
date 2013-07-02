@@ -19,24 +19,10 @@ class App.Views.AlbumShow extends Backbone.View
 
   expand: (event) ->
     event.preventDefault()
-    @render_track_list()
+    @render_expanded_view()
 
-  render_track_list: ->
-    @expanded_view or= new App.Views.AlbumExpanded model: @model
-    $el = @expanded_view.render().$el
-    offset = @$el.offset()
-    $el.css
-      top:   offset.top# - window.scrollY
-      left:  offset.left
-      right: 'auto'
-      width: @$el.width()
-      height: @$el.height()
+  render_expanded_view: ->
+    @expanded_view or= new App.Views.AlbumExpanded model: @model, original: this
 
-    $("body").append $el
-    setTimeout (->
-      $el.addClass('expanded')
-      $el.css
-        width: ''
-        height: ''
-    ), 10
+    $("body").append @expanded_view.render().el
     this
