@@ -71,6 +71,16 @@ class window.ColorFinder
     for color in colors
       Math.round(color / 50) * 50
 
+  yuv: ([r,g,b]) ->
+    y = 0.299 * r + (0.587 * g) + (0.114 * b)
+    u = 0.492 * (b - y)
+    v = 0.877 * (r - y)
+    [y, u, v]
+
+  distance: (rgb1, rgb2) ->
+    yuv1 = @yuv rgb1
+    yuv2 = @yuv rgb2
+
   hue: ([r, g, b]) ->
     beta  = 0.003396178055 * (g - b)
     alpha = 0.001960784314 * (2 * r - g - b)
