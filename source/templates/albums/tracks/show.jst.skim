@@ -3,8 +3,6 @@
 - else
   i.status.add-to-collection.icon-plus-sign
 
-.track-number = @track.get('trackNum')
-
 .text
   .track-name = @track.get('name')
 

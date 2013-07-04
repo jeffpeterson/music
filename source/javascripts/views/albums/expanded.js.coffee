@@ -9,7 +9,7 @@ class App.Views.AlbumExpanded extends Backbone.View
 
   render: ->
     @track_list or= new App.Views.AlbumTrackIndex collection: @model.track_list
-    @colors     or= @model.artwork.colors()
+    @colors     or= @model.artwork.get('colors')
     @model.track_list.lazy_fetch()
 
     @$el.html @template(album: @model)
@@ -22,12 +22,19 @@ class App.Views.AlbumExpanded extends Backbone.View
       width:  @original.$el.width()
       height: @original.$el.height()
 
-    @$('.back').html @track_list.render().el
-    @$('ul').css
-      backgroundColor: "rgba(#{@colors.background}, 0.9)"
-    @render_flip_over()
+    @$('.back').append @track_list.render().el
 
+    @render_colors()
+    @render_flip_over()
     @render_click_shield()
+    this
+
+  render_colors: ->
+    @$('.back').css
+      backgroundColor: "rgba(#{@colors.background}, 0.9)"
+      color:           "rgb(#{@colors.primary})"
+    @$('.secondary').css color: "rgb(#{@colors.secondary})"
+    @$('.detail').css    color: "rgb(#{@colors.detail})"
     this
 
   render_flip_over: ->

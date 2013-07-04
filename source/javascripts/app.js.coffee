@@ -13,6 +13,7 @@ window.App =
     App.collection.artists = new App.Collections.Artists
     App.collection.albums  = new App.Collections.Albums
     App.collection.tracks  = new App.Collections.Tracks
+    App.collection.heavy_rotation = 1
 
     App.player = new App.Models.Player
     App.queue  = new App.Models.Queue

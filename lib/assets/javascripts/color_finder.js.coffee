@@ -37,10 +37,6 @@ class window.ColorFinder
   find_background: (size = 1, offset = 0) ->
     edge_pixels  = @image_data(offset, offset, @width - offset * 2, size)
     colors = @find_colors(edge_pixels)
-
-    if colors.length < 3 and offset < @height / 10
-      return @find_background(size, offset + 1)
-
     colors[0]
 
   find_colors: (pixels) ->
@@ -57,7 +53,6 @@ class window.ColorFinder
       rgbs   = [p[i], p[i+1], p[i+2]]
       rgb    = rgbs.join(',')
       step   = @round(rgbs).join(',')
-      # step   = @round([@hue(rgbs)]).join(',')
 
       buckets[step]      or= {count: 0, colors: {}}
       buckets[step].count += 1
@@ -77,31 +72,16 @@ class window.ColorFinder
     v = 0.877 * (r - y)
     [y, u, v]
 
-  distance: (rgb1, rgb2) ->
+  distance_squared: (rgb1, rgb2) ->
     yuv1 = @yuv rgb1
     yuv2 = @yuv rgb2
 
-  hue: ([r, g, b]) ->
-    beta  = 0.003396178055 * (g - b)
-    alpha = 0.001960784314 * (2 * r - g - b)
-    Math.round(Math.atan2(beta, alpha) * 360)
-
-  lightness: (r, g, b) ->
-    0.5 * (Math.max(r, g, b) + Math.min(r, g, b))
-
-  luminosity_of: (color) ->
-    [r, g, b] = (Math.pow(p / 255, 2.2) for p in color.split(','))
-    (0.2126 * r) + (0.7152 * g) + (0.0722 * b)
+    _.reduce (Math.pow(p - yuv2[i], 2) for p, i in yuv1), ((sum, i) -> sum + i), 0
 
   are_contrasting: (a, b) ->
-    @contrast(a, b) > 2.5
-    # 4.0 is recommended by W3C
-
-  contrast: (a, b) ->
-    high = @luminosity_of(a) + 0.05
-    low  = @luminosity_of(b) + 0.05
-    [high, low] = [low, high] if high < low
-    high / low
+    a = a.split(',')
+    b = b.split(',')
+    @distance_squared(a, b) > 10000
 
   contrasts_background: (color) ->
     @are_contrasting color, @colors.background

@@ -1,3 +1,5 @@
 .card
   .cover style="background-image: url(#{@album.artwork.get('icon')})"
   .back
+    .album-name.secondary = @album.get('name')
+    .artist-name.detail = @album.get('artist')

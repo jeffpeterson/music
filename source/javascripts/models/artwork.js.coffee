@@ -2,13 +2,13 @@ class App.Models.Artwork extends Backbone.Model
   defaults:
     icon: ''
     'icon-500': ''
+    colors:
+      background: "0,0,0"
+      primary:    "255,255,255"
+      secondary:  "255,255,255"
+      detail:     "255,255,255"
 
-  colors: ->
-    colors = @get('colors') or App.memo 'colors', @get('icon')
-    return colors if colors
-
-    @analyze()
-    @get('colors')
+  colors: -> @get('colors')
 
   initialize: ->
     @set('icon-200', @get('icon'))
@@ -17,8 +17,12 @@ class App.Models.Artwork extends Backbone.Model
       @get('icon-200').replace("square-200", "square-500")
 
     @set('icon', @get('icon-500')) if devicePixelRatio > 1
+    @analyze()
 
   analyze: ->
+    if colors = App.memo('colors', @get('icon'))
+      return @set {colors}
+
     ColorFinder.analyze @get('icon'), (colors) =>
       @set 'colors', colors
       App.memo 'colors', @get('icon'), -> colors
