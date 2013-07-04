@@ -4,13 +4,14 @@ class App.Views.QueueShow extends Backbone.View
   initialize: ->
     @listenTo @model.tracks, "reset",                @render
     @listenTo @model.tracks, "add",                  @add
-    @listenTo @model,        "change:current_track", @render_playing_track
+    @listenTo @model,        "change:current_track", @render_current_track
 
   render: ->
     @$el.empty()
     @model.tracks.each (track) =>
       @add track
-    @render_playing_track()
+    @render_current_track()
+
     this
 
   add: (track) ->
@@ -23,6 +24,7 @@ class App.Views.QueueShow extends Backbone.View
     else
       @$el.append $el
 
-  render_playing_track: ->
+  render_current_track: ->
     $("#current-track").removeAttr("id")
     @model.get('current_track')?.trigger("current")
+    this

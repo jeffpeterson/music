@@ -3,26 +3,29 @@ window.App =
   Models:      {}
   Collections: {}
 
+  debug_on: true
   memo_pad: {}
 
   initialize: ->
     App.router = new App.Router
 
     App.collection = {}
-    App.collection.artists = new App.Collections.Artists JSON.parse(localStorage.artists || null)
-    App.collection.albums  = new App.Collections.Albums JSON.parse(localStorage.albums || null)
-    App.collection.tracks  = new App.Collections.Tracks JSON.parse(localStorage.tracks || null)
+    App.collection.artists = new App.Collections.Artists
+    App.collection.albums  = new App.Collections.Albums
+    App.collection.tracks  = new App.Collections.Tracks
 
     App.player = new App.Models.Player
     App.queue  = new App.Models.Queue
-    # $("body").append new App.Views.CssShow().render().el
 
     new App.Views.Touch
+    new App.Views.Scroll
     new App.Views.QueueShow(model: App.queue).render()
-    R.ready ->
-      new App.Views.PlayerShow(model: App.player).render()
+    new App.Views.PlayerShow(model: App.player).render()
 
     Backbone.history.start pushState: false
+
+  debug: (args...) ->
+    console.log("-- DEBUG:", args...) if App.debug_on
 
   time: (name, fn = eval(name), args...) ->
     console.time name
@@ -30,7 +33,14 @@ window.App =
     console.timeEnd name
 
   set_local: (key, value) ->
-    localStorage[key] = JSON.stringify(value)
+    if value
+      attrs = {}
+      attrs[key] = value
+    else
+      attrs = key
+
+    for key, value of attrs
+      localStorage[key] = JSON.stringify(value)
 
   get_local: (key, default_value = null) ->
     JSON.parse(localStorage[key] or null) or default_value
@@ -50,5 +60,3 @@ $(document).ready ->
     if not R.authenticated()
       R.authenticate(mode: 'redirect')
     console.timeEnd "R.ready"
-
-

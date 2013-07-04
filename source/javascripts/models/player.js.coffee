@@ -1,15 +1,32 @@
 class App.Models.Player extends Backbone.Model
+  defaults:
+    volume:   1
+    position: 0
+    shuffle:  false
+    repeat:   "all"
+    state:    "stopped"
+
   initialize: ->
-    console.log "player init"
+    super()
+    @load()
+
+    @on 'change', @store
+
+    R.ready => @rdio_ready()
     R.ready =>
-      R.player.on "change:position", => @trigger('change:position')
-      R.player.on "change:playState", => @trigger('change change:playState')
       R.player.on "change:volume", => @trigger("change change:volume")
       this
+
+  rdio_ready: ->
+    R.player.on "change:position", => @set position: R.player.position() / R.player.playingTrack().get('duration')
+    R.player.on "change:volume",   => @set volume:   R.player.volume()
+
   play: ->
+    @set state: 'playing'
     App.queue.play()
 
   pause: ->
+    @set state: 'paused'
     App.queue.pause()
 
   prev: ->
@@ -19,18 +36,18 @@ class App.Models.Player extends Backbone.Model
     App.queue.next()
 
   toggle: ->
-      App.queue.toggle()
-
-  volume: (percent) ->
-    if percent
-      R.player.volume(percent / 100)
-    Math.round(R.player.volume() * 100)
-
-  position: (percent) ->
-    if percent
-      R.player.position percent / 100 * R.player.playingTrack().get("duration")
-      return
-    if R.player.playingTrack()
-      R.player.position() / R.player.playingTrack().get("duration") * 100
+    if @get('state') is 'playing'
+      @pause()
     else
-      0
+      @play()
+
+  set_volume:   (float) ->
+    R.player.volume(float)
+    @set volume: float
+
+  set_position: (float) ->
+    R.player.position(float * R.player.playingTrack().get("duration"))
+    @set position: float
+
+  store: -> App.set_local 'Player': this
+  load:  -> @set App.get_local('Player')

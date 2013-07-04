@@ -22,11 +22,15 @@ class App.Views.TrackShow extends Backbone.View
 
   play_now: (event) =>
     event.preventDefault()
+    event.stopPropagation()
+
     App.queue.tracks.add(@model, at: App.queue.relative(1))
     App.queue.play(@model)
 
   add_to_queue: (event) ->
     event.preventDefault()
+    event.stopPropagation()
+
     App.queue.tracks.add @model
 
   dragstart: (event) ->

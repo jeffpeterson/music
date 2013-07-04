@@ -10,7 +10,8 @@ class App.Collections.TrackList extends App.Collections.Base
     super _.defaults(options, keys: @album.get('itemTrackKeys').join(','))
 
   parse: (response, options) ->
+    tracks = response.result
     for key in @album.get('trackKeys')
-      response[key].inCollection = true
-    _.values(response)
+      tracks[key].inCollection = true
+    _.values(tracks)
 

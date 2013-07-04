@@ -3,27 +3,27 @@ class App.Views.PlayerShow extends Backbone.View
   el: "#player"
 
   events:
-    'click .pause': (e) -> e.preventDefault(); @model.pause()
-    'click .play':  (e) -> e.preventDefault(); @model.play()
-    'click .next':  (e) -> e.preventDefault(); @model.next()
-    'click .prev':  (e) -> e.preventDefault(); @model.prev()
+    'click .pause': -> @model.pause()
+    'click .play':  -> @model.play()
+    'click .next':  -> @model.next()
+    'click .prev':  -> @model.prev()
     'input #volume': 'update_volume'
 
   initialize: ->
-    @model.on "change:playState", @render, this
+    @model.on "change:state", @render, this
     $(window).on 'keydown', @keypress
 
   render: ->
-    @$el.html @template()
+    @$el.html @template(@model.attributes)
     @render_volume()
     new App.Views.ProgressBarShow(model: @model).render()
     this
 
   render_volume: =>
-    $("#volume").val @model.volume()
+    $("#volume").val @model.get('volume')
 
   update_volume: =>
-    @model.volume $("#volume").val()
+    @model.set_volume $("#volume").val()
 
   keypress: (event) =>
     console.log event

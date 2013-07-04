@@ -1,7 +1,7 @@
 #= require ./artwork
+#= require ./item
 
-class App.Models.Track extends Backbone.Model
-  idAttribute: 'key'
+class App.Models.Track extends App.Models.Item
   initialize: ->
     @artwork = new App.Models.Artwork(icon: @get('icon'))
     @compute 'full', ->

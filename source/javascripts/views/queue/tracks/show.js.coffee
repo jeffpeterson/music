@@ -10,7 +10,7 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
     @listenTo @model.artwork, 'change', @render_colors
 
   events:
-    'click .remove': 'remove'
+    'click .remove': 'remove_from_queue'
     'click .text':   'expand'
     dragstart:       'dragstart'
     dragenter:       'dragenter'
@@ -55,11 +55,10 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
     App.queue.play(@model)
 
   dragstart: (event) -> true
-  dragenter: => @$el.addClass("dragover")        
-  dragleave: => @$el.removeClass("dragover")     
+  dragenter: => @$el.addClass("dragover")
+  dragleave: => @$el.removeClass("dragover")
 
-  remove: (event) =>
-    event?.preventDefault()
+  remove_from_queue: =>
     @model.collection.remove @model
 
   removed: (model) ->
@@ -67,7 +66,8 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
 
     @$el.transit
       height: 0
-      complete: =>
-        @remove()
+      duration: 500
+      complete: => @remove()
+
   current: =>
     @$el.attr id: 'current-track'

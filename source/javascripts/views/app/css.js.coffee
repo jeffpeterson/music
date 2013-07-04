@@ -5,7 +5,7 @@ class App.Views.CssShow extends Backbone.View
     media: 'screen'
     type: 'text/css'
 
-  template: JST['css/show']
+  template: JST['app/css']
 
   initialize: ->
     @listenTo App.queue, 'change:current_track', @render

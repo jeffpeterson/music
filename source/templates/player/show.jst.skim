@@ -1,6 +1,6 @@
 i.repeat.icon-repeat
 i.prev.icon-fast-backward
-- if R?.player? and R.player.playState() is R.player.PLAYSTATE_PLAYING
+- if @state is 'playing'
   i.pause.icon-pause
 - else
   i.play.icon-play
