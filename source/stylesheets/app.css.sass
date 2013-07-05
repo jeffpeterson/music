@@ -270,10 +270,16 @@ ul.albums
   transition: all 0.25s
   @if $debug
     transition: all 5s
-  top: -webkit-calc(50% - 250px)
-  left: -webkit-calc(50% - 500px)
   width: 500px
   height: 500px
+  top: -webkit-calc(50% - 250px)
+  left: -webkit-calc(50% - 500px)
+  @media (max-width: 1000px)
+    top: -webkit-calc(50% - 500px)
+    left: -webkit-calc(50% - 250px)
+  @media (max-width: 500px)
+    width: 100%
+    left: 0
   > .card
     transition: all 0.25s
     @if $debug
@@ -303,9 +309,6 @@ ul.albums
       > .album-name, > .artist-name
         -webkit-flex-shrink: 0
         padding-left: 10px
-  @media (max-width: 1000px)
-    top: -webkit-calc(50% - 500px)
-    left: -webkit-calc(50% - 250px)
   &.expanded
     > .card
       -webkit-transform: rotateX(0deg)
