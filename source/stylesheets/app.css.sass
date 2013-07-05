@@ -126,6 +126,7 @@ input
   width: 100%
 
 #bar
+  -webkit-transition: height 0.25s
   display: -webkit-flex
   -webkit-align-items: center
   height: 75px
@@ -142,9 +143,7 @@ input
     width: 2em
 
 #logo
-  display: table-cell
   width: 75px
-  line-height: 75px
   text-align: center
   cursor: default
   -webkit-flex-shrink: 0
@@ -152,10 +151,12 @@ input
   &:hover
     color: $highlight
 
+i:hover, button:hover, a:hover
+  color: $highlight
+
 #search
   width: 100%
   -webkit-flex: 100px 1 1
-  display: table-cell
   margin: 0
   padding-left: 10px
   height: 100%
@@ -224,6 +225,7 @@ input
 #content
   height: 100%
   > ul
+    -webkit-transition: padding-top 0.25s
     box-sizing: border-box
     overflow: hidden
     height: 100%
@@ -396,3 +398,8 @@ ul.tracks.track-list
       margin-right: 300px
       margin-left: -300px
 
+@media (max-height: 400px)
+  #bar
+    height: 40px
+  #content > ul, #queue
+    padding-top: 40px
