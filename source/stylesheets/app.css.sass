@@ -315,6 +315,9 @@ ul.albums
     > .card
       -webkit-transform: rotateX(0deg)
       > .back
+        -webkit-transition-delay: 0.20s
+        @if $debug
+          -webkit-transition-delay: 5s
         left: 100%
         @media (max-width: 1000px)
           left: 0
