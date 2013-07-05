@@ -31,7 +31,7 @@ class App.Views.AlbumExpanded extends Backbone.View
 
   render_colors: ->
     @$('.back').css
-      backgroundColor: "rgba(#{@colors.background}, 0.9)"
+      backgroundColor: "rgba(#{@colors.background}, 1)"
       color:           "rgb(#{@colors.primary})"
     @$('.secondary').css color: "rgb(#{@colors.secondary})"
     @$('.detail').css    color: "rgb(#{@colors.detail})"
@@ -44,6 +44,8 @@ class App.Views.AlbumExpanded extends Backbone.View
       @$el.css
         width: ''
         height: ''
+        left: ''
+        top: ''
     ), 10
     this
 
@@ -64,11 +66,13 @@ class App.Views.AlbumExpanded extends Backbone.View
   out: (complete) ->
     $(".click-shield").transit opacity: 0
     @$el.removeClass('expanded')
+    offset = @original.$el.offset()
     @$el.transit
-      # opacity: 0
       duration: 500
       width: @original.$el.width()
       height: @original.$el.height()
+      top:    offset.top - window.scrollY
+      left:   offset.left
       complete: complete
 
 

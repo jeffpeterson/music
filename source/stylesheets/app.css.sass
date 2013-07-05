@@ -262,8 +262,6 @@ ul.albums
     padding-top: 100%
 
 .expanded-album
-  -webkit-perspective-origin: center center
-  -webkit-perspective: 1000px
   -webkit-transform: translate3d(0,0,0)
   max-width: 100%
   position: fixed
@@ -272,48 +270,50 @@ ul.albums
   transition: all 0.25s
   @if $debug
     transition: all 5s
+  top: -webkit-calc(50% - 250px)
+  left: -webkit-calc(50% - 500px)
   width: 500px
   height: 500px
-  &:before
-    content: ""
-    display: block
-    padding-top: 100%
   > .card
-    transition: all 0.5s
+    transition: all 0.25s
     @if $debug
-      transition: all 10s
-    -webkit-transform-style: preserve-3d
-    -webkit-transform: rotateX(180deg)
+      transition: all 5s
     position: absolute
     top: 0
     left: 0
     right: 0
     bottom: 0
+    box-shadow: 0 0 30px rgba(0,0,0, 0.6)
     > .cover, > .back
-      box-shadow: 0 0 30px rgba(0,0,0, 0.6)
-      -webkit-transform-style: preserve-3d
-      -webkit-backface-visibility: hidden
       background-size: 100% auto
       position: absolute
       top: 0
       left: 0
+      width: 100%
+      height: 100%
     > .cover
-      -webkit-transform: rotateX(-180deg)
-      bottom: 0
-      right: 0
+      z-index: 10
     > .back
-      width:  500px
-      height: 500px
+      transition: all 0.25s
+      @if $debug
+        transition: all 5s
       padding: 10px 10px 0
       display: -webkit-flex
       -webkit-flex-direction: column
       > .album-name, > .artist-name
         -webkit-flex-shrink: 0
         padding-left: 10px
-
+  @media (max-width: 1000px)
+    top: -webkit-calc(50% - 500px)
+    left: -webkit-calc(50% - 250px)
   &.expanded
     > .card
       -webkit-transform: rotateX(0deg)
+      > .back
+        left: 100%
+        @media (max-width: 1000px)
+          left: 0
+          top: 100%
 
 ul.tracks.track-list
   padding: 10px 0
