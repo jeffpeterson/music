@@ -303,6 +303,7 @@ ul.albums
       z-index: 10
     > .back
       transition: all 0.25s
+      overflow: hidden
       @if $debug
         transition: all 5s
       padding: 10px 10px 0
@@ -315,7 +316,7 @@ ul.albums
     > .card
       -webkit-transform: rotateX(0deg)
       > .back
-        -webkit-transition-delay: 0.20s
+        -webkit-transition-delay: 0.25s
         @if $debug
           -webkit-transition-delay: 5s
         left: 100%
