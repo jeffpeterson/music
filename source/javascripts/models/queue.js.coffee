@@ -52,9 +52,11 @@ class App.Models.Queue extends App.Models.Playlist
   pause: ->
     R.player?.pause()
 
+  current_index: (offset = 0) ->
+    @tracks.indexOf(@get 'current_track') + offset
+
   relative: (offset) ->
-    index = @tracks.indexOf @get('current_track')
-    index += offset
+    index  = @current_index(offset)
     index %= @tracks.length
     index += @tracks.length if index < 0
     index

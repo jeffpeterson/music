@@ -14,13 +14,19 @@ class App.Views.QueueShow extends Backbone.View
 
     this
 
-  add: (track) ->
+  add: (track, queue, options) ->
+
     $el       = new App.Views.QueueTrackShow(model: track).render().$el
     index     = @model.tracks.indexOf(track)
     $children = @$el.children()
 
+    App.debug 'track added at index:', index
+
     if $children.length > 0
-      $el.insertAfter $children[index - 1]
+      if index is 0
+        $el.insertBefore $children.first()
+      else
+        $el.insertAfter $children[index - 1]
     else
       @$el.append $el
 

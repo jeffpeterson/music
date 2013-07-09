@@ -24,7 +24,7 @@ class App.Views.TrackShow extends Backbone.View
     event.preventDefault()
     event.stopPropagation()
 
-    App.queue.tracks.add(@model, at: App.queue.relative(1))
+    App.queue.tracks.add(@model, at: App.queue.current_index(1))
     App.queue.play(@model)
 
   add_to_queue: (event) ->
