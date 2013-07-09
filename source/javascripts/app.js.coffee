@@ -20,8 +20,8 @@ window.App =
 
     new App.Views.Touch
     new App.Views.Scroll
+    new App.Views.Bar().render()
     new App.Views.QueueShow(model: App.queue).render()
-    new App.Views.PlayerShow(model: App.player).render()
 
     Backbone.history.start pushState: false
 

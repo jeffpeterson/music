@@ -17,14 +17,15 @@ class App.Models.Player extends Backbone.Model
   rdio_ready: ->
     R.player.on "change:position", => @set position: R.player.position() / R.player.playingTrack().get('duration')
     R.player.on "change:volume",   => @set volume:   R.player.volume()
-    R.player.on "change:playState", (play_state) =>
-      @set state: switch play_state
+    R.player.on "change:playState", (rdio_play_state) =>
+      state = switch rdio_play_state
         when R.player.PLAYSTATE_PAUSED    then 'paused'
         when R.player.PLAYSTATE_PLAYING   then 'playing'
         when R.player.PLAYSTATE_STOPPED   then 'stopped'
         when R.player.PLAYSTATE_BUFFERING then 'buffering'
         when R.player.PLAYSTATE_OFFLINE   then 'offline'
 
+      @set {state}
 
   play: ->
     @set state: 'playing'

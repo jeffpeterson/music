@@ -139,8 +139,13 @@ input
   box-shadow: 0 0 30px rgba(0,0,0, 0.2)
   > [class *= 'icon']
     -webkit-flex-shrink: 1
-    display: table-cell
-    width: 2em
+    -webkit-transition: color 0.4s, background-color 0.4s, line-height 0.25s
+    width: 50px
+    text-align: center
+    line-height: 75px
+    &.current
+      background-color: rgba($color, 0.9)
+      color: white
 
 #logo
   width: 75px
@@ -199,8 +204,8 @@ i:hover, button:hover, a:hover
 
 #progress
   position: absolute
-  left: 0
-  right: 0
+  left: 5px
+  right: 5px
   bottom: 0
   height: 10px
   cursor: pointer
@@ -208,13 +213,13 @@ i:hover, button:hover, a:hover
   > .position
     height: 2px
     position: absolute
-    bottom: 0
+    bottom: 2px
     left: 0
     z-index: 1
     background-color: $color
     width: 0
     transition: height 0.2s//, width 1s linear
-    border-right: 2px solid white
+    border-radius: 4px
 
 #main
   margin-right: 300px
@@ -405,5 +410,7 @@ ul.tracks.track-list
 @media (max-height: 400px)
   #bar
     height: 40px
+    > [class *= 'icon']
+      line-height: 40px
   #content > ul, #queue
     padding-top: 40px

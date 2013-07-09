@@ -10,17 +10,22 @@ class App.Views.PlayerShow extends Backbone.View
     'input #volume': 'update_volume'
 
   initialize: ->
-    @model.on "change:state", @render, this
+    @listenTo @model, 'change:state', @render
+
     $(window).on 'keydown', @keypress
 
   render: ->
     @$el.html @template(@model.attributes)
-    @render_volume()
+
+    @render_repeat()
+
     new App.Views.ProgressBarShow(model: @model).render()
+
     this
 
-  render_volume: =>
-    $("#volume").val @model.get('volume')
+  render_repeat: ->
+    @$('.repeat').removeClass('all one none').addClass(@model.get 'repeat')
+    this
 
   update_volume: =>
     @model.set_volume $("#volume").val()
