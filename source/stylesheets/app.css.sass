@@ -1,5 +1,6 @@
-@import url("http://fonts.googleapis.com/css?family=Raleway:300")
+@import url("http://fonts.googleapis.com/css?family=Raleway:300,500")
 
+$bold: 500
 
 $debug: false
 
@@ -115,6 +116,9 @@ input
     opacity: 0
   to
     opacity: 1
+
+.by
+  opacity: 0.5
 
 #bar > #show-sidebar
   display: none
@@ -317,6 +321,15 @@ ul.albums
       > .album-name, > .artist-name
         -webkit-flex-shrink: 0
         padding-left: 10px
+      > .album-name
+        font-size: 1.5em
+        line-height: 1.5em
+      > .artist-name
+        font-weight: $bold
+        font-size: 1.1em
+        line-height: 1.5em
+        margin-top: -10px
+
   &.expanded
     > .card
       -webkit-transform: rotateX(0deg)

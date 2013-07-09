@@ -33,8 +33,9 @@ class App.Views.AlbumExpanded extends Backbone.View
     @$('.back').css
       backgroundColor: "rgba(#{@colors.background}, 1)"
       color:           "rgb(#{@colors.primary})"
-    @$('.secondary').css color: "rgb(#{@colors.secondary})"
-    @$('.detail').css    color: "rgb(#{@colors.detail})"
+
+    @$('.album-name').css  color: "rgba(#{@colors.secondary}, 1.0)"
+    @$('.artist-name').css color: "rgba(#{@colors.secondary}, 0.5)"
     this
 
   render_flip_over: ->
