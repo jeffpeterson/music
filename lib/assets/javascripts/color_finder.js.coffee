@@ -89,7 +89,7 @@ class window.ColorFinder
     @distance_squared(a, b) > diff
 
   contrasts_background: (color_key) ->
-    Math.abs(@yuv(@colors.background.split(','))[0] - @yuv(color_key.split(','))[0]) > 50
+    Math.abs(@yuv(@colors.background.split(','))[0] - @yuv(color_key.split(','))[0]) > 75
 
 ColorFinder.analyze = (image_url, callback) ->
   new ColorFinder(image_url).analyze(callback)

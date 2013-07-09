@@ -7,11 +7,11 @@ class App.Views.ItemIndex extends Backbone.View
     @listenTo @collection, "change:current_request", @loading
 
   in: ->
-    @$el.css opacity: 0
-    @$el.transit opacity: 1
+    @$el.css x: '100%', opacity: 0
+    @$el.transit x: 0, opacity: 1
 
   out: ->
-    @$el.transit opacity: 0
+    @$el.transit x: '-100%', opacity: 0
 
   leave: ->
     @remove()

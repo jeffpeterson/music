@@ -69,7 +69,7 @@ class App.Views.AlbumExpanded extends Backbone.View
     @$el.removeClass('expanded')
     offset = @original.$el.offset()
     @$el.transit
-      duration: 500
+      duration: 700
       width: @original.$el.width()
       height: @original.$el.height()
       top:    offset.top - window.scrollY

@@ -1,8 +1,7 @@
 @import url("http://fonts.googleapis.com/css?family=Raleway:300,500")
 
-$bold: 500
-
-$debug: false
+$normal: 300
+$bold:   500
 
 $white: #fff
 $black: #000
@@ -11,8 +10,10 @@ $blue: #79c
 $green: #8c8
 $brown: #7F6A5B
 $color: hsl(220, 15%, 30%)
-$highlight: lighten($color, 10%)
+$highlight: lighten($color, 15%)
 $background-color: $white
+
+$flip-time: 0.8s
 
 @import 'tracks'
 @import 'queue'
@@ -106,19 +107,13 @@ input
   bottom: 0
   z-index: 50
   background-color: rgba(0,0,0, 0.8)
-  @if $debug
-    -webkit-animation: fade-in 10s
-  @else
-    -webkit-animation: fade-in 0.5s
+  -webkit-animation: fade-in $flip-time
 
 @-webkit-keyframes fade-in
   from
     opacity: 0
   to
     opacity: 1
-
-.by
-  opacity: 0.5
 
 #bar > #show-sidebar
   display: none
@@ -144,7 +139,7 @@ input
   > [class *= 'icon']
     -webkit-flex-shrink: 1
     -webkit-transition: color 0.4s, background-color 0.4s, line-height 0.25s
-    width: 50px
+    width: 60px
     text-align: center
     line-height: 75px
     &.current
@@ -273,14 +268,14 @@ ul.albums
     padding-top: 100%
 
 .expanded-album
+  -webkit-perspective-origin: center center
+  -webkit-perspective: 1000px
   -webkit-transform: translate3d(0,0,0)
   max-width: 100%
   position: fixed
   z-index: 100
   background-size: 100% auto
-  transition: all 0.25s
-  @if $debug
-    transition: all 5s
+  transition: all ($flip-time / 3)
   width: 500px
   height: 500px
   top: -webkit-calc(50% - 250px)
@@ -292,16 +287,19 @@ ul.albums
     width: 100%
     left: 0
   > .card
-    transition: all 0.25s
-    @if $debug
-      transition: all 5s
+    background-position: left top
+    background-repeat: no-repeat
+    -webkit-transform-style: preserve-3d
+    transition: all $flip-time
     position: absolute
     top: 0
     left: 0
     right: 0
     bottom: 0
     box-shadow: 0 0 30px rgba(0,0,0, 0.6)
+    -webkit-transform: rotateX(180deg)
     > .cover, > .back
+      -webkit-backface-visibility: hidden
       background-size: 100% auto
       position: absolute
       top: 0
@@ -309,12 +307,13 @@ ul.albums
       width: 100%
       height: 100%
     > .cover
-      z-index: 10
+      -webkit-transform: rotateX(180deg)
     > .back
-      transition: all 0.25s
+      width: 500px
+      height: 500px
+      z-index: 10
+      transition: all $flip-time / 2
       overflow: hidden
-      @if $debug
-        transition: all 5s
       padding: 10px 10px 0
       display: -webkit-flex
       -webkit-flex-direction: column
@@ -325,7 +324,6 @@ ul.albums
         font-size: 1.5em
         line-height: 1.5em
       > .artist-name
-        font-weight: $bold
         font-size: 1.1em
         line-height: 1.5em
         margin-top: -10px
@@ -334,9 +332,8 @@ ul.albums
     > .card
       -webkit-transform: rotateX(0deg)
       > .back
-        -webkit-transition-delay: 0.25s
-        @if $debug
-          -webkit-transition-delay: 5s
+        box-shadow: none
+        -webkit-transition-delay: $flip-time / 2
         left: 100%
         @media (max-width: 1000px)
           left: 0
