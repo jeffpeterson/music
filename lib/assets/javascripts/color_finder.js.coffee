@@ -26,8 +26,12 @@ class window.ColorFinder
       colors = (color for color in colors when @contrasts_background(color))
 
       @colors.primary   = colors.shift()
-      @colors.secondary = colors.shift()
-      @colors.detail    = colors.shift()
+
+      scolors = (color for color in colors when @are_contrasting(color, @colors.primary, 5000))
+      @colors.secondary = scolors.shift() or colors.shift() or @colors.primary
+
+      dcolors = (color for color in scolors when @are_contrasting(color, @colors.secondary, 5000))
+      @colors.detail    = dcolors.shift() or scolors.shift() or scolors.shift() or @colors.secondary
 
       callback?(@colors)
 
@@ -52,7 +56,8 @@ class window.ColorFinder
     for i in [0...p.length] by 4
       rgbs   = [p[i], p[i+1], p[i+2]]
       rgb    = rgbs.join(',')
-      step   = @round(rgbs).join(',')
+      yuv    = @yuv(rgbs)
+      step   = @round(yuv[1..2]).join(',')
 
       buckets[step]      or= {count: 0, colors: {}}
       buckets[step].count += 1
@@ -64,7 +69,7 @@ class window.ColorFinder
 
   round: (colors) ->
     for color in colors
-      Math.round(color / 50) * 50
+      Math.round(color / 25) * 25
 
   yuv: ([r,g,b]) ->
     y = 0.299 * r + (0.587 * g) + (0.114 * b)
@@ -78,13 +83,13 @@ class window.ColorFinder
 
     _.reduce (Math.pow(p - yuv2[i], 2) for p, i in yuv1), ((sum, i) -> sum + i), 0
 
-  are_contrasting: (a, b) ->
+  are_contrasting: (a, b, diff = 10000) ->
     a = a.split(',')
     b = b.split(',')
-    @distance_squared(a, b) > 10000
+    @distance_squared(a, b) > diff
 
-  contrasts_background: (color) ->
-    @are_contrasting color, @colors.background
+  contrasts_background: (color_key) ->
+    Math.abs(@yuv(@colors.background.split(','))[0] - @yuv(color_key.split(','))[0]) > 50
 
 ColorFinder.analyze = (image_url, callback) ->
   new ColorFinder(image_url).analyze(callback)
