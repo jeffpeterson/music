@@ -1,8 +1,10 @@
 .card style="background-image: url(#{@album.artwork.get('icon-500')})"
   .cover style="background-image: url(#{@album.artwork.get('icon-500')})"
   .back
-    .album-name  = @album.get('name')
+    .album-name = @album.get('name')
     .artist-name
       span.by
         ' by
       = @album.get('artist')
+      '
+      i.station.icon-microphone

@@ -3,6 +3,9 @@
 class App.Views.AlbumExpanded extends Backbone.View
   className: 'expanded-album'
 
+  events:
+    'click': 'play_station'
+
   template: JST['albums/expanded']
   initialize: (options) ->
     @original = options.original
@@ -52,7 +55,7 @@ class App.Views.AlbumExpanded extends Backbone.View
 
   render_click_shield: ->
     $shield = $("<div>").addClass("click-shield")
-    $shield.on 'click', => @remove()
+    $shield.one 'click', => @remove()
     $("body").addClass('freeze').append($shield)
     this
 
@@ -75,5 +78,9 @@ class App.Views.AlbumExpanded extends Backbone.View
       top:    offset.top - window.scrollY
       left:   offset.left
       complete: complete
+
+  play_station: (event) ->
+    event.preventDefault()
+    R.player.play source: 'r' + @model.get('rawArtistKey') + '|3'
 
 

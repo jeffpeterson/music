@@ -1,2 +1,6 @@
-class App.Models.Artist extends Backbone.Model
-  idAttribute: "key"
+#= require ./artwork
+#= require ./item
+
+class App.Models.Artist extends App.Models.Item
+  initialize: ->
+    @artwork    = new App.Models.Artwork(icon: @get('icon'))

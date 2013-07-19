@@ -39,7 +39,9 @@ class window.ColorFinder
     @ctx.getImageData(left, top, width, height).data
 
   find_background: (size = 1, offset = 0) ->
-    edge_pixels  = @image_data(offset, offset, @width - offset * 2, size)
+    edge_pixels  = []
+    edge_pixels.push @image_data(offset, offset, @width - offset * 2, size)...
+    edge_pixels.push @image_data(@width - offset - size, offset + size, size, @height - offset * 2 - size)...
     colors = @find_colors(edge_pixels)
     colors[0]
 

@@ -12,4 +12,4 @@ Backbone.ComputedAttributes =
 
     model.set computed_attribute, fn.apply(clone)
 
-Backbone.Model.prototype.compute = Backbone.ComputedAttributes.compute
+Backbone.Model::compute = Backbone.ComputedAttributes.compute
