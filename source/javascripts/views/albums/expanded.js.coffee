@@ -4,7 +4,7 @@ class App.Views.AlbumExpanded extends Backbone.View
   className: 'expanded-album'
 
   events:
-    'click': 'play_station'
+    'click .station': 'play_station'
 
   template: JST['albums/expanded']
   initialize: (options) ->
@@ -44,11 +44,11 @@ class App.Views.AlbumExpanded extends Backbone.View
       #     url(#{@model.artwork.get('icon-500')})"
       '.back':
         'background-color': "rgba(#{@colors.background}, 1)"
-        color:              "rgb(#{@colors.primary})"
+        color:              "rgb(#{@colors.secondary})"
       '.album-name':
-        color: "rgba(#{@colors.secondary}, 1.0)"
+        color: "rgba(#{@colors.primary}, 1.0)"
       '.artist-name, .release-date':
-        color: "rgba(#{@colors.secondary}, 0.5)"
+        color: "rgba(#{@colors.primary}, 0.5)"
       'button:active, .station:hover':
         color: "rgb(#{@colors.detail})"
       '.station':

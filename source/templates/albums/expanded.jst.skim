@@ -1,12 +1,13 @@
 .card
   .cover
   .back
-    .album-name = @album.get('name')
-    .artist-name
-      span.by
-        ' by
-      = @album.get('artist')
-      '
-      button.station.icon-microphone
-    .release-date
-      = @album.get('displayDate')
+    .info
+      .album-name = @album.get('name')
+      .artist-name
+        span.by
+          ' by
+        = @album.get('artist')
+        '
+        button.station.icon-microphone
+      .release-date
+        = @album.get('displayDate')

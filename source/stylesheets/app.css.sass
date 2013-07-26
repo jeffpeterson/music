@@ -333,22 +333,21 @@ ul.albums
       z-index: 10
       transition: all $flip-time / 2
       overflow: auto
-      padding: 10px 10px 0
       display: -webkit-flex
       -webkit-flex-direction: column
-      > .album-name, > .artist-name, > .release-date
+      > .info
         -webkit-flex-shrink: 0
-        padding-left: 10px
-      > .album-name
-        font-size: 1.5em
-        line-height: 1.5em
-      > .artist-name
-        font-size: 1.1em
-        line-height: 1.5em
-        margin-top: -10px
-      > .release-date
-        font-size:   0.7em
-        line-height: 1em
+        padding: 10px
+        > .album-name
+          font-size: 1.5em
+          line-height: 1.5em
+        > .artist-name
+          font-size: 1.1em
+          line-height: 1.5em
+          margin-top: -10px
+        > .release-date
+          font-size:   0.7em
+          line-height: 1em
 
   &.expanded
     > .card
