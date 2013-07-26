@@ -3,6 +3,9 @@ class App.Views.Bar extends Backbone.View
 
   template: JST['app/bar']
 
+  events:
+    'input #search': 'search'
+
   initialize: ->
     @listenTo Backbone.history, 'route', @render_current_path
     @$el.html @template()
@@ -18,3 +21,6 @@ class App.Views.Bar extends Backbone.View
     @$('a.current').removeClass('current')
     @$("a[href='##{fragment}']").addClass('current')
     this
+
+  search: (event) ->
+    App.trigger('search', event.target.value)

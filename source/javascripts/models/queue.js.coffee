@@ -9,12 +9,12 @@ class App.Models.Queue extends App.Models.Playlist
     super()
     @load()
 
-    R.ready => @rdio_ready()
-
-    @on 'change', @store
-
     @compute 'current_track', ->
       @tracks.get @get('current_key')
+
+    App.on 'rdio:ready', => @rdio_ready()
+
+    @on 'change', @store
 
     @listenTo @tracks, 'reset', -> @set('current_key', null)
     @listenTo @tracks, 'reset add remove', @store
@@ -22,6 +22,7 @@ class App.Models.Queue extends App.Models.Playlist
       @next() if (1 - position) * @get('current_track').get('duration') < 2
 
   rdio_ready: ->
+    console.log App.player.get('state'), @get('current_track')
     if App.player.get('state') is "playing" and @get('current_track')
       @play @get('current_track'), App.player.get('position')
 

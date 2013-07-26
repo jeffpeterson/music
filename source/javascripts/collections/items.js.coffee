@@ -3,9 +3,10 @@
 class App.Collections.Items extends App.Collections.Base
   method: 'get'
 
-  initialize: ->
+  initialize: (models, options) ->
     @load()
     @on 'reset', (collection) => @store()
+    super(arguments...)
 
   init_fetch: (options = {}) ->
     @fetch _.defaults(options, start: 0, reset: true)

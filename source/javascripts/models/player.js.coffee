@@ -12,7 +12,7 @@ class App.Models.Player extends Backbone.Model
 
     @on 'change', @store
 
-    R.ready => @rdio_ready()
+    App.on 'rdio:ready', => @rdio_ready()
 
   rdio_ready: ->
     R.player.on "change:position", => @set position: R.player.position() / R.player.playingTrack().get('duration')

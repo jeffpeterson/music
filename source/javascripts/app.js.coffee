@@ -10,10 +10,9 @@ window.App =
     App.router = new App.Router
 
     App.collection = {}
-    App.collection.artists = new App.Collections.Artists
-    App.collection.albums  = new App.Collections.Albums
-    App.collection.tracks  = new App.Collections.Tracks
-    App.collection.heavy_rotation = 1
+    App.collection.artists        = new App.Collections.Artists
+    App.collection.albums         = new App.Collections.Albums
+    App.collection.tracks         = new App.Collections.Tracks
 
     App.player = new App.Models.Player
     App.queue  = new App.Models.Queue
@@ -52,12 +51,20 @@ window.App =
       cached_object[property] = fn?()
       App.set_local(key, cached_object)
     cached_object[property]
+
 _.extend App, Backbone.Events
 
-$(document).ready ->
-  App.time "App.initialize"
+console.time "R.ready"
 
+window.rdio_loaded = ->
+  App.trigger 'rdio:loaded'
   R.ready ->
+    App.trigger 'rdio:ready'
+
+$ ->
+  App.time "App.initialize"
+  App.on 'rdio:ready', ->
     if not R.authenticated()
       R.authenticate(mode: 'redirect')
     console.timeEnd "R.ready"
+

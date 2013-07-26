@@ -11,11 +11,15 @@ class App.Views.AlbumExpanded extends Backbone.View
     @original = options.original
 
   render: ->
+    @styles     or= new App.Views.Style
     @track_list or= new App.Views.AlbumTrackIndex collection: @model.track_list
     @colors     or= @model.artwork.get('colors')
     @model.track_list.lazy_fetch()
 
-    @$el.html @template(album: @model)
+    @render_colors()
+
+    @$el.html   @styles.render().el
+    @$el.append @template(album: @model)
     @$el.attr('style', '')
 
     offset = @original.$el.offset()
@@ -27,18 +31,28 @@ class App.Views.AlbumExpanded extends Backbone.View
 
     @$('.back').append @track_list.render().el
 
-    @render_colors()
     @render_flip_over()
     @render_click_shield()
     this
 
   render_colors: ->
-    @$('.back').css
-      backgroundColor: "rgba(#{@colors.background}, 1)"
-      color:           "rgb(#{@colors.primary})"
-
-    @$('.album-name').css  color: "rgba(#{@colors.secondary}, 1.0)"
-    @$('.artist-name').css color: "rgba(#{@colors.secondary}, 0.5)"
+    @styles.css
+      '.cover, .card':
+        'background-image': "url(#{@model.artwork.get('icon-500')})"
+      # '.card':
+      #   'background-image': "linear-gradient(to left, rgb(#{@colors.background}), rgba(#{@colors.background}, 0.01)),
+      #     url(#{@model.artwork.get('icon-500')})"
+      '.back':
+        'background-color': "rgba(#{@colors.background}, 1)"
+        color:              "rgb(#{@colors.primary})"
+      '.album-name':
+        color: "rgba(#{@colors.secondary}, 1.0)"
+      '.artist-name, .release-date':
+        color: "rgba(#{@colors.secondary}, 0.5)"
+      'button:active, .station:hover':
+        color: "rgb(#{@colors.detail})"
+      '.station':
+        color: "rgba(#{@colors.detail}, 0.6)"
     this
 
   render_flip_over: ->
