@@ -329,8 +329,12 @@ ul.albums
     height: 100%
     box-shadow: 0 0 30px rgba(0,0,0, 0.6)
     -webkit-transform: rotateX(180deg)
+    padding-top: 20px
     > .close
-      padding: 0 10px
+      padding: 10px
+      position: absolute
+      top: 0
+      left: 0
     > .cover, > .back
       -webkit-backface-visibility: hidden
       background-size: 100% auto
@@ -368,6 +372,7 @@ ul.albums
       -webkit-transform: rotateX(0deg)
       @media (max-width: 1000px)
         @media (max-height: 600px)
+          -webkit-user-scrolling: touch
           overflow: auto
           > .back
             overflow: visible
