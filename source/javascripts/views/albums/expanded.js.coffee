@@ -13,14 +13,14 @@ class App.Views.AlbumExpanded extends Backbone.View
   render: ->
     @styles     or= new App.Views.Style
     @track_list or= new App.Views.AlbumTrackIndex collection: @model.track_list
-    @colors     or= @model.artwork.get('colors')
+    @colors       = @model.artwork.get('colors')
     @model.track_list.lazy_fetch()
 
     @render_colors()
 
     @$el.html   @styles.render().el
     @$el.append @template(album: @model)
-    @$el.attr('style', '')
+    @$el.attr(style: '')
 
     offset = @original.$el.offset()
     @$el.css
@@ -59,11 +59,7 @@ class App.Views.AlbumExpanded extends Backbone.View
     setTimeout (=>
       @$el.addClass('expanded')
       @original.$el.addClass('invisible')
-      @$el.css
-        width: ''
-        height: ''
-        left: ''
-        top: ''
+      @$el.attr(style: '')
     ), 10
     this
 

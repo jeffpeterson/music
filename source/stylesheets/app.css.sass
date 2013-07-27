@@ -264,7 +264,7 @@ button:active, a:active
 ul.albums
   display: -webkit-flex
   -webkit-flex-wrap: wrap
-  -webkit-justify-content: flex-start
+  -webkit-justify-content: flex-end
   -webkit-align-items: flex-start
   padding-left: 1px
   &.expanded
@@ -284,6 +284,14 @@ ul.albums
     content: ""
     display: block
     padding-top: 100%
+  &.unavailable
+    opacity: 1
+    &:before
+      background-color: rgba(0,0,0, 0.7)
+      content: "Unavailable"
+      padding-top: -webkit-calc(100% - 2em)
+      padding-left: 5px
+      color: white
 
 .expanded-album
   -webkit-perspective-origin: center center
@@ -348,7 +356,6 @@ ul.albums
         > .release-date
           font-size:   0.7em
           line-height: 1em
-
   &.expanded
     > .card
       -webkit-transform: rotateX(0deg)

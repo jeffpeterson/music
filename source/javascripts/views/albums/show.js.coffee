@@ -16,6 +16,10 @@ class App.Views.AlbumShow extends Backbone.View
     @$el.css backgroundImage: "url(#{@model.artwork.get('icon')})"
 
   render: ->
+    unless @model.get("canStream")
+      @$el.addClass "unavailable" 
+      @$el.attr draggable: false
+
     @$el.html @template(album: @model)
     this
 

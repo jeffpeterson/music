@@ -24,12 +24,16 @@ class App.Views.TrackShow extends Backbone.View
     event.preventDefault()
     event.stopPropagation()
 
+    return unless @model.get('canStream')
+
     App.queue.tracks.add(@model, at: App.queue.current_index(1))
     App.queue.play(@model)
 
   add_to_queue: (event) ->
     event.preventDefault()
     event.stopPropagation()
+
+    return unless @model.get('canStream')
 
     App.queue.tracks.add @model
 
