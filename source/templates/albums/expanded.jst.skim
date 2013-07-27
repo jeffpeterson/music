@@ -1,4 +1,5 @@
 .card
+  button.close.icon-remove-sign
   .cover
   .back
     .info

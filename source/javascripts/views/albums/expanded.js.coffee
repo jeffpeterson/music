@@ -5,12 +5,14 @@ class App.Views.AlbumExpanded extends Backbone.View
 
   events:
     'click .station': 'play_station'
+    'click .close':   'remove'
 
   template: JST['albums/expanded']
   initialize: (options) ->
     @original = options.original
 
   render: ->
+    @delegateEvents()
     @styles     or= new App.Views.Style
     @track_list or= new App.Views.AlbumTrackIndex collection: @model.track_list
     @colors       = @model.artwork.get('colors')
@@ -49,9 +51,9 @@ class App.Views.AlbumExpanded extends Backbone.View
         color: "rgba(#{@colors.primary}, 1.0)"
       '.artist-name, .release-date':
         color: "rgba(#{@colors.primary}, 0.5)"
-      'button:active, .station:hover':
+      'button:active, .station:hover, .close:hover':
         color: "rgb(#{@colors.detail})"
-      '.station':
+      '.station, .close':
         color: "rgba(#{@colors.detail}, 0.6)"
     this
 
