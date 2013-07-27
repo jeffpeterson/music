@@ -309,10 +309,15 @@ ul.albums
   @media (max-width: 1000px)
     top: -webkit-calc(50% - 500px)
     left: -webkit-calc(50% - 250px)
+    @media (max-height: 1000px)
+      top: 0
+    @media (max-height: 600px)
+      height: 100%
   @media (max-width: 500px)
     width: 100%
     left: 0
   > .card
+    background-size: 100% auto
     background-position: left top
     background-repeat: no-repeat
     -webkit-transform-style: preserve-3d
@@ -320,8 +325,8 @@ ul.albums
     position: absolute
     top: 0
     left: 0
-    right: 0
-    bottom: 0
+    width: 100%
+    height: 100%
     box-shadow: 0 0 30px rgba(0,0,0, 0.6)
     -webkit-transform: rotateX(180deg)
     > .cover, > .back
@@ -359,13 +364,21 @@ ul.albums
   &.expanded
     > .card
       -webkit-transform: rotateX(0deg)
+      @media (max-width: 1000px)
+        @media (max-height: 600px)
+          overflow: auto
+          > .back
+            overflow: visible
+            height: auto
       > .back
         box-shadow: none
         -webkit-transition-delay: $flip-time / 2
         left: 99.99%
         @media (max-width: 1000px)
           left: 0
-          top: 100%
+          margin-top: 100%
+        @media (max-width: 500px)
+          width: 100%
 
 ul.tracks.track-list
   padding: 10px 0
