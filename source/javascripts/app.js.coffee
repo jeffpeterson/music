@@ -10,9 +10,10 @@ window.App =
     App.router = new App.Router
 
     App.collection = {}
-    App.collection.artists        = new App.Collections.Artists
-    App.collection.albums         = new App.Collections.Albums
-    App.collection.tracks         = new App.Collections.Tracks
+    App.collection.artists   = new App.Collections.Artists
+    App.collection.albums    = new App.Collections.Albums
+    App.collection.tracks    = new App.Collections.Tracks
+    App.collection.playlists = new App.Collections.Playlists
 
     App.player = new App.Models.Player
     App.queue  = new App.Models.Queue

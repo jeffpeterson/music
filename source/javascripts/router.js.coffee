@@ -1,9 +1,10 @@
 class App.Router extends BetterRouter
   routes:
-    '': 'index'
-    'collection/artists':  'artists'
-    'collection(/albums)': 'albums'
-    'collection/tracks':   'tracks'
+    '':                          'index'
+    'collection(/albums)':       'albums'
+    'collection/artists':        'artists'
+    'collection/tracks':         'tracks'
+    'collection/playlists':      'playlists'
     'collection/heavy-rotation': 'heavy_rotation'
 
   initialize: ->
@@ -22,19 +23,24 @@ class App.Router extends BetterRouter
     Backbone.history.navigate "collection/albums", trigger: true
 
   artists: ->
-    @collection = App.collection.artists
+    @collection = App.collection.artists.fork()
     @swap new App.Views.ArtistIndex(collection: @collection)
     App.on 'rdio:ready', => App.collection.artists.init_fetch()
 
   albums: ->
-    @collection = new App.Collections.Albums App.collection.albums.models,
-      parent: App.collection.albums
+    @collection = App.collection.albums.fork()
 
     @swap new App.Views.AlbumIndex(collection: @collection)
     App.on 'rdio:ready', => App.collection.albums.init_fetch()
 
+  playlists: ->
+    @collection = App.collection.playlists.fork()
+
+    @swap new App.Views.PlaylistIndex(collection: @collection)
+    App.on 'rdio:ready', => App.collection.playlists.init_fetch()
+
   tracks: ->
-    @collection = App.collection.tracks
+    @collection = App.collection.tracks.fork()
     @swap new App.Views.TrackIndex(collection: @collection)
     App.on 'rdio:ready', => App.collection.tracks.init_fetch()
 

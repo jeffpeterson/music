@@ -17,10 +17,30 @@ class App.Collections.Base extends Backbone.Collection
       @fetch(options)
     this
 
-  # set: (models, options) ->
-  #   super _.select(models, @matching, this), options
-
   filter: ->
     @reset _.select(@parent.models, @matching, this)
 
   matching: -> true
+
+  clone: (params = {}) ->
+    collection = super()
+    for key, value of params
+      collection[key] = value
+    collection
+
+  fork: (params = {}) ->
+    @clone(parent: this, store_key: null)
+
+  load: ->
+    return unless @store_key
+
+    App.debug("Loading #{@store_key?() or @store_key}.")
+    @reset App.get_local(@store_key?() or @store_key, [])
+    this
+
+  store: ->
+    return unless @store_key
+
+    App.debug("Storing #{@store_key?() or @store_key}.")
+    App.set_local(@store_key?() or @store_key, @first(100))
+    this

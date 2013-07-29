@@ -1,4 +1,4 @@
 class App.Models.Item extends Backbone.Model
   idAttribute: 'key'
-  clean: (string) ->
+  clean: (string = '') ->
     string.toLowerCase().replace(/[^a-z0-9]/i, '')

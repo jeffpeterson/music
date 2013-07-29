@@ -17,6 +17,8 @@
 
 #queue > #current-track
   height: 300px
+  > .remove
+    display: none
 
 li#current-track-fixed.track
   height: 75px !important
@@ -27,7 +29,7 @@ li#current-track-fixed.track
   z-index: 1
   display: none
   box-shadow: 0 0 5px rgba(0,0,0, 0.9)
-  > .icon.remove
+  > .remove
     display: none
   &.top
     display: block

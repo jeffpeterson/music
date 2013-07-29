@@ -2,8 +2,8 @@
 #= require models/track
 
 class App.Collections.TrackList extends App.Collections.Base
-  model: App.Models.Track
-  method: 'get'
+  model:      App.Models.Track
+  method:     'get'
   comparator: 'trackNum'
 
   fetch: (options = {}) ->

@@ -1,9 +1,9 @@
 #logo fst.io
 
 input#search type="text" placeholder="search . . ."
-a.tracks.icon-heart-empty href="#collection/heavy-rotation" title='Heavy Rotation'
-a.tracks.icon-list        href="#collection/tracks"         title='Tracks'
-a.albums.icon-th-large    href="#collection/albums"         title='Albums'
-a.artists.icon-group      href="#collection/artists"        title='Artists'
+a.playlists.icon-list-alt href="#collection/playlists" title='Playlists'
+a.tracks.icon-list        href="#collection/tracks"    title='Tracks'
+a.albums.icon-th-large    href="#collection/albums"    title='Albums'
+a.artists.icon-group      href="#collection/artists"   title='Artists'
 button#show-sidebar.slidable.icon-chevron-left
 #player

@@ -31,7 +31,7 @@ class App.Views.PlayerShow extends Backbone.View
     @model.set_volume $("#volume").val()
 
   keypress: (event) =>
-    console.log event
+    App.debug "Keypress:", event
     return if event.target isnt document.body
 
     switch event.which

@@ -22,8 +22,11 @@ class App.Views.Style extends Backbone.View
       for sel, props of selector
         @css(sel, props)
       return
+
+    cleaned_properties = @clean_properties(properties)
+
     el = @styles[selector] or= {}
-    @styles[selector] = _.defaults properties, el
+    @styles[selector] = _.defaults cleaned_properties, el
 
   stringified_styles: ->
     sels = for selector, properties of @styles
@@ -33,4 +36,16 @@ class App.Views.Style extends Backbone.View
   stringified_properties: (properties) ->
     props = for property, value of properties
       "#{property}: #{value};"
+
     props.join(' ')
+
+  clean_properties: (properties) ->
+    cleaned_properties = {}
+
+    for property, value of properties
+      p = property.replace /[A-Z]/, (c) ->
+        "-#{c.toLowerCase()}"
+
+      cleaned_properties[p] = value
+
+    cleaned_properties

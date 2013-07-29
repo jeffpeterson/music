@@ -20,8 +20,6 @@ class App.Views.QueueShow extends Backbone.View
     index     = @model.tracks.indexOf(track)
     $children = @$el.children()
 
-    App.debug 'track added at index:', index
-
     if $children.length > 0
       if index is 0
         $el.insertBefore $children.first()

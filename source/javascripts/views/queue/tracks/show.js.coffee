@@ -18,26 +18,24 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
     drop:            'drop'
 
   render: ->
-    @$el.html @template(track: @model)
+    @$el.empty()
+    @$el.append @template(track: @model)
 
     if @model is @model.collection.get('current_track')
       @current()
 
     @render_colors()
-
     this
-
 
   render_colors: ->
     return unless colors = @model.artwork.colors()
-
     bg = colors.background
+
     @$el.css
-      backgroundImage: "-webkit-linear-gradient(top, rgb(#{bg}) 0, rgba(#{bg}, 0.10) 300px), url(#{@model.artwork.get('icon-500')})"
-      textShadow: "0 0 3px rgb(#{bg})"
-      color: "rgb(#{colors.primary})"
-    @$(".artist-name").css
-      color: "rgb(#{colors.secondary})"
+        backgroundImage: "-webkit-linear-gradient(top, rgba(#{bg}, 0.9), rgba(#{bg}, 0.9) 75px, transparent 75px), url(#{@model.artwork.get('icon-500')})"
+        color:      "rgb(#{colors.primary})"
+    @$('.artist-name').css
+        color:      "rgb(#{colors.secondary})"
 
   play: (event) ->
     event.preventDefault()
