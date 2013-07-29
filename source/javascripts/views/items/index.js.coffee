@@ -9,6 +9,8 @@ class App.Views.ItemIndex extends Backbone.View
     @listenTo @collection, "add", @add
     @listenTo @collection, "change:current_request", @loading
 
+    super(arguments...)
+
   in: ->
     @$el.css x: '100%', opacity: 0
     @$el.transit x: 0, opacity: 1

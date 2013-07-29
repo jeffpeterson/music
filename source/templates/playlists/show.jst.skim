@@ -1,3 +1,3 @@
 .text
   .playlist-name
-    = @playlist.get('name')
+    = @playlist.get('name') + "-" + @playlist.get('key')
