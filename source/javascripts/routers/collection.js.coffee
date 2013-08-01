@@ -1,4 +1,4 @@
-class App.Router extends BetterRouter
+class App.Routers.Collection extends BetterRouter
   routes:
     '':                          'index'
     'collection(/albums)':       'albums'
@@ -10,10 +10,8 @@ class App.Router extends BetterRouter
   initialize: ->
     @el = '#content'
     @listenTo App, 'search', (query) ->
-      @collection.matching = (item) ->
+      @collection.filter (item) ->
         item.get('query').match item.clean(query)
-
-      @collection.filter()
 
     @listenTo App, 'infinite-scroll', -> @collection.fetch()
 

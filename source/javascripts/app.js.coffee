@@ -2,18 +2,25 @@ window.App =
   Views:       {}
   Models:      {}
   Collections: {}
+  Routers:     {}
+
+  routers:     {}
+  collection:  {}
 
   debug_on: true
   memo_pad: {}
 
   initialize: ->
-    App.router = new App.Router
+    for name, router of App.Routers
+      App.routers[name] = new router
 
-    App.collection = {}
     App.collection.artists   = new App.Collections.Artists
     App.collection.albums    = new App.Collections.Albums
     App.collection.tracks    = new App.Collections.Tracks
     App.collection.playlists = new App.Collections.Playlists
+
+    App.on 'rdio:ready', ->
+      App.collection.playlists.fetch()
 
     App.player = new App.Models.Player
     App.queue  = new App.Models.Queue
@@ -64,8 +71,9 @@ window.rdio_loaded = ->
 
 $ ->
   App.time "App.initialize"
-  App.on 'rdio:ready', ->
-    if not R.authenticated()
-      R.authenticate(mode: 'redirect')
-    console.timeEnd "R.ready"
+
+App.on 'rdio:ready', ->
+  if not R.authenticated()
+    R.authenticate(mode: 'redirect')
+  console.timeEnd "R.ready"
 

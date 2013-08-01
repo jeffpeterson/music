@@ -1,5 +1,3 @@
-#= require ./show
-
 class App.Views.AlbumExpanded extends Backbone.View
   className: 'expanded-album'
 
@@ -72,10 +70,10 @@ class App.Views.AlbumExpanded extends Backbone.View
     this
 
   remove: ->
+    $('body').removeClass('freeze')
     @out =>
       super()
       @original.$el.removeClass('invisible')
-      $('body').removeClass('freeze')
       $(".click-shield").remove()
     this
 

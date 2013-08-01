@@ -6,11 +6,15 @@ class App.Views.TrackShow extends Backbone.View
 
   template: JST['tracks/show']
 
+  initialize: ->
+    @listenTo @model, 'change', @render
+
   events:
-    'click .play-now':     "play_now"
-    'click .album-art':    "play_now"
-    'click .add-to-queue': "add_to_queue"
-    'dragstart':           "dragstart"
+    'click .play-now':          'play_now'
+    'click .album-art':         'play_now'
+    'click .add-to-queue':      'add_to_queue'
+    'click .add-to-collection': 'add_to_collection'
+    'dragstart':                'dragstart'
 
   render: ->
     unless @model.get("canStream")
@@ -36,6 +40,12 @@ class App.Views.TrackShow extends Backbone.View
     return unless @model.get('canStream')
 
     App.queue.tracks.add @model
+
+  add_to_collection: (event) ->
+    event.preventDefault()
+    event.stopPropagation()
+
+    @model.add_to_collection()
 
   dragstart: (event) ->
     event.originalEvent.dataTransfer.setData "text/json", JSON.stringify(@model)

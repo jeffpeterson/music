@@ -1,13 +1,5 @@
 class App.Collections.Base extends Backbone.Collection
   initialize: (models, options = {}) ->
-    @parent   = options.parent   if options.parent
-    @matching = options.matching if options.matching
-
-    if @parent
-      @listenTo this, 'add', (models) ->
-        @parent.add(models, silent: true)
-      @listenTo @parent, 'add reset set', (args...) ->
-        @set args...
 
     super(arguments...)
 
@@ -17,8 +9,8 @@ class App.Collections.Base extends Backbone.Collection
       @fetch(options)
     this
 
-  filter: ->
-    @reset _.select(@parent.models, @matching, this)
+  filter: (matching = @matching) ->
+    @reset _.select(@parent.models, matching, this)
 
   matching: -> true
 
@@ -29,7 +21,14 @@ class App.Collections.Base extends Backbone.Collection
     collection
 
   fork: (params = {}) ->
-    @clone(parent: this, store_key: null)
+    child = @clone(parent: this, store_key: null)
+
+    @listenTo child, 'add', (models) ->
+      @add(models, silent: true)
+    child.listenTo this, 'add reset set', (args...) ->
+      @set args...
+
+    child
 
   load: ->
     return unless @store_key

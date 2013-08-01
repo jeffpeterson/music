@@ -12,6 +12,7 @@ class App.Views.AlbumShow extends Backbone.View
   initialize: ->
     @listenTo @model.artwork, 'change', @render_colors
     @listenTo @model, 'remove', @remove
+    @listenTo @model, 'change', @render
 
     @$el.css backgroundImage: "url(#{@model.artwork.get('icon')})"
 

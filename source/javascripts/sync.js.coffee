@@ -1,11 +1,11 @@
 Backbone.sync = (method, model, options = {}) ->
-  content = _.omit options, 'success', 'error', 'parse', 'reset'
+  content = _.omit options, 'success', 'error', 'parse', 'reset', 'method'
   App.debug 'Syncing with options:', options
 
   switch method
     when 'read'
       R.request
-        method:  model.method
+        method:  options.method or model.method
         success: options.success
         error:   options.error
         content: content
@@ -16,3 +16,11 @@ Backbone.sync = (method, model, options = {}) ->
     else
       throw "Invalid sync method: #{method}."
 
+App.request = (method, options = {}) ->
+  content = _.omit options, 'success', 'error', 'method'
+
+  R.request
+    method:  method
+    success: options.success
+    error:   options.error
+    content: content
