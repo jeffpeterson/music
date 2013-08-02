@@ -19,6 +19,12 @@ $flip-time: 0.8s
 @import 'albums'
 @import 'queue'
 
+=square
+  &:before
+    content: ''
+    display: block
+    padding-top: 100%
+
 ::-webkit-scrollbar
   display: none
 
@@ -60,8 +66,13 @@ button
   color: inherit
   outline: none
   font-size: inherit
-  &[class *= 'icon']:hover
-    -webkit-transform: scale(1.07)
+  cursor: pointer
+
+button, [class *= 'icon']
+  padding: 4px
+
+.icon-random
+  padding-top: 8px
 
 h1
   color: rgba(0, 0, 0, .3)
@@ -131,12 +142,6 @@ input
   to
     opacity: 1
 
-button.station
-  font-size: 0.8em
-  line-height: 1.5em
-  padding-left: 5px
-  padding-right: 5px
-
 #bar > #show-sidebar
   display: none
   -webkit-flex-shrink: 0
@@ -150,7 +155,7 @@ button.station
   -webkit-transition: height 0.25s
   display: -webkit-flex
   -webkit-align-items: center
-  height: 75px
+  height: 60px
   position: fixed
   top: 0
   left: 0
@@ -160,17 +165,20 @@ button.station
   color: $color
   box-shadow: 0 0 30px rgba(0,0,0, 0.2)
   > [class *= 'icon']
+    -webkit-align-self: stretch
     -webkit-flex-shrink: 1
     -webkit-transition: color 0.4s, background-color 0.4s, line-height 0.25s
+    padding: 0
+    display: -webkit-flex
     width: 60px
-    text-align: center
-    line-height: 75px
+    -webkit-align-items: center
+    -webkit-justify-content: center
     &.current
       background-color: rgba($color, 0.9)
       color: white
 
 #logo
-  width: 75px
+  width: 60px
   text-align: center
   cursor: default
   -webkit-flex-shrink: 0
@@ -196,12 +204,12 @@ button:active, a:active
 
 #player
   width: 300px
-  height: 100%
   z-index: 20
   position: relative
   display: -webkit-flex
   -webkit-justify-content: space-around
   -webkit-align-items: center
+  -webkit-align-self: stretch
   -webkit-flex-shrink: 0
   > [class *= 'icon']
     -webkit-flex-grow: 2
@@ -256,7 +264,7 @@ button:active, a:active
     box-sizing: border-box
     overflow: hidden
     height: 100%
-    padding-top: 75px
+    padding-top: 60px
 
 #sidebar
   overflow: hidden
@@ -287,13 +295,6 @@ button:active, a:active
 .album-art
   width: 75px
   -webkit-flex-shrink: 0
-
-.text
-  font-size: 15px
-  -webkit-flex-grow: 1
-  line-height: 1.5em
-  > .artist-name, > .track-name, > .album-name
-    -webkit-flex-grow: 0
 
 @media (max-width: 780px)
   .album

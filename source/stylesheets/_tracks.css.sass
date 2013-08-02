@@ -3,9 +3,6 @@
   background: none
   width: 100%
   position: relative
-  > .track
-    > .text
-      padding: 0
 
 .track
   -webkit-column-break-inside: avoid
@@ -14,37 +11,20 @@
   position: relative
   display: -webkit-flex
   -webkit-align-items: center
-  > .status
-    opacity: 0.3
-    font-size: 0.8em
-    width: 40px
-    text-align: center
-    -webkit-flex-shrink: 0
-    visibility: visible
-    &.add-to-collection
-      visibility: hidden
-  > .track-number
-    font-size: 14px
-    width: 50px
-    text-align: center
-    -webkit-flex-shrink: 0
+  padding: 0 10px
   > .text
-    padding: 13px 10px
-    > .track-name
-      font-size: 20px
-      line-height: 30px
-    > .artist-name
-      font-size: 15px
-      line-height: 20px
+    -webkit-flex-grow: 1
   &:hover
     background-color: rgba(255,255,255, 0.02)
-    > .status
-      visibility: visible
-    > button
+    > .controls > button
       visibility: visible
   > .remove
     text-align: center
-  > button
-    padding: 2px
-    margin: 2px
-    visibility: hidden
+  > .controls 
+    -webkit-flex-shrink: 0
+    display: -webkit-flex
+    -webkit-align-items: center
+    > button
+      visibility: hidden
+    > .is-in-collection
+      opacity: 0.3

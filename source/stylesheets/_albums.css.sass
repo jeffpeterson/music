@@ -98,16 +98,22 @@
       > .info
         -webkit-flex-shrink: 0
         padding: 10px
-        > .album-name
-          font-size: 1.5em
-          line-height: 1.5em
-        > .artist-name
-          font-size: 1.1em
-          line-height: 1.5em
-          margin-top: -10px
-        > .release-date
-          font-size:   0.7em
-          line-height: 1em
+        display: -webkit-flex
+        > .text
+          -webkit-flex-grow: 1
+          > .album-name
+            font-size: 1.5em
+            line-height: 1.5em
+          > .artist-name
+            font-size: 1.1em
+            line-height: 1.5em
+            margin-top: -10px
+        > .controls
+          -webkit-flex-shrink: 0
+          text-align: right
+          > .release-date
+            font-size:   0.7em
+            line-height: 1em
   &.expanded
     > .card
       -webkit-transform: rotateX(0deg)

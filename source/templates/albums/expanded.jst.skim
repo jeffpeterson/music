@@ -3,12 +3,14 @@
   .cover
   .back
     .info
-      .album-name = @album.get('name')
-      .artist-name
-        span.by
-          ' by
-        = @album.get('artist')
-        '
-        button.station.icon-microphone
-      .release-date
-        = @album.get('displayDate')
+      .text
+        .album-name = @album.get('name')
+        .artist-name
+          span.by
+            ' by
+          = @album.get('artist')
+          '
+      .controls
+        button.play-station.icon-microphone
+        button.add-to-collection.icon-plus-sign
+        .release-date = @album.get('displayDate')

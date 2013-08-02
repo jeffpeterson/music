@@ -4,7 +4,7 @@
   overflow: auto
   height: 100%
   box-sizing: border-box
-  padding: 75px 0 0
+  padding: 60px 0 0
   > .track
     margin-top: 1px
     height: 75px
@@ -12,15 +12,18 @@
     background-size: 100% auto
     transition: all 0.2s
     -webkit-align-items: flex-start
-    &.dragover
-      border-top: 2px $blue solid
-    > .remove
-      line-height: 67px
+    font-size: 20px
+    line-height: 25px
+    > .text
+      padding: 12px 0
+    > .controls
+      height: 75px
 
 #queue > #current-track
   height: 300px
-  > .remove
-    display: none
+  > .controls
+    > .remove
+      display: none
 
 li#current-track-fixed.track
   height: 75px !important

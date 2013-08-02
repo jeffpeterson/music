@@ -1,9 +1,9 @@
-- if @track.get('isInCollection')
-  i.status.icon-ok
-- else
-  button.status.add-to-collection.icon-plus-sign
 
 .text
   .track-name = @track.get('name')
-
-button.add-to-queue.icon-share-alt
+.controls
+  button.add-to-queue.icon-share-alt
+  - if @track.get('isInCollection')
+    i.is-in-collection.icon-ok
+  - else
+    button.status.add-to-collection.icon-plus-sign
