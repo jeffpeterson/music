@@ -1,7 +1,7 @@
 #= require views/tracks/index
 
 class App.Views.AlbumTrackIndex extends App.Views.TrackIndex
-  className: 'track-list tracks'
+  className: 'track-list'
   initialize: ->
     @listenTo @collection, "reset", @render
 

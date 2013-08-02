@@ -21,11 +21,12 @@ class window.ColorFinder
       @ctx.drawImage(@image, 0, 0, @width, @height)
 
       @colors.background = @find_background()
+      @colors.contrast   = @is_dark(@colors.background) ? '255,255,255' : '0,0,0'
 
       colors = @find_colors(@image_data())
       colors = (color for color in colors when @contrasts_background(color))
 
-      @colors.primary   = colors.shift()
+      @colors.primary = colors.shift() or @colors.contrast
 
       scolors = (color for color in colors when @are_contrasting(color, @colors.primary, 5000))
       @colors.secondary = scolors.shift() or colors.shift() or @colors.primary
@@ -84,6 +85,9 @@ class window.ColorFinder
     yuv2 = @yuv rgb2
 
     _.reduce (Math.pow(p - yuv2[i], 2) for p, i in yuv1), ((sum, i) -> sum + i), 0
+
+  is_dark: (color) ->
+    color.split(',')[0] > 0.5
 
   are_contrasting: (a, b, diff = 10000) ->
     a = a.split(',')

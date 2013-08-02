@@ -3,6 +3,7 @@ class App.Models.Item extends Backbone.Model
   clean: (string = '') ->
     string.toString().toLowerCase().replace(/[^a-z0-9]+/ig, '')
 
+
   fetch_by_url: (options = {}) ->
     @fetch _.defaults options,
       url: @get('url')

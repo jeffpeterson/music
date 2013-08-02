@@ -49,9 +49,9 @@ class App.Views.AlbumExpanded extends Backbone.View
         color: "rgba(#{@colors.primary}, 1.0)"
       '.artist-name, .release-date':
         color: "rgba(#{@colors.primary}, 0.5)"
-      'button:active, .station:hover, .close:hover':
+      'button:active, .station:hover, .close':
         color: "rgb(#{@colors.detail})"
-      '.station, .close':
+      '.station':
         color: "rgba(#{@colors.detail}, 0.6)"
     this
 

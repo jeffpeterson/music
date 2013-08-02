@@ -1,13 +1,33 @@
-ul.tracks
-  background-color: $white
+.track-list
+  padding: 10px 0
+  background: none
+  width: 100%
+  position: relative
+  > .track
+    > .text
+      padding: 0
 
 .track
+  -webkit-column-break-inside: avoid
   cursor: default
   overflow: hidden
   position: relative
   display: -webkit-flex
   -webkit-align-items: center
-  height: 75px
+  > .status
+    opacity: 0.3
+    font-size: 0.8em
+    width: 40px
+    text-align: center
+    -webkit-flex-shrink: 0
+    visibility: visible
+    &.add-to-collection
+      visibility: hidden
+  > .track-number
+    font-size: 14px
+    width: 50px
+    text-align: center
+    -webkit-flex-shrink: 0
   > .text
     padding: 13px 10px
     > .track-name
@@ -16,11 +36,15 @@ ul.tracks
     > .artist-name
       font-size: 15px
       line-height: 20px
+  &:hover
+    background-color: rgba(255,255,255, 0.02)
+    > .status
+      visibility: visible
+    > button
+      visibility: visible
   > .remove
     text-align: center
-  > [class *= 'icon']
-    width: 2em
-    display: none
-  &:hover
-    > [class *= 'icon']
-      display: inline-block
+  > button
+    padding: 2px
+    margin: 2px
+    visibility: hidden

@@ -16,6 +16,7 @@ $background-color: $white
 $flip-time: 0.8s
 
 @import 'tracks'
+@import 'albums'
 @import 'queue'
 
 ::-webkit-scrollbar
@@ -79,6 +80,8 @@ li
   list-style-type: none
 
 input
+  border-radius: 0
+  -webkit-appearance: none
   font-weight: $normal
   border: none
   color: inherit
@@ -88,6 +91,14 @@ input
   outline: none
   &:focus
     color: $blue
+
+::-webkit-search-cancel-button
+  -webkit-appearance: none
+  &:before
+    content: '\f057'
+    font-family: FontAwesome
+  color: rgba(0,0,0, 0.2)
+  padding-right: 10px
 
 .freeze
   overflow: hidden
@@ -261,161 +272,6 @@ button:active, a:active
 #station
   height: 100px
   width: 300px
-
-ul.albums
-  display: -webkit-flex
-  -webkit-flex-wrap: wrap
-  -webkit-justify-content: flex-end
-  -webkit-align-items: flex-start
-  padding-left: 1px
-  &.expanded
-    > .album
-      opacity: 0.3
-  > .album
-    margin-right: 1px
-    margin-top: 1px
-    max-width: 400px
-
-.album
-  position: relative
-  width: 200px
-  background-size: 100% auto
-  -webkit-flex-grow: 1
-  &:before
-    content: ""
-    display: block
-    padding-top: 100%
-  &.unavailable
-    opacity: 1
-    &:before
-      background-color: rgba(0,0,0, 0.7)
-      content: "Unavailable"
-      padding-top: -webkit-calc(100% - 2em)
-      padding-left: 5px
-      color: white
-
-.expanded-album
-  -webkit-perspective-origin: center center
-  -webkit-perspective: 1000px
-  -webkit-transform: translate3d(0,0,0)
-  max-width: 100%
-  position: fixed
-  z-index: 100
-  background-size: 100% auto
-  transition: all ($flip-time / 3)
-  width: 500px
-  height: 500px
-  top: -webkit-calc(50% - 250px)
-  left: -webkit-calc(50% - 500px)
-  @media (max-width: 1000px)
-    top: -webkit-calc(50% - 500px)
-    left: -webkit-calc(50% - 250px)
-    @media (max-height: 1000px)
-      top: 0
-    @media (max-height: 600px)
-      height: 100%
-  @media (max-width: 500px)
-    width: 100%
-    left: 0
-  > .card
-    background-size: 100% auto
-    background-position: left top
-    background-repeat: no-repeat
-    -webkit-transform-style: preserve-3d
-    transition: all $flip-time
-    position: absolute
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-    box-shadow: 0 0 30px rgba(0,0,0, 0.6)
-    -webkit-transform: rotateX(180deg)
-    padding-top: 20px
-    > .close
-      padding: 10px
-      position: absolute
-      top: 0
-      left: 0
-    > .cover, > .back
-      -webkit-backface-visibility: hidden
-      background-size: 100% auto
-      position: absolute
-      top: 0
-      left: 0
-      width: 100%
-      height: 100%
-    > .cover
-      -webkit-transform: rotateX(180deg) translateZ(0.01px)
-    > .back
-      -webkit-transform: translateZ(0.01px)
-      width: 500px
-      height: 500px
-      z-index: 10
-      transition: all $flip-time / 2
-      overflow: auto
-      display: -webkit-flex
-      -webkit-flex-direction: column
-      > .info
-        -webkit-flex-shrink: 0
-        padding: 10px
-        > .album-name
-          font-size: 1.5em
-          line-height: 1.5em
-        > .artist-name
-          font-size: 1.1em
-          line-height: 1.5em
-          margin-top: -10px
-        > .release-date
-          font-size:   0.7em
-          line-height: 1em
-  &.expanded
-    > .card
-      -webkit-transform: rotateX(0deg)
-      @media (max-width: 1000px)
-        @media (max-height: 600px)
-          -webkit-overflow-scrolling: touch
-          overflow: auto
-          > .back
-            overflow: visible
-            height: auto
-      > .back
-        box-shadow: none
-        -webkit-transition-delay: $flip-time / 2
-        left: 99.99%
-        @media (max-width: 1000px)
-          left: 0
-          margin-top: 100%
-        @media (max-width: 500px)
-          width: 100%
-
-ul.tracks.track-list
-  padding: 10px 0
-  background: none
-  width: 100%
-  position: relative
-  > .track
-    height: 40px
-    -webkit-column-break-inside: avoid
-    > .status
-      opacity: 0.3
-      display: inline-block
-      font-size: 0.8em
-      width: 40px
-      text-align: center
-      -webkit-flex-shrink: 0
-      &.add-to-collection
-        visibility: hidden
-    > .track-number
-      font-size: 14px
-      width: 50px
-      text-align: center
-      -webkit-flex-shrink: 0
-    > .text
-      padding: 0
-    &:hover
-      background-color: rgba(255,255,255, 0.02)
-      > .status
-        visibility: visible
 
 .track-name, .album-name, .artist-name
   white-space: nowrap
