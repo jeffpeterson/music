@@ -22,18 +22,25 @@ class App.Views.AlbumExpanded extends Backbone.View
     @$el.append @template(album: @model)
     @$el.attr(style: '')
 
-    offset = @original.$el.offset()
-    @$el.css
-      top:    offset.top - window.scrollY
-      left:   offset.left
-      width:  @original.$el.width()
-      height: @original.$el.height()
+    @move_to_original()
 
     @$('.back').append @track_list.render().el
 
     @render_flip_over()
     @render_click_shield()
     this
+
+  move_to_original: ->
+    offset = @original.$el.offset()
+    width  = @original.$el.width()
+    scale  = width / 500
+    y      = offset.top - window.scrollY - (500 - width) / 2
+    x      = offset.left - (500 - width) / 2
+
+    @$el.css
+      webkitTransform: "scale(#{scale})"
+      left: x
+      top: y
 
   render_colors: ->
     @styles.css
@@ -49,7 +56,7 @@ class App.Views.AlbumExpanded extends Backbone.View
         color: "rgba(#{@colors.primary}, 1.0)"
       '.artist-name, .release-date':
         color: "rgba(#{@colors.primary}, 0.5)"
-      'button, button:active':
+      'button, button:active, i':
         color: "rgb(#{@colors.detail})"
       '.track:hover':
         backgroundColor: "rgba(#{@colors.contrast}, 0.5)"
@@ -70,9 +77,9 @@ class App.Views.AlbumExpanded extends Backbone.View
     this
 
   remove: ->
-    $('body').removeClass('freeze')
     @out =>
       super()
+      $('body').removeClass('freeze')
       @original.$el.removeClass('invisible')
       $(".click-shield").remove()
     this
@@ -80,14 +87,8 @@ class App.Views.AlbumExpanded extends Backbone.View
   out: (complete) ->
     $(".click-shield").transit opacity: 0
     @$el.removeClass('expanded')
-    offset = @original.$el.offset()
-    @$el.transit
-      duration: 700
-      width: @original.$el.width()
-      height: @original.$el.height()
-      top:    offset.top - window.scrollY
-      left:   offset.left
-      complete: complete
+    @move_to_original()
+    setTimeout(complete, parseFloat(@$('.card').css("transition").split(' ')[1]) * 1000)
 
   play_station: (event) ->
     event.preventDefault()
