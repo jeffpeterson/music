@@ -44,13 +44,11 @@ $flip-time: 0.8s
   background-size: 100% auto
   width: 500px
   height: 500px
-  top: 50%
-  left: 50%
-  -webkit-transform: translate3d(-100%,-50%,0)
+  top: -webkit-calc(50% - 250px)
+  left: -webkit-calc(50% - 500px)
   @media (max-width: 1000px)
-    -webkit-transform: translate3d(-50%,0,0)
     top: 0
-    left: 50%
+    left: -webkit-calc(50% - 250px)
     height: 100%
     > .card
       -webkit-overflow-scrolling: touch
@@ -133,7 +131,7 @@ $flip-time: 0.8s
     > .back
       box-shadow: none
       -webkit-transition-delay: $flip-time / 2
-      -webkit-transform: translate3d(100%, 0, 1px)
+      -webkit-transform: translate3d(99%, 0, 1px)
       @media (max-width: 1000px)
-        margin-top: 100%
+        margin-top: 99%
         -webkit-transform: translate3d(0, 0, 1px)
