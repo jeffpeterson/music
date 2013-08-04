@@ -3,3 +3,7 @@
   .artist-name = @track.get('artist')
 .controls
   button.remove.icon-remove-sign
+  - if @track.get("isInCollection")
+    i.is-in-collection.icon-ok
+  - else
+    button.add-to-collection.icon-plus-sign

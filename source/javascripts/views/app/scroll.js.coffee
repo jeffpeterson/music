@@ -8,7 +8,7 @@ class App.Views.Scroll extends Backbone.View
       if @previous_y? and @previous_seconds?
         @pixels_per_second = (@y - @previous_y) / (@seconds - @previous_seconds)
 
-        if @pixels_per_second * 2 > @total_height - @y
+        if @pixels_per_second * 5 > @total_height - @y
           App.trigger 'infinite-scroll', @pixels_per_second
 
       @previous_y       = @y

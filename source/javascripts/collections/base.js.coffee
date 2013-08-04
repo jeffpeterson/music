@@ -33,13 +33,16 @@ class App.Collections.Base extends Backbone.Collection
   load: ->
     return unless @store_key
 
-    App.debug("Loading #{@store_key?() or @store_key}.")
-    @reset App.get_local(@store_key?() or @store_key, [])
-    this
+    store_key = @store_key?() or @store_key
+    keys = App.get_local(store_key, [])
+
+    @reset ({key} for key in keys)
+    for model in @models
+      model.load()
 
   store: ->
     return unless @store_key
+    store_key = @store_key?() or @store_key
 
-    App.debug("Storing #{@store_key?() or @store_key}.")
-    App.set_local(@store_key?() or @store_key, @first(100))
-    this
+    model.store() for model in @models
+    App.set_local store_key, @pluck('key')

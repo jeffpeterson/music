@@ -1,20 +1,19 @@
 #= require ./tracks/index
+#= require views/items/show
 
-class App.Views.AlbumShow extends Backbone.View
-  tagName: "li"
-  className: "album"
+class App.Views.AlbumShow extends App.Views.ItemShow
+  tagName:   'li'
+  className: 'album'
 
   template: JST['albums/show']
 
   events:
-    click: 'expand'
+    'click':     'expand'
+    'dragstart': 'dragstart'
 
   initialize: ->
+    super(arguments...)
     @listenTo @model.artwork, 'change', @render_colors
-    @listenTo @model, 'remove', @remove
-    @listenTo @model, 'change', @render
-
-    @$el.css backgroundImage: "url(#{@model.artwork.get('icon')})"
 
   render: ->
     unless @model.get("canStream")
@@ -22,6 +21,7 @@ class App.Views.AlbumShow extends Backbone.View
       @$el.attr draggable: false
 
     @$el.html @template(album: @model)
+    @$el.css backgroundImage: "url(#{@model.artwork.get('icon')})"
     this
 
   expand: (event) ->

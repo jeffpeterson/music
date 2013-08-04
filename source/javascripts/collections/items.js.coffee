@@ -7,16 +7,16 @@ class App.Collections.Items extends App.Collections.Base
 
   initialize: (models, options) ->
     @load()
-    @on 'reset', (collection) => @store()
+    @on 'add reset set', (collection) => @store()
     super(arguments...)
 
   init_fetch: (options = {}) ->
-    @fetch _.defaults(options, start: 0, reset: true)
+    @fetch _.defaults(options, start: 0)
 
   fetch: (options = {}) ->
     @current_request or= do =>
       App.debug("Fetching #{@constructor.name}.")
-      super _.defaults(options, count: 100, sort: 'dateAdded', remove: false)
+      super _.defaults(options, count: 300, sort: 'dateAdded', remove: false)
 
   parse: (response, options = {}) ->
     App.debug "Parsing #{@constructor.name}."
@@ -25,6 +25,6 @@ class App.Collections.Items extends App.Collections.Base
 
   sync: (method, collection, options) ->
     Backbone.sync method, collection, _.defaults options,
-      count: 100
+      count: 300
       sort: 'dateAdded'
       start: collection.length

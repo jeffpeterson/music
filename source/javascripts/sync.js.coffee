@@ -10,8 +10,8 @@ Backbone.sync = (method, model, options = {}) ->
         error:   options.error
         content: content
 
-    when 'create' then throw 'create not implemented'
     when 'update' then throw "update not implemented"
+    when 'create' then throw 'create not implemented'
     when 'delete' then throw 'delete not implemented'
     else
       throw "Invalid sync method: #{method}."

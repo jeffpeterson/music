@@ -41,17 +41,14 @@ window.App =
     console.timeEnd name
 
   set_local: (key, value) ->
-    if value
-      attrs = {}
-      attrs[key] = value
-    else
-      attrs = key
+    unless value?
+      @set_local(k, v) for k, v of key
+      return
 
-    for key, value of attrs
-      localStorage[key] = JSON.stringify(value)
+    localStorage[key] = JSON.stringify(@memo_pad[key] = value)
 
   get_local: (key, default_value = null) ->
-    JSON.parse(localStorage[key] or null) or default_value
+    @memo_pad[key] or= (JSON.parse(localStorage[key] or null) or default_value)
 
   memo: (key, property, fn) ->
     cached_object = App.get_local(key, {})

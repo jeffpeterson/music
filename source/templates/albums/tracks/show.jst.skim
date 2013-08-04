@@ -6,4 +6,4 @@
   - if @track.get('isInCollection')
     i.is-in-collection.icon-ok
   - else
-    button.status.add-to-collection.icon-plus-sign
+    button.add-to-collection.icon-plus-sign

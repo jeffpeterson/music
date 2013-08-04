@@ -1,13 +1,10 @@
-class App.Views.TrackShow extends Backbone.View
-  tagName: "li"
-  className: "track"
-  attributes:
-    draggable: true
+#= require views/items/show
+
+class App.Views.TrackShow extends App.Views.ItemShow
+  tagName: 'li'
+  className: 'track'
 
   template: JST['tracks/show']
-
-  initialize: ->
-    @listenTo @model, 'change', @render
 
   events:
     'click .play-now':          'play_now'
@@ -40,13 +37,3 @@ class App.Views.TrackShow extends Backbone.View
     return unless @model.get('canStream')
 
     App.queue.tracks.add @model
-
-  add_to_collection: (event) ->
-    event.preventDefault()
-    event.stopPropagation()
-
-    @model.add_to_collection()
-
-  dragstart: (event) ->
-    event.originalEvent.dataTransfer.setData "text/json", JSON.stringify(@model)
-    event.originalEvent.dataTransfer.setData "text/plain", @model.full()

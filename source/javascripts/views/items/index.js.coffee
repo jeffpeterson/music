@@ -2,6 +2,9 @@ class App.Views.ItemIndex extends Backbone.View
   tagName: "ul"
 
   initialize: ->
+    @append_queue = []
+    @flush_append_queue = _.debounce(@flush_append_queue, 300)
+
     @listenTo @collection, "reset", @render
     @listenTo @collection, "add", @add
     @listenTo @collection, "change:current_request", @loading
@@ -21,6 +24,14 @@ class App.Views.ItemIndex extends Backbone.View
     @collection.each (model) =>
       @add(model)
     this
+
+  flush_append_queue: ->
+    @$el.append(@append_queue)
+    @append_queue = []
+
+  append: ($el) ->
+    @append_queue.push($el)
+    @flush_append_queue()
 
   loading: (collection) ->
     if collection.current_request
