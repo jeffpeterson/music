@@ -144,7 +144,7 @@ input
 #bar > #show-sidebar
   display: none
   -webkit-flex-shrink: 0
-  &.to-left:before
+  &.slide-to-left:before
     content: '\f054'
 
 #container
@@ -307,18 +307,14 @@ button:active, a:active
   #bar > #show-sidebar
     display: inline-block
   #bar, #sidebar
-    -webkit-transition: right 0.5s, left 0.5s
     right: -300px
-    &.to-left
-      right: 0
-  #bar.to-left
-    left: -300px
+  #container
+    -webkit-transition: -webkit-transform 0.5s
+    &.slide-to-left
+      -webkit-transform: translate(-300px, 0)
   #main
     margin-right: 0
     -webkit-transition: margin 0.5s
-    &.to-left
-      margin-right: 300px
-      margin-left: -300px
 
 @media (max-height: 400px)
   #bar

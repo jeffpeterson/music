@@ -13,7 +13,7 @@ class App.Views.Touch extends Backbone.View
 
   toggle_sidebar: (event) ->
     event.preventDefault()
-    $(".slidable").toggleClass('to-left')
+    $(".slidable").toggleClass('slide-to-left')
 
   touchstart: (event) =>
     return if event.originalEvent.touches.length isnt 1
