@@ -1,18 +1,4 @@
-require "rubygems"
-require "middleman-core/load_paths"
+# This file is used by Rack-based servers to start the application.
 
-Middleman.setup_load_paths
-
-require "middleman-core"
-require "middleman-core/preview_server"
-
-module Middleman::PreviewServer
-  def self.preview_in_rack
-    @options = {  }
-    @app = new_app
-    start_file_watcher
-  end
-end
-
-Middleman::PreviewServer.preview_in_rack
-run Middleman::PreviewServer.app.class.to_rack_app
+require ::File.expand_path('../config/environment',  __FILE__)
+run Rails.application

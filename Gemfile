@@ -1,9 +1,20 @@
-# If you have OpenSSL installed, we recommend updating
-# the following line to use "https"
 source 'https://rubygems.org'
 
-gem 'middleman', '~> 3.1.0'
-gem 'slim',      '~> 2.0.0'
-gem 'skim',      '~> 0.9.0'
-gem 'eco',       '~> 1.0.0'
-gem 'pry'
+gem 'coffee-rails', '~> 4.0.0'
+gem 'haml'
+gem 'jbuilder', '~> 1.2'
+gem 'jquery-rails'
+gem 'rails', '4.0.0'
+gem 'sqlite3'
+gem 'uglifier', '>= 1.3.0'
+
+group :development do
+  gem "better_errors"
+  gem "binding_of_caller"
+  gem 'pry-rails'
+end
+
+gem 'eco'
+gem 'haml_coffee_assets', git: 'git@github.com:netzpirat/haml_coffee_assets.git'
+gem 'execjs'
+gem 'stylus', git: 'git@github.com:lucasmazza/ruby-stylus.git', branch: 'rails_4'

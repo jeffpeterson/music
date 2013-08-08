@@ -1,0 +1,322 @@
+$normal           = 300
+$bold             = 500
+$white            = #fff
+$black            = #000
+$red              = #dd777a
+$blue             = #79c
+$green            = #8c8
+$brown            = #7F6A5B
+$color            = hsl(220, 15%, 30%)
+$highlight        = lighten($color, 15%)
+$background-color = $white
+
+@import 'tracks'
+@import 'albums'
+@import 'queue'
+
+square()
+  &:before
+    content: ''
+    display: block
+    padding-top: 100%
+
+::-webkit-scrollbar
+  display: none
+
+*
+  box-sizing: border-box
+
+html, body
+  min-width: 100%
+  min-height: 100%
+  padding: 0
+  margin: 0
+
+body
+  display: -webkit-flex
+  font-weight: $normal
+  font-family: Raleway, sans-serif
+  background-color: $black
+  color: white
+  font-size: 20px
+  line-height: 40px
+  cursor: default
+  transition: background-color 0.3s, width 0.4s
+  // -webkit-overflow-scrolling: touch
+  -webkit-user-select: none
+  -webkit-touch-callout: none
+  -webkit-tap-highlight-color: rgba(0,0,0,0)
+
+a
+  text-decoration: none
+  color: inherit
+  cursor: default
+
+button
+  -webkit-appearance: none
+  border: 0
+  display: inline-block
+  padding: 0
+  margin: 0
+  background: none
+  color: inherit
+  outline: none
+  font-size: inherit
+  cursor: pointer
+
+button, [class *= 'icon']
+  padding: 4px
+
+.icon-random
+  padding-top: 8px
+
+h1
+  color: rgba(0, 0, 0, .3)
+  font-weight: $bold
+  font-size: 32px
+  letter-spacing: -1px
+  text-transform: uppercase
+  padding: 350px 0 10px
+
+ul
+  margin: 0
+  padding: 0
+  display: block
+
+li
+  list-style-type: none
+
+input
+  border-radius: 0
+  -webkit-appearance: none
+  font-weight: $normal
+  border: none
+  color: inherit
+  font-size: inherit
+  font-family: inherit
+  line-height: 1em
+  outline: none
+  &:focus
+    color: $blue
+
+::-webkit-search-cancel-button
+  -webkit-appearance: none
+  &:before
+    content: '\f057'
+    font-family: FontAwesome
+  color: rgba(0,0,0, 0.2)
+  padding-right: 10px
+
+.freeze
+  overflow: hidden
+
+.clear
+  clear: both
+
+.blur
+  -webkit-filter: blur(5px)
+
+.invisible
+  visibility: hidden
+
+.accent
+  color: $color + #555
+
+.click-shield
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  z-index: 50
+  background-color: rgba(0,0,0, 0.8)
+  -webkit-animation: fade-in $flip-time
+
+@-webkit-keyframes fade-in
+  from
+    opacity: 0
+  to
+    opacity: 1
+
+#bar > #show-sidebar
+  display: none
+  -webkit-flex-shrink: 0
+  &.slide-to-left:before
+    content: '\f054'
+
+#container
+  width: 100%
+
+#bar
+  -webkit-transition: height 0.25s
+  display: -webkit-flex
+  -webkit-align-items: center
+  height: 60px
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  z-index: 10
+  background-color: rgba(245, 245, 245, 0.95)
+  color: $color
+  box-shadow: 0 0 30px rgba(0,0,0, 0.2)
+  > [class *= 'icon']
+    -webkit-align-self: stretch
+    -webkit-flex-shrink: 1
+    -webkit-transition: color 0.4s, background-color 0.4s, line-height 0.25s
+    padding: 0
+    display: -webkit-flex
+    width: 60px
+    -webkit-align-items: center
+    -webkit-justify-content: center
+    &.current
+      background-color: rgba($color, 0.9)
+      color: white
+
+#logo
+  width: 60px
+  text-align: center
+  cursor: default
+  -webkit-flex-shrink: 0
+  box-sizing: border-box
+  &:hover
+    color: $highlight
+
+button:active, a:active
+  color: $highlight
+
+#search
+  width: 100%
+  -webkit-flex: 100px 1 1
+  margin: 0
+  padding-left: 10px
+  height: 100%
+  background: none
+  transition: background-color 0.2s
+  overflow: hidden
+  text-overflow: ellipsis
+  &:focus
+    background-color: $white
+
+#player
+  width: 300px
+  z-index: 20
+  position: relative
+  display: -webkit-flex
+  -webkit-justify-content: space-around
+  -webkit-align-items: center
+  -webkit-align-self: stretch
+  -webkit-flex-shrink: 0
+  > [class *= 'icon']
+    -webkit-flex-grow: 2
+    text-align: center
+  > .shuffle, > .repeat
+    font-size: 0.8em
+    -webkit-flex-grow: 1
+
+#volume
+  -webkit-appearance: none
+  background-color: $color + #444
+  height: 2px
+  border-radius: 8px
+  &::-webkit-slider-thumb
+    -webkit-appearance: none
+    background-color: $color
+    width: 10px
+    height: 10px
+    border-radius: 20px
+    &:active
+      background-color: $blue
+
+#progress
+  position: absolute
+  left: 5px
+  right: 5px
+  bottom: 0
+  height: 10px
+  cursor: pointer
+  z-index: 1
+  > .position
+    height: 2px
+    position: absolute
+    bottom: 2px
+    left: 0
+    z-index: 1
+    background-color: $color
+    width: 0
+    transition: height 0.2s//, width 1s linear
+    border-radius: 4px
+
+#main
+  margin-right: 300px
+  position: relative
+  z-index: 1
+  overflow: auto
+
+#content
+  height: 100%
+  > ul
+    -webkit-transition: padding-top 0.25s
+    box-sizing: border-box
+    overflow: hidden
+    height: 100%
+    padding-top: 60px
+
+#sidebar
+  overflow: hidden
+  position: fixed
+  width: 300px
+  top: 0
+  bottom: 0
+  right: 0
+  -webkit-flex-shrink: 0
+  display: -webkit-flex
+  -webkit-flex-direction: column
+
+#station
+  height: 100px
+  width: 300px
+
+.track-name, .album-name, .artist-name
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
+.unavailable
+  opacity: 0.3
+  &:hover
+    > .play, > .queue
+      display: none
+
+.album-art
+  width: 75px
+  -webkit-flex-shrink: 0
+
+@media (max-width: 780px)
+  .album
+    width: 150px
+  #progress
+    height: 15px
+  .track-name, .album-name
+    display: block
+  .track-list
+    -webkit-columns: 1
+  #bar > #show-sidebar
+    display: inline-block
+  #bar, #sidebar
+    right: -300px
+  #container
+    -webkit-transition: -webkit-transform 0.5s
+    &.slide-to-left
+      -webkit-transform: translate(-300px, 0)
+  #main
+    margin-right: 0
+    -webkit-transition: margin 0.5s
+
+@media (max-height: 400px)
+  #bar
+    height: 40px
+    > [class *= 'icon']
+      line-height: 40px
+  #content > ul, #queue
+    padding-top: 40px

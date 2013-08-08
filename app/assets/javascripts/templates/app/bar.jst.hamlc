@@ -1,0 +1,8 @@
+#logo.icon-music
+
+%input#search{type: "text", placeholder: "search . . ."}
+%a.playlists.icon-list{href: "#collection/playlists", title: 'Playlists'}
+%a.albums.icon-th-large{href: "#collection/albums", title: 'Albums'}
+%a.artists.icon-group{href: "#collection/artists", title: 'Artists'}
+%button#show-sidebar.slidable.icon-chevron-left
+#player
