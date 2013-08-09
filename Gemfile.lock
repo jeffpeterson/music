@@ -1,20 +1,11 @@
 GIT
-  remote: git@github.com:lucasmazza/ruby-stylus.git
+  remote: https://github.com/lucasmazza/ruby-stylus.git
   revision: 062d8309f4c2192a854b42d766d19841c26662ca
   branch: rails_4
   specs:
     stylus (1.0.0.dev)
       execjs
       stylus-source
-
-GIT
-  remote: git@github.com:netzpirat/haml_coffee_assets.git
-  revision: 19c31c43fdd6deec6bf520edd760adc54bf4ad73
-  specs:
-    haml_coffee_assets (1.13.0)
-      coffee-script (>= 1.0.0)
-      sprockets (>= 2.0.3)
-      tilt (>= 1.3.3)
 
 GEM
   remote: https://rubygems.org/
@@ -70,6 +61,10 @@ GEM
       multi_json (~> 1.0)
     haml (4.0.3)
       tilt
+    haml_coffee_assets (1.13.1)
+      coffee-script (>= 1.0.0)
+      sprockets (>= 2.0.3)
+      tilt (>= 1.3.3)
     hike (1.2.3)
     i18n (0.6.4)
     jbuilder (1.5.0)
@@ -143,7 +138,7 @@ DEPENDENCIES
   eco
   execjs
   haml
-  haml_coffee_assets!
+  haml_coffee_assets
   jbuilder (~> 1.2)
   jquery-rails
   pry-rails

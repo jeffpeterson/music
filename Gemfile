@@ -15,6 +15,6 @@ group :development do
 end
 
 gem 'eco'
-gem 'haml_coffee_assets', git: 'git@github.com:netzpirat/haml_coffee_assets.git'
+gem 'haml_coffee_assets'#, git: 'https://github.com/netzpirat/haml_coffee_assets.git'
 gem 'execjs'
-gem 'stylus', git: 'git@github.com:lucasmazza/ruby-stylus.git', branch: 'rails_4'
+gem 'stylus', git: 'https://github.com/lucasmazza/ruby-stylus.git', branch: 'rails_4'
