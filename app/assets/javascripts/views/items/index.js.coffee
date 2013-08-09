@@ -18,6 +18,9 @@ class App.Views.ItemIndex extends Backbone.View
 
   render: =>
     @$el.empty()
+
+    @$el.append $('<div>').addClass('loading') if @collection.length is 0
+
     @collection.each (model) =>
       @add(model)
     this

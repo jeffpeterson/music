@@ -138,6 +138,16 @@ input
   to
     opacity: 1
 
+
+.loading
+  height: 100%
+  display: -webkit-flex
+  -webkit-justify-content: center
+  -webkit-align-items: center
+  &:before
+    content: 'loading...'
+
+
 #bar > #show-sidebar
   display: none
   -webkit-flex-shrink: 0
@@ -157,21 +167,23 @@ input
   left: 0
   right: 0
   z-index: 10
-  background-color: rgba(245, 245, 245, 0.95)
+  background-image: linear-gradient(to bottom, rgba(255,255,255, 1), rgba(255, 255, 255, 0.95))
   color: $color
   box-shadow: 0 0 30px rgba(0,0,0, 0.2)
-  > [class *= 'icon']
+  > a, > button
     -webkit-align-self: stretch
     -webkit-flex-shrink: 1
-    -webkit-transition: color 0.4s, background-color 0.4s, line-height 0.25s
+    -webkit-transition: color 0.4s, background-color 0.4s, line-height 0.25s, box-shadow 0.4s
     padding: 0
     display: -webkit-flex
     width: 60px
     -webkit-align-items: center
     -webkit-justify-content: center
     &.current
-      background-color: rgba($color, 0.9)
+      background-image: linear-gradient(to top, rgba($color, 0.8), rgba($color, 1))
       color: white
+      text-shadow 0 0 3px rgba($black, 0.5)
+      box-shadow: inset 0 0 15px rgba($black, 0.1)
 
 #logo
   width: 60px
@@ -195,8 +207,6 @@ button:active, a:active
   transition: background-color 0.2s
   overflow: hidden
   text-overflow: ellipsis
-  &:focus
-    background-color: $white
 
 #player
   width: 300px
