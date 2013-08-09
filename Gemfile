@@ -6,6 +6,7 @@ gem 'jbuilder', '~> 1.2'
 gem 'jquery-rails'
 gem 'rails', '4.0.0'
 gem 'sqlite3'
+gem 'thin'
 gem 'uglifier', '>= 1.3.0'
 
 group :development do
