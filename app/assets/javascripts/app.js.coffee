@@ -36,6 +36,10 @@ window.App =
 
     Backbone.history.start pushState: false
 
+  go: (fragment, options = {}) ->
+    _.defaults options, trigger: true
+    Backbone.history.navigate fragment, options
+
   debug: (args...) ->
     console.log("-- DEBUG:", args...) if App.debug_on
 
@@ -79,7 +83,5 @@ $ ->
   App.time "App.initialize"
 
 App.on 'rdio:ready', ->
-  if not R.authenticated()
-    R.authenticate(mode: 'redirect')
   console.timeEnd "R.ready"
-
+  App.go 'home' if not R.authenticated()

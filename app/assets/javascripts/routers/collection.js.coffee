@@ -10,15 +10,16 @@ class App.Routers.Collection extends BetterRouter
   initialize: ->
     @el = '#content'
     @listenTo App, 'search', (query) ->
+      return unless @collection
       @collection.filter (item) ->
         item.get('query').match item.clean(query)
 
-    @listenTo App, 'infinite-scroll', -> @collection.fetch()
+    @listenTo App, 'infinite-scroll', -> @collection?.fetch()
 
     super(arguments...)
 
   index: ->
-    Backbone.history.navigate "collection/albums", trigger: true
+    App.go 'collection/albums'
 
   artists: ->
     @collection = App.collection.artists.fork()

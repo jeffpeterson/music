@@ -1,7 +1,7 @@
 $normal           = 300
 $bold             = 500
-$white            = #fff
-$black            = #000
+$white            = #eee
+$black            = #666
 $red              = #dd777a
 $blue             = #79c
 $green            = #8c8
@@ -28,16 +28,19 @@ square()
 
 html, body
   min-width: 100%
-  min-height: 100%
   padding: 0
   margin: 0
 
+html
+  height: 100%
+
 body
+  min-height: 100%
   display: -webkit-flex
   font-weight: $normal
   font-family: Raleway, sans-serif
-  background-color: $black
-  color: white
+  background-color: #000
+  color: #ddd
   font-size: 20px
   line-height: 40px
   cursor: default
@@ -57,6 +60,8 @@ button
   border: 0
   display: inline-block
   padding: 0
+  font-family inherit
+  font-weight inherit
   margin: 0
   background: none
   color: inherit
@@ -64,19 +69,24 @@ button
   font-size: inherit
   cursor: pointer
 
+
 button, [class *= 'icon']
   padding: 4px
 
-.icon-random
-  padding-top: 8px
+h1, h2, h3
+  font-weight: $normal
+  line-height: 1.5em
+  padding 0.75em
+  letter-spacing: -1px
 
 h1
-  color: rgba(0, 0, 0, .3)
-  font-weight: $bold
-  font-size: 32px
-  letter-spacing: -1px
-  text-transform: uppercase
-  padding: 350px 0 10px
+  font-size: 40px
+
+h2
+  font-size: 30px
+
+img
+  vertical-align: middle
 
 ul
   margin: 0
@@ -107,17 +117,27 @@ input
   color: rgba(0,0,0, 0.2)
   padding-right: 10px
 
+.button
+  color       $blue
+
+.photo
+  max-width  95%
+  box-shadow 0 0 50px rgba(black, 0.5)
+
+.icon-random
+  padding-top 8px
+
 .freeze
-  overflow: hidden
+  overflow hidden
 
 .clear
-  clear: both
+  clear both
 
 .blur
-  -webkit-filter: blur(5px)
+  -webkit-filter blur(5px)
 
 .invisible
-  visibility: hidden
+  visibility hidden
 
 .accent
   color: $color + #555
@@ -147,6 +167,17 @@ input
   &:before
     content: 'loading...'
 
+#home
+  position fixed
+  top 0
+  left 0
+  right 0
+  bottom 0
+  overflow auto
+  background-color white
+  padding-top 60px
+  text-align center
+  color $black
 
 #bar > #show-sidebar
   display: none
