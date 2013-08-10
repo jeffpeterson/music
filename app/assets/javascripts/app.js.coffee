@@ -1,4 +1,6 @@
 window.App =
+  version: 4
+
   Views:       {}
   Models:      {}
   Collections: {}
@@ -11,6 +13,8 @@ window.App =
   memo_pad: {}
 
   initialize: ->
+    App.prune_local()
+
     for name, router of App.Routers
       App.routers[name] = new router
 
@@ -45,10 +49,15 @@ window.App =
       @set_local(k, v) for k, v of key
       return
 
-    localStorage[key] = JSON.stringify(@memo_pad[key] = value)
+    localStorage["v#{App.version}/#{key}"] = JSON.stringify(@memo_pad[key] = value)
 
   get_local: (key, default_value = null) ->
-    @memo_pad[key] or= (JSON.parse(localStorage[key] or null) or default_value)
+    @memo_pad[key] or= (JSON.parse(localStorage["v#{App.version}/#{key}"] or null) or default_value)
+
+  prune_local: ->
+    regex = new RegExp("^v#{App.version}/")
+    for key, value of localStorage when not regex.test(key)
+      delete localStorage[key]
 
   memo: (key, property, fn) ->
     cached_object = App.get_local(key, {})
