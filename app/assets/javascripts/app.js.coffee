@@ -1,5 +1,5 @@
 window.App =
-  version: 4
+  version: 5
 
   Views:       {}
   Models:      {}
