@@ -89,13 +89,14 @@ class window.ColorFinder
   is_dark: (color) ->
     color.split(',')[0] > 0.5
 
-  are_contrasting: (a, b, diff = 10000) ->
+  are_contrasting: (a, b, diff = 20000) ->
     a = a.split(',')
     b = b.split(',')
     @distance_squared(a, b) > diff
 
   contrasts_background: (color_key) ->
     Math.abs(@yuv(@colors.background.split(','))[0] - @yuv(color_key.split(','))[0]) > 75
+    # @are_contrasting(@colors.background, color_key)
 
 ColorFinder.analyze = (image_url, callback) ->
   new ColorFinder(image_url).analyze(callback)
