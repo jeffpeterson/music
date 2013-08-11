@@ -53,7 +53,10 @@ window.App =
       @set_local(k, v) for k, v of key
       return
 
-    localStorage["v#{App.version}/#{key}"] = JSON.stringify(@memo_pad[key] = value)
+    try
+      localStorage["v#{App.version}/#{key}"] = JSON.stringify(@memo_pad[key] = value)
+    catch error
+      App.debug "ERROR:", error
 
   get_local: (key, default_value = null) ->
     @memo_pad[key] or= (JSON.parse(localStorage["v#{App.version}/#{key}"] or null) or default_value)
