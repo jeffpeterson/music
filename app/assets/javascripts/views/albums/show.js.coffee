@@ -8,7 +8,7 @@ class App.Views.AlbumShow extends App.Views.ItemShow
   template: JST['templates/albums/show']
 
   events:
-    'click':     'expand'
+    'click':     'show'
     'dragstart': 'dragstart'
 
   initialize: ->
@@ -24,12 +24,11 @@ class App.Views.AlbumShow extends App.Views.ItemShow
     @$el.css backgroundImage: "url(#{@model.artwork.get('icon')})"
     this
 
-  expand: (event) ->
+  show: (event) ->
     event.preventDefault()
-    @render_expanded_view()
 
-  render_expanded_view: ->
-    @expanded_view or= new App.Views.AlbumExpanded model: @model, original: this
+    view = new App.Views.AlbumExpanded model: @model, original: this
+    view.render().in()
+    $("body").append view.el
 
-    $("body").append @expanded_view.render().el
-    this
+    App.go @model.get('route'), trigger: false

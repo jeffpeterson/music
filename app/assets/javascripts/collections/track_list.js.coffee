@@ -7,7 +7,7 @@ class App.Collections.TrackList extends App.Collections.Base
   comparator: 'trackNum'
 
   fetch: (options = {}) ->
-    super _.defaults(options, keys: @album.get('itemTrackKeys').join(','), extras: 'isInCollection')
+    super _.defaults(options, keys: (@album.get('itemTrackKeys') or @album.get('trackKeys')).join(','), extras: 'isInCollection')
 
   parse: (response, options) ->
     tracks = response.result

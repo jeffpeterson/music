@@ -18,10 +18,11 @@ window.App =
     for name, router of App.Routers
       App.routers[name] = new router
 
-    App.collection.artists   = new App.Collections.Artists
-    App.collection.albums    = new App.Collections.Albums
-    App.collection.tracks    = new App.Collections.Tracks
-    App.collection.playlists = new App.Collections.Playlists
+    App.collection.artists        = new App.Collections.Artists
+    App.collection.albums         = new App.Collections.Albums
+    App.collection.tracks         = new App.Collections.Tracks
+    App.collection.playlists      = new App.Collections.Playlists
+    App.collection.heavy_rotation = new App.Collections.HeavyRotation
 
     App.collection.playlists.fetch(start: 0)
 
@@ -86,4 +87,5 @@ $ ->
 
 App.on 'rdio:ready', ->
   console.timeEnd "R.ready"
+  App.set_local current_user: R.currentUser
   App.go 'home' if not R.authenticated()

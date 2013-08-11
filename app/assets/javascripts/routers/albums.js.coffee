@@ -7,10 +7,13 @@ class App.Routers.Albums extends BetterRouter
     super(arguments...)
 
   show: (artist_name, album_name) ->
-    album = new App.Models.Album
-      url: "/artist/#{artist_name}/album/#{album_name}/"
+    App.routers.Collection.albums()
 
-    App.on 'rdio:ready', =>
-      console.log "FETCHING ALBUM"
+    album = App.collection.albums.findWhere url: "/artist/#{artist_name}/album/#{album_name}/"
+    unless album
+      album = new App.Models.Album
+        url: "/artist/#{artist_name}/album/#{album_name}/"
       album.fetch_by_url()
-    @swap new App.Views.AlbumShow(model: album)
+
+    view = new App.Views.AlbumExpanded model: album
+    $("body").append view.render().el

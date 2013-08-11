@@ -6,9 +6,6 @@ $flip-time = 0.8s
   -webkit-justify-content: flex-end
   -webkit-align-items: flex-start
   padding-left: 1px
-  &.expanded
-    > .album
-      opacity: 0.3
   > .album
     margin-right: 1px
     margin-top: 1px
@@ -124,7 +121,7 @@ $flip-time = 0.8s
             font-size:   0.7em
             line-height: 1em
 
-.expanded-album.expanded
+.expanded-album.is-expanded
   > .card
     -webkit-transform: rotateX(0deg)
     box-shadow: 0 0 30px rgba(0,0,0, 0.6)

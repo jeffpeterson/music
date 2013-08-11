@@ -14,3 +14,10 @@ class App.Models.Album extends App.Models.Item
     @compute 'query', ->
       @clean(@get('name') + @get('artist'))
 
+    @compute 'route', ->
+      return unless url     = @get('url')
+      return unless match   = url.match("/artist/([^/]+)/album/([^/]+)/")
+      [full, artist, album] = match
+
+      "artists/#{artist}/albums/#{album}"
+

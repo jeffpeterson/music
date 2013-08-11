@@ -1,13 +1,15 @@
 class App.Views.AlbumExpanded extends Backbone.View
-  className: 'expanded-album'
+  className: 'expanded-album is-expanded'
 
   events:
     'click .station': 'play_station'
     'click .close':   'remove'
 
   template: JST['templates/albums/expanded']
+
   initialize: (options) ->
     @original = options.original
+    @$el.removeClass('is-expanded') if @original
 
   render: ->
     @delegateEvents()
@@ -22,15 +24,18 @@ class App.Views.AlbumExpanded extends Backbone.View
     @$el.append @template(album: @model)
     @$el.attr(style: '')
 
-    @move_to_original()
-
     @$('.back').append @track_list.render().el
 
-    @render_flip_over()
     @render_click_shield()
     this
 
+  in: ->
+    @move_to_original()
+    @flip_over()
+
   move_to_original: ->
+    return unless @original
+
     offset = @original.$el.offset()
     width  = @original.$el.width()
     scale  = width / 500
@@ -62,13 +67,11 @@ class App.Views.AlbumExpanded extends Backbone.View
         backgroundColor: "rgba(#{@colors.contrast}, 0.5)"
     this
 
-  render_flip_over: ->
-    setTimeout (=>
-      @$el.addClass('expanded')
-      @original.$el.addClass('invisible')
+  flip_over: ->
+    requestAnimationFrame =>
+      @$el.addClass('is-expanded')
+      @original?.$el.addClass('invisible')
       @$el.attr(style: '')
-    ), 10
-    this
 
   render_click_shield: ->
     $shield = $("<div>").addClass("click-shield")
@@ -77,21 +80,18 @@ class App.Views.AlbumExpanded extends Backbone.View
     this
 
   remove: ->
-    @out =>
-      super()
-      $('body').removeClass('freeze')
-      @original.$el.removeClass('invisible')
-      $(".click-shield").remove()
-    this
+    super(arguments...)
+    App.go 'collection/albums', trigger: false
+    $('body').removeClass('freeze')
+    @original?.$el.removeClass('invisible')
+    $(".click-shield").remove()
 
   out: (complete) ->
     $(".click-shield").transit opacity: 0
-    @$el.removeClass('expanded')
+    @$el.removeClass('is-expanded')
     @move_to_original()
     setTimeout(complete, parseFloat(@$('.card').css("transition").split(' ')[1]) * 1000)
 
   play_station: (event) ->
     event.preventDefault()
     R.player.play source: 'r' + @model.get('rawArtistKey') + '|3'
-
-
