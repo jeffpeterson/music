@@ -23,8 +23,7 @@ window.App =
     App.collection.tracks    = new App.Collections.Tracks
     App.collection.playlists = new App.Collections.Playlists
 
-    App.on 'rdio:ready', ->
-      App.collection.playlists.fetch()
+    App.collection.playlists.fetch(start: 0)
 
     App.player = new App.Models.Player
     App.queue  = new App.Models.Queue
