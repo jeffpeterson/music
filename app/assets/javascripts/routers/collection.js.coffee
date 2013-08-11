@@ -24,26 +24,26 @@ class App.Routers.Collection extends BetterRouter
   artists: ->
     @collection = App.collection.artists.fork()
     @swap new App.Views.ArtistIndex(collection: @collection)
-    App.on 'rdio:ready', => App.collection.artists.init_fetch()
+    App.on 'rdio:ready', => App.collection.artists.fetch(start: 0)
 
   albums: ->
     @collection = App.collection.albums.fork()
 
     @swap new App.Views.AlbumIndex(collection: @collection)
-    App.on 'rdio:ready', => App.collection.albums.init_fetch()
+    App.on 'rdio:ready', => App.collection.albums.fetch(start: 0)
 
   playlists: ->
     @collection = App.collection.playlists.fork()
 
     @swap new App.Views.PlaylistIndex(collection: @collection)
-    App.on 'rdio:ready', => App.collection.playlists.init_fetch()
+    App.on 'rdio:ready', => App.collection.playlists.fetch(start: 0)
 
   tracks: ->
     @collection = App.collection.tracks.fork()
     @swap new App.Views.TrackIndex(collection: @collection)
-    App.on 'rdio:ready', => App.collection.tracks.init_fetch()
+    App.on 'rdio:ready', => App.collection.tracks.fetch(start: 0)
 
   heavy_rotation: ->
     @swap new App.Views.AlbumIndex(collection: App.collection.heavy_rotation)
-    App.on 'rdio:ready',=> App.collection.heavy_rotation.init_fetch()
+    App.on 'rdio:ready',=> App.collection.heavy_rotation.fetch(start: 0)
 
