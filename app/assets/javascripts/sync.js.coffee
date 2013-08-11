@@ -1,4 +1,8 @@
 Backbone.sync = (method, model, options = {}) ->
+  unless R?.ready?()
+    App.once 'rdio:ready', -> Backbone.sync(method, model, options)
+    return
+
   content = _.omit options, 'success', 'error', 'parse', 'reset', 'method'
   App.debug 'Syncing with options:', options
 
