@@ -2,10 +2,12 @@ window.App =
   version: 5
 
   Views:       {}
+  Adapters:    {}
   Models:      {}
   Collections: {}
   Routers:     {}
 
+  adapters:    {}
   routers:     {}
   collection:  {}
 
@@ -14,6 +16,8 @@ window.App =
 
   initialize: ->
     App.prune_local()
+
+    App.adapters.rdio = new App.Adapters.Rdio
 
     for name, router of App.Routers
       App.routers[name] = new router
