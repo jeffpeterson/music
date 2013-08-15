@@ -120,15 +120,15 @@ input
 
 .modal
   position: fixed
-  top: 0
+  top: 60px
   left: 0
-  right: 0
+  right: 300px
   bottom: 0
   z-index: 1000
   display: -webkit-flex
   -webkit-align-items: center
   -webkit-justify-content: space-around
-  background-color: rgba(0,0,0, 0.8)
+  background-color: rgba(black, 0.8)
   -webkit-animation: fade-in $flip-time
   > .close
     z-index: 1000
@@ -165,7 +165,7 @@ input
   color: $color + #555
 
 .click-shield
-  position: fixed
+  position: absolute
   top: 0
   left: 0
   right: 0
@@ -372,6 +372,8 @@ button:active, a:active
   #main
     margin-right: 0
     -webkit-transition: margin 0.5s
+  .modal
+    right: 0
 
 @media (max-height: 400px)
   #bar
