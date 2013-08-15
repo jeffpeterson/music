@@ -33,13 +33,22 @@ $flip-time = 8s
 .modal > .album
   position: relative
   display: -webkit-flex
+  max-width: 100%
   > .cover, > .back
+    max-width: 100%
     width: 500px
-    height: 500px
     position: relative
   > .cover
+    position: relative
+    background-size: 100% auto
+    background-repeat: no-repeat
     -webkit-flex-shrink: 0
+    &:before
+      content: ""
+      display: block
+      padding-top: 100%
   > .back
+    height: 500px
     z-index: 10
     overflow: auto
     > .info
