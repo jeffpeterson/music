@@ -57,7 +57,6 @@ body
 a
   text-decoration: none
   color: inherit
-  cursor: default
 
 button
   -webkit-appearance: none
@@ -233,12 +232,13 @@ input
   > a, > button
     -webkit-align-self: stretch
     -webkit-flex-shrink: 1
-    -webkit-transition: color 0.4s, background-color 0.4s, line-height 0.25s, box-shadow 0.4s
     padding: 0
     display: -webkit-flex
     width: 60px
     -webkit-align-items: center
     -webkit-justify-content: center
+    &:hover
+      color: lighten($color, 20%)
     &.current
       background-image: linear-gradient(to top, rgba($color, 0.8), rgba($color, 1))
       color: white
