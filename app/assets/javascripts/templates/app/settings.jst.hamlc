@@ -1,0 +1,10 @@
+- if App.adapters.rdio.is_authenticated
+  %h2 Authenticated with Rdio
+- else
+  %h2
+    %button.button.authorize-rdio Authenticate Rdio
+- if App.adapters.sound_cloud.is_authenticated
+  %h2 Authenticated with SoundCloud
+- else
+  %h2
+    %button.button.authorize-sound-cloud Authenticate Sound Cloud

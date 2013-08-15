@@ -17,8 +17,6 @@ window.App =
   initialize: ->
     App.prune_local()
 
-    App.adapters.rdio = new App.Adapters.Rdio
-
     for name, router of App.Routers
       App.routers[name] = new router
 
@@ -80,11 +78,6 @@ window.App =
 _.extend App, Backbone.Events
 
 console.time "R.ready"
-
-window.rdio_loaded = ->
-  App.trigger 'rdio:loaded'
-  R.ready ->
-    App.trigger 'rdio:ready'
 
 $ ->
   App.time "App.initialize"

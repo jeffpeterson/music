@@ -19,8 +19,8 @@
       != yield
 
     != javascript_include_tag :application
-    %script{async: true, src: "//rdio.com/api/api.js?client_id=zpGC9HgrNQDdpyfQdSiwtQ", onload: "rdio_loaded()"}
-    %script{async: true, src: "//connect.soundcloud.com/sdk.js", onload: ""}
+    %script{async: true, src: "//rdio.com/api/api.js?client_id=zpGC9HgrNQDdpyfQdSiwtQ", onload: "App.adapters.rdio.loaded()"}
+    %script{async: true, src: "//connect.soundcloud.com/sdk.js",                        onload: "App.adapters.sound_cloud.loaded()"}
 
     :javascript
       document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')

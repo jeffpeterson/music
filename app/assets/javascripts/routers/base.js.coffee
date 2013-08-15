@@ -1,6 +1,7 @@
 class App.Routers.Base extends BetterRouter
   routes:
-    'home': 'home'
+    'home':     'home'
+    'settings': 'settings'
 
   initialize: ->
     @el = '#content'
@@ -9,3 +10,5 @@ class App.Routers.Base extends BetterRouter
   home: ->
     @swap new App.Views.Home
 
+  settings: ->
+    @swap new App.Views.Settings

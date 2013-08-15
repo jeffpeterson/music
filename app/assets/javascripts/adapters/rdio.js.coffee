@@ -1,6 +1,16 @@
 #= require ./base
 
 class App.Adapters.Rdio extends App.Adapters.Base
+  loaded: ->
+    super()
+
+    App.trigger 'rdio:loaded'
+    R.ready =>
+      if R.authenticated()
+        @is_authenticated = true
+        @trigger 'change'
+      App.trigger 'rdio:ready'
+
   initialize:  (options = {}) ->
     @translate 'album',
       name:         'name'
@@ -9,6 +19,8 @@ class App.Adapters.Rdio extends App.Adapters.Base
 
   authenticate: (options = {}) ->
     if R.authenticated()
+      @is_authenticated = true
+      @triggger 'change'
       return
     else
       R.authenticate()
@@ -16,3 +28,5 @@ class App.Adapters.Rdio extends App.Adapters.Base
   # e.g. adapter.get('albums', count: 10, start: 20)
   get: (type, options = {}) ->
     this
+
+App.adapters.rdio = new App.Adapters.Rdio
