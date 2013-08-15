@@ -1,5 +1,5 @@
 class App.Views.AlbumExpanded extends Backbone.View
-  className: 'expanded-album is-expanded'
+  className: 'modal'
 
   events:
     'click .station': 'play_station'
@@ -39,8 +39,8 @@ class App.Views.AlbumExpanded extends Backbone.View
     offset = @original.$el.offset()
     width  = @original.$el.width()
     scale  = width / 500
-    y      = offset.top - window.scrollY - (500 - width) / 2
-    x      = offset.left - (500 - width) / 2
+    y      = offset.top - window.scrollY# - (500 - width) / 2
+    x      = offset.left# - (500 - width) / 2
 
     @$el.css
       webkitTransform: "scale(#{scale})"
@@ -54,7 +54,7 @@ class App.Views.AlbumExpanded extends Backbone.View
       # '.card':
       #   'background-image': "linear-gradient(to left, rgb(#{@colors.background}), rgba(#{@colors.background}, 0.01)),
       #     url(#{@model.artwork.get('icon-500')})"
-      '.back':
+      '.back, .track-list':
         'background-color': "rgba(#{@colors.background}, 1)"
         color:              "rgb(#{@colors.secondary})"
       '.album-name':

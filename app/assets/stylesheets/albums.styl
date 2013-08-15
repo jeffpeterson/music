@@ -1,4 +1,4 @@
-$flip-time = 0.8s
+$flip-time = 8s
 
 .album-list
   display: -webkit-flex
@@ -12,27 +12,70 @@ $flip-time = 0.8s
     width: 180px
     max-width: 400px
     -webkit-flex-grow: 1
+    &:before
+      content: ""
+      display: block
+      padding-top: 100%
+    &.unavailable
+      opacity: 1
+      &:before
+        background-color: rgba(0,0,0, 0.7)
+        content: "Unavailable"
+        padding-top: -webkit-calc(100% \- 2em)
+        padding-left: 5px
+        color: white
 
 .album
   position: relative
   background-size: 100% auto
   background-repeat: no-repeat
-  &:before
-    content: ""
-    display: block
-    padding-top: 100%
-  &.unavailable
-    opacity: 1
-    &:before
-      background-color: rgba(0,0,0, 0.7)
-      content: "Unavailable"
-      padding-top: -webkit-calc(100% \- 2em)
-      padding-left: 5px
-      color: white
+
+.modal > .album
+  position: relative
+  display: -webkit-flex
+  > .cover, > .back
+    width: 500px
+    height: 500px
+    position: relative
+  > .cover
+    -webkit-flex-shrink: 0
+  > .back
+    z-index: 10
+    overflow: auto
+    > .info
+      -webkit-flex-shrink: 0
+      padding: 10px
+      display: -webkit-flex
+      > .text
+        -webkit-flex-grow: 1
+        > .album-name
+          font-size: 1.5em
+          line-height: 1.5em
+        > .artist-name
+          font-size: 1.1em
+          line-height: 1.5em
+          margin-top: -10px
+          &:before
+            content: "by "
+            opacity: 0.7
+      > .controls
+        -webkit-flex-shrink: 0
+        text-align: right
+        > .release-date
+          font-size:   0.7em
+          line-height: 1em
+
+@media (max-width: 960px)
+  .modal > .album
+    -webkit-flex-direction: column
+    overflow: auto
+    max-height: 100%
+    > .back
+      height: auto
+      overflow: visible
 
 .expanded-album
-  -webkit-perspective-origin: center center
-  -webkit-perspective: 1000px
+  -webkit-transform-origin: left top
   -webkit-transform: translate3d(0,0,0)
   transition: all ($flip-time / 3)
   max-width: 100%
@@ -61,17 +104,13 @@ $flip-time = 0.8s
     background-size: 100% auto
     background-position: left top
     background-repeat: no-repeat
-    -webkit-transform-style: preserve-3d
-    transition: all $flip-time
     position: absolute
     top: 0
     left: 0
     width: 100%
     height: 100%
-    -webkit-transform: rotateX(180deg)
     padding-top: 20px
     > .close
-      -webkit-backface-visibility: hidden
       font-size: 1.2em
       width: 40px
       line-height: 40px
@@ -82,7 +121,6 @@ $flip-time = 0.8s
       @media (max-width: 500px)
         display: block
     > .cover, > .back
-      -webkit-backface-visibility: hidden
       background-size: 100% auto
       position: absolute
       top: 0
@@ -90,14 +128,14 @@ $flip-time = 0.8s
       width: 100%
       height: 100%
     > .cover
-      -webkit-transform: rotateX(180deg) translateZ(0.1px)
+      z-index: 20
     > .back
       z-index: 10
       transition: all ($flip-time / 2)
       overflow: auto
       display: -webkit-flex
       -webkit-flex-direction: column
-      -webkit-transform: translateZ(1px)
+      -webkit-transform: translate3d(0,0,0)
       > .info
         -webkit-flex-shrink: 0
         padding: 10px
@@ -123,12 +161,11 @@ $flip-time = 0.8s
 
 .expanded-album.is-expanded
   > .card
-    -webkit-transform: rotateX(0deg)
     box-shadow: 0 0 30px rgba(0,0,0, 0.6)
     > .back
       box-shadow: none
       -webkit-transition-delay: ($flip-time / 2)
-      -webkit-transform: translate3d(99%, 0, 1px)
+      -webkit-transform: translate3d(100%, 0, 1px)
       @media (max-width: 1000px)
         margin-top: 99%
-        -webkit-transform: translate3d(0, 0, 1px)
+        -webkit-transform: translate3d(0,0,0)
