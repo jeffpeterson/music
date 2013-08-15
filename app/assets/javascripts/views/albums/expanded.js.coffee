@@ -83,13 +83,11 @@ class App.Views.AlbumExpanded extends Backbone.View
     App.go 'collection/albums', trigger: false
     $('body').removeClass('freeze')
     @original?.$el.removeClass('invisible')
-    $(".click-shield").remove()
 
   out: (complete) ->
-    $(".click-shield").transit opacity: 0
-    @$el.removeClass('is-expanded')
-    @move_to_original()
-    setTimeout(complete, parseFloat(@$('.card').css("transition").split(' ')[1]) * 1000)
+    @$el.transit
+      opacity: 0,
+      complete: complete
 
   play_station: (event) ->
     event.preventDefault()
