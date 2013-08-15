@@ -51,6 +51,7 @@ $flip-time = 8s
     height: 500px
     z-index: 10
     overflow: auto
+    -webkit-overflow-scrolling: touch
     > .info
       -webkit-flex-shrink: 0
       padding: 10px
@@ -77,6 +78,7 @@ $flip-time = 8s
 @media (max-width: 960px)
   .modal > .album
     -webkit-flex-direction: column
+    -webkit-overflow-scrolling: touch
     overflow: auto
     max-height: 100%
     > .back
