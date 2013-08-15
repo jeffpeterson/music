@@ -2,8 +2,9 @@ class App.Views.AlbumExpanded extends Backbone.View
   className: 'modal'
 
   events:
-    'click .station': 'play_station'
-    'click .close':   'remove'
+    'click .station':      'play_station'
+    'click .close':        'remove'
+    'click .click-shield': 'remove'
 
   template: JST['templates/albums/expanded']
 
@@ -74,9 +75,7 @@ class App.Views.AlbumExpanded extends Backbone.View
       @$el.attr(style: '')
 
   render_click_shield: ->
-    $shield = $("<div>").addClass("click-shield")
-    $shield.one 'click', => @remove()
-    $("body").addClass('freeze').append($shield)
+    $("body").addClass('freeze')
     this
 
   remove: ->

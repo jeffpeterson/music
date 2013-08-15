@@ -1,5 +1,6 @@
+.click-shield
+%button.close.icon-remove-sign
 .item.album
-  %button.close.icon-remove-sign
   .cover
   .back
     .info
