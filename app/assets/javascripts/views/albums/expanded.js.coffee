@@ -52,14 +52,14 @@ class App.Views.AlbumExpanded extends Backbone.View
     @styles.css
       '.cover, .card':
         'background-image': "url(#{@model.artwork.get('icon-500')})"
-      '.back, .track-list, .track':
+      '.back, .modal .track-list, .modal .track':
         'background-color': "rgba(#{@colors.background}, 1)"
         color:              "rgb(#{@colors.secondary})"
-      '.album-name':
+      '.modal .album-name':
         color: "rgba(#{@colors.primary}, 1.0)"
-      '.artist-name, .release-date':
+      '.modal .artist-name, .modal .release-date':
         color: "rgba(#{@colors.primary}, 0.5)"
-      'button, button:active, i':
+      '.modal button, .modal button:active, i':
         color: "rgb(#{@colors.detail})"
     this
 
