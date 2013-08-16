@@ -52,10 +52,7 @@ class App.Views.AlbumExpanded extends Backbone.View
     @styles.css
       '.cover, .card':
         'background-image': "url(#{@model.artwork.get('icon-500')})"
-      # '.card':
-      #   'background-image': "linear-gradient(to left, rgb(#{@colors.background}), rgba(#{@colors.background}, 0.01)),
-      #     url(#{@model.artwork.get('icon-500')})"
-      '.back, .track-list':
+      '.back, .track-list, .track':
         'background-color': "rgba(#{@colors.background}, 1)"
         color:              "rgb(#{@colors.secondary})"
       '.album-name':
@@ -64,14 +61,11 @@ class App.Views.AlbumExpanded extends Backbone.View
         color: "rgba(#{@colors.primary}, 0.5)"
       'button, button:active, i':
         color: "rgb(#{@colors.detail})"
-      '.track:hover':
-        backgroundColor: "rgba(#{@colors.contrast}, 0.5)"
     this
 
   flip_over: ->
     requestAnimationFrame =>
       @$el.addClass('is-expanded')
-      @original?.$el.addClass('invisible')
       @$el.attr(style: '')
 
   render_click_shield: ->
@@ -79,10 +73,10 @@ class App.Views.AlbumExpanded extends Backbone.View
     this
 
   remove: ->
-    super(arguments...)
-    App.go 'collection/albums', trigger: false
     $('body').removeClass('freeze')
-    @original?.$el.removeClass('invisible')
+    App.go 'collection/albums', trigger: false
+    @out =>
+      super(arguments...)
 
   out: (complete) ->
     @$el.transit
