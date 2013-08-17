@@ -70,10 +70,12 @@ class App.Views.AlbumExpanded extends Backbone.View
 
   render_click_shield: ->
     $("body").addClass('freeze')
+    $("#main").addClass('blur')
     this
 
   remove: ->
     $('body').removeClass('freeze')
+    $("#main").removeClass('blur')
     App.go 'collection/albums', trigger: false
     @out =>
       super(arguments...)

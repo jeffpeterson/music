@@ -10,6 +10,9 @@ $color            = hsl(220, 15%, 30%)
 $highlight        = lighten($color, 15%)
 $background-color = $white
 
+modal-animation-duration = 0.5s
+
+@import 'vendor'
 @import 'items'
 @import 'tracks'
 @import 'albums'
@@ -119,17 +122,17 @@ input
   padding-right: 10px
 
 .modal
-  position: fixed
-  top: 60px
-  left: 0
-  right: 300px
-  bottom: 0
-  z-index: 50
-  display: -webkit-flex
-  -webkit-align-items: center
-  -webkit-justify-content: space-around
-  background-color: rgba(black, 0.8)
-  -webkit-animation: fade-in $flip-time
+  position fixed
+  top 60px
+  left 0
+  right 300px
+  bottom 0
+  z-index 50
+  display -webkit-flex
+  align-items center
+  justify-content space-around
+  background-color rgba(black, 0.2)
+  animation fade-in modal-animation-duration
   > div
     box-shadow: 0 0 100px rgba(black, 0.8)
   > .close
@@ -158,7 +161,7 @@ input
   clear both
 
 .blur
-  -webkit-filter blur(5px)
+  filter blur(10px)
 
 .invisible
   visibility hidden
@@ -173,17 +176,22 @@ input
   right: 0
   bottom: 0
 
-@-webkit-keyframes fade-in
+@keyframes fade-in
   from
-    opacity: 0
+    opacity 0
   to
-    opacity: 1
+    opacity 1
 
+@keyframes slide-down
+  from
+    transform translate3d(0, -100%, 0)
+  to
+    transform translate3d(0, 0, 0)
 
 .loading
   height: 100%
   display: -webkit-flex
-  -webkit-justify-content: center
+  -webkit-justify-content center
   -webkit-align-items: center
   &:before
     content: 'loading...'
