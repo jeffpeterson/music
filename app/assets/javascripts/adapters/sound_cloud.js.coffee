@@ -32,4 +32,3 @@ class App.Adapters.SoundCloud extends App.Adapters.Base
     this
 
 App.adapters.sound_cloud = new App.Adapters.SoundCloud
-
