@@ -7,7 +7,7 @@ class App.Routers.Albums extends BetterRouter
     super(arguments...)
 
   show: (artist_name, album_name) ->
-    App.routers.Collection.albums()
+    App.routers.Collection.index('albums')
 
     album = App.collection.albums.findWhere url: "/artist/#{artist_name}/album/#{album_name}/"
     unless album

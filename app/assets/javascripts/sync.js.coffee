@@ -3,7 +3,7 @@ Backbone.sync = (verb, model, options = {}) ->
     App.once 'rdio:ready', -> Backbone.sync(verb, model, options)
     return
 
-  content = _.omit options, 'success', 'error', 'parse', 'reset', 'method', 'adapter'
+  content = _.omit options, 'success', 'error', 'parse', 'reset', 'method', 'adapter', 'remove'
   App.debug 'Syncing with options:', options
 
   method  = options.method or model.method

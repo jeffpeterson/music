@@ -5,6 +5,7 @@ class App.Views.AlbumExpanded extends Backbone.View
     'click .station':      'play_station'
     'click .close':        'remove'
     'click .click-shield': 'remove'
+    'click':               'unhighlight'
 
   template: JST['templates/albums/expanded']
 
@@ -51,16 +52,20 @@ class App.Views.AlbumExpanded extends Backbone.View
   render_colors: ->
     @styles.css
       '.cover, .card':
-        'background-image': "url(#{@model.artwork.get('icon-500')})"
+        backgroundImage: "url(#{@model.artwork.get('icon-500')})"
       '.back, .modal .track-list, .modal .track':
-        'background-color': "rgba(#{@colors.background}, 1)"
-        color:              "rgb(#{@colors.secondary})"
+        backgroundColor: "rgba(#{@colors.background}, 1)"
+        color:           "rgb(#{@colors.secondary})"
       '.modal .album-name':
         color: "rgba(#{@colors.primary}, 1.0)"
       '.modal .artist-name, .modal .release-date':
         color: "rgba(#{@colors.primary}, 0.5)"
       '.modal button, .modal button:active, i':
         color: "rgb(#{@colors.detail})"
+      '.modal .track.is-highlighted':
+        backgroundColor: "rgb(#{@colors.secondary})"
+      '.modal .track.is-highlighted, .modal .track.is-highlighted i, .modal .track.is-highlighted button':
+        color:           "rgb(#{@colors.background})"
     this
 
   flip_over: ->
@@ -88,3 +93,8 @@ class App.Views.AlbumExpanded extends Backbone.View
   play_station: (event) ->
     event.preventDefault()
     R.player.play source: 'r' + @model.get('rawArtistKey') + '|3'
+
+  unhighlight: (event) ->
+    event.preventDefault()
+    @$('.is-highlighted').removeClass('is-highlighted')
+

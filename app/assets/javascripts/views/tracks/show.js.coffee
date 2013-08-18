@@ -37,3 +37,11 @@ class App.Views.TrackShow extends App.Views.ItemShow
     return unless @model.get('canStream')
 
     App.queue.tracks.add @model
+
+  highlight: (event) ->
+    event.preventDefault()
+
+    requestAnimationFrame =>
+      @$el.addClass('is-highlighted')
+
+

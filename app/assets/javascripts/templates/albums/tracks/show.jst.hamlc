@@ -1,6 +1,8 @@
-
+.status
+  .track-number= @track.get('trackNum')
+  %button.play-now.icon-play-sign
 .text
-  .track-name= @track.get('name')
+  .track-name=   @track.get('name')
 .controls
   %button.add-to-queue.icon-share-alt
   - if @track.get('isInCollection')

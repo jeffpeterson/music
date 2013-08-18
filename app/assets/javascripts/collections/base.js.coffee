@@ -21,12 +21,11 @@ class App.Collections.Base extends Backbone.Collection
     collection
 
   fork: (params = {}) ->
-    child = @clone(parent: this, store_key: null)
+    child = @clone parent: this, store_key: null
 
-    @listenTo child, 'add', (models) ->
-      @add(models, silent: true)
-    child.listenTo this, 'add reset set', (args...) ->
-      @set args...
+    child.listenTo this, 'all', (ev, model, collection, options) ->
+      return unless ev is 'add' or ev is 'remove'
+      this[ev](model)
 
     child
 

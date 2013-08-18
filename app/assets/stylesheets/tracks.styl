@@ -10,13 +10,26 @@
   overflow: hidden
   position: relative
   display: -webkit-flex
-  -webkit-align-items: center
+  align-items: center
   padding: 0 10px
-  > .text
-    -webkit-flex-grow: 1
-  &:hover
+  > .status
+    flex-shrink 0
+    text-align center
+    width 2em
+    > .play-now
+      display: none
+    > .track-number
+      font-size 0.6em
+  &.is-highlighted
+    > .status
+      > .track-number
+        display: none
+      > .play-now
+        display: inline-block
     > .controls > button
       visibility: visible
+  > .text
+    flex-grow: 1
   > .remove
     text-align: center
   > .controls 

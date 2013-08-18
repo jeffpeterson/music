@@ -4,7 +4,8 @@ class App.Views.AlbumTrackShow extends App.Views.TrackShow
   events:
     'click .add-to-queue':      'add_to_queue'
     'click .add-to-collection': 'add_to_collection'
-    'click':                    'play_now'
+    'click .play-now':          'play_now'
+    'click':                    'highlight'
     'dragstart':                'dragstart'
 
   template: JST['templates/albums/tracks/show']
