@@ -62,8 +62,10 @@ class App.Views.AlbumExpanded extends Backbone.View
         color: "rgba(#{@colors.primary}, 0.5)"
       '.modal button, .modal button:active, i':
         color: "rgb(#{@colors.detail})"
-      '.modal .track.is-highlighted':
+      '.modal .track.is-highlighted, .modal .track.is-highlighted:hover':
         backgroundColor: "rgb(#{@colors.secondary})"
+      '.modal .track:hover':
+        backgroundColor: "rgba(#{@colors.primary}, 0.1)"
       '.modal .track.is-highlighted, .modal .track.is-highlighted i, .modal .track.is-highlighted button':
         color:           "rgb(#{@colors.background})"
     this

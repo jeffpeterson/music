@@ -20,5 +20,6 @@ group :development do
 end
 
 group :test, :development do
-  gem 'jasmine-rails'
+  # gem 'jasmine-rails'
+  gem 'konacha'
 end

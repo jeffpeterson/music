@@ -8,33 +8,38 @@ class window.ColorFinder
     @canvas.height     = @height
     @ctx               = @canvas.getContext('2d')
     @image             = new Image
-    @image.crossOrigin = "anonymous"
+    @image.crossOrigin = "anonymous" unless /^data:/.test(@image_url)
 
   after_image_loads: (fn) ->
-    @image.onload = =>
-      fn?(this)
+    @image.onload = => fn?(this)
     @image.src = @image_url
     this
 
   analyze: (callback) ->
     @after_image_loads =>
-      @ctx.drawImage(@image, 0, 0, @width, @height)
-
-      @colors.background = @find_background()
-      @colors.contrast   = @is_dark(@colors.background) ? '255,255,255' : '0,0,0'
-
-      colors = @find_colors(@image_data())
-      colors = (color for color in colors when @contrasts_background(color))
-
-      @colors.primary = colors.shift() or @colors.contrast
-
-      scolors = (color for color in colors when @are_contrasting(color, @colors.primary, 5000))
-      @colors.secondary = scolors.shift() or colors.shift() or @colors.primary
-
-      dcolors = (color for color in scolors when @are_contrasting(color, @colors.secondary, 5000))
-      @colors.detail    = dcolors.shift() or scolors.shift() or scolors.shift() or @colors.secondary
-
+      @analyze_now()
       callback?(@colors)
+
+  analyze_now: ->
+    @ctx.drawImage(@image, 0, 0, @width, @height)
+
+    @colors.background = @find_background()
+    @colors.contrast   = if @is_dark(@colors.background) then '255,255,255' else '0,0,0'
+
+    colors = @find_colors(@image_data())
+    colors = (color for color in colors when @contrasts_background(color))
+
+    color_to_differ_from = @colors.background
+    i = 0
+    while colors[i] and colors.length > 3
+      if @are_differing(colors[i], color_to_differ_from)
+        color_to_differ_from = colors[i++]
+      else
+        colors.splice(i, 1)
+
+    @colors.primary   = colors.shift() or @colors.contrast
+    @colors.secondary = colors.shift() or @colors.primary
+    @colors.detail    = colors.shift() or @colors.secondary
 
   image_data: (left = 0, top = 0, width = @width, height = @height) ->
     @ctx.getImageData(left, top, width, height).data
@@ -47,7 +52,7 @@ class window.ColorFinder
     colors[0]
 
   find_colors: (pixels) ->
-    buckets = _.values(@find_buckets(pixels))
+    buckets = (v for k,v of @find_buckets(pixels))
     buckets = _(buckets).sortBy (bucket) -> - bucket.count
     # [{count: 123, colors: {}}, ...]
 
@@ -59,8 +64,8 @@ class window.ColorFinder
     for i in [0...p.length] by 4
       rgbs   = [p[i], p[i+1], p[i+2]]
       rgb    = rgbs.join(',')
-      yuv    = @yuv(rgbs)
-      step   = @round(yuv[1..2]).join(',')
+      ybr    = @ybr(rgbs)
+      step   = @round(ybr).join(',')
 
       buckets[step]      or= {count: 0, colors: {}}
       buckets[step].count += 1
@@ -74,29 +79,35 @@ class window.ColorFinder
     for color in colors
       Math.round(color / 25) * 25
 
-  yuv: ([r,g,b]) ->
-    y = 0.299 * r + (0.587 * g) + (0.114 * b)
-    u = 0.492 * (b - y)
-    v = 0.877 * (r - y)
-    [y, u, v]
+  ybr: (rgbs) ->
+    return @ybr(rgbs.split(',')) if typeof rgbs is 'string'
+    [r, g, b] = rgbs
 
-  distance_squared: (rgb1, rgb2) ->
-    yuv1 = @yuv rgb1
-    yuv2 = @yuv rgb2
+    y  =       (0.299    * r) + (0.587    * g) + (0.114    * b)
+    cb = 128 - (0.168736 * r) - (0.331264 * g) + (0.5      * b)
+    cr = 128 + (0.5      * r) - (0.418688 * g) - (0.081312 * b)
+    [y, cb, cr]
 
-    _.reduce (Math.pow(p - yuv2[i], 2) for p, i in yuv1), ((sum, i) -> sum + i), 0
+  distance_squared: (a, b) ->
+    a   = @ybr a
+    b   = @ybr b
+    sum = 0
 
-  is_dark: (color) ->
-    color.split(',')[0] > 0.5
+    for i in [0..2]
+      sum += Math.pow(a[i] - b[i], 2)
+    sum
 
-  are_contrasting: (a, b, diff = 20000) ->
-    a = a.split(',')
-    b = b.split(',')
+  are_differing: (a, b, diff = 2000) ->
     @distance_squared(a, b) > diff
 
+  is_dark: (color) ->
+    @ybr(color)[0] < 127
+
+  are_contrasting: (a, b, diff = 50) ->
+    Math.abs(@ybr(a)[0] - @ybr(b)[0]) > diff
+
   contrasts_background: (color_key) ->
-    Math.abs(@yuv(@colors.background.split(','))[0] - @yuv(color_key.split(','))[0]) > 75
-    # @are_contrasting(@colors.background, color_key)
+    @are_contrasting(@colors.background, color_key)
 
 ColorFinder.analyze = (image_url, callback) ->
   new ColorFinder(image_url).analyze(callback)
