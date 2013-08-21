@@ -41,6 +41,10 @@ describe "ColorFinder", ->
   red   = ybr([255, 0, 0])
   blue  = ybr([0, 0, 255])
 
+  it "finds correct list of colors", ->
+    expect([255,0,0,0, 0,255,0,0, 255,0,0,0]).to.find_colors '255,0,0', '0,255,0'
+    expect([255,0,0,0, 0,255,0,0, 254,0,0,0, 253,0,0,0, 0,255,0,0]).to.find_colors '255,0,0', '0,255,0'
+
   it "converts to Y'CbCr", ->
     expect(black).to.be.about [0  , 128, 128]
     expect(white).to.be.about [255, 128, 128]
@@ -79,6 +83,15 @@ describe "ColorFinder", ->
     expect('208,98,40' ).to.differ_from '133,170,80'
     expect('133,170,80').to.differ_from '143,205,207'
 
+  it "finds color in Finale by Madeon", ->
+    expect('22,21,27').to.contrast '148,56,119'  # cyan
+    expect('22,21,27').to.contrast '118,193,182' # pink
+    expect('22,21,27').to.contrast '244,211,1'   # yellow
+
+    expect('148,56,119').to.differ_from '244,211,1'
+    expect('148,56,119').to.differ_from '118,193,182'
+    expect('244,211,1' ).to.differ_from '118,193,182'
+
   it "finds color in Live From Shepherd's Bush Empire by Mumford and Sons", ->
     expect('113,78,36').to.contrast '186,146,3'
 
@@ -90,12 +103,13 @@ describe "ColorFinder", ->
     expect('255,0,0'    ).to.differ_from '0,0,255'
     expect('127,127,127').to.differ_from '0,0,0'
     expect('127,127,127').to.differ_from '255,255,255'
-    expect('255,255,255').to.differ_from '205,205,205'
+    # expect('255,255,255').to.differ_from '205,205,205'
     expect('0,0,0'      ).to.differ_from '255,255,255'
     expect('0,0,0'      ).to.differ_from '0,0,255'
     expect('255,0,0'    ).to.differ_from '0,0,255'
-    expect('81,174,131' ).to.differ_from '152,203,178'
+    expect('208,32,183' ).to.differ_from '234,134,30'
 
+    expect('81,174,131' ).not.to.differ_from '152,203,178'
     expect('255,0,0'    ).not.to.differ_from '235,0,0'
 
   it 'detects the colors of The North Borders by Bonobo', (done) ->

@@ -27,15 +27,8 @@ class window.ColorFinder
     @colors.contrast   = if @is_dark(@colors.background) then '255,255,255' else '0,0,0'
 
     colors = @find_colors(@image_data())
-    colors = (color for color in colors when @contrasts_background(color))
 
     color_to_differ_from = @colors.background
-    i = 0
-    while colors[i] and colors.length > 3
-      if @are_differing(colors[i], color_to_differ_from)
-        color_to_differ_from = colors[i++]
-      else
-        colors.splice(i, 1)
 
     @colors.primary   = colors.shift() or @colors.contrast
     @colors.secondary = colors.shift() or @colors.primary
@@ -52,32 +45,33 @@ class window.ColorFinder
     colors[0]
 
   find_colors: (pixels) ->
-    buckets = (v for k,v of @find_buckets(pixels))
-    buckets = _(buckets).sortBy (bucket) -> - bucket.count
-    # [{count: 123, colors: {}}, ...]
+    counts = {}
+    p      = pixels
 
-    buckets.map (bucket) ->
-      _(_.pairs(bucket.colors)).max(([rgb, count]) -> count)[0]
+    for i in [0...pixels.length] by 4
+      rgb = [p[i], p[i+1], p[i+2]]
+      continue if @colors.background and not @contrasts_background(rgb)
 
-  find_buckets: (p) ->
-    buckets = {}
-    for i in [0...p.length] by 4
-      rgbs   = [p[i], p[i+1], p[i+2]]
-      rgb    = rgbs.join(',')
-      ybr    = @ybr(rgbs)
-      step   = @round(ybr).join(',')
+      key = rgb.join(',')
 
-      buckets[step]      or= {count: 0, colors: {}}
-      buckets[step].count += 1
+      counts[key] or= 0
+      counts[key]  += 1
 
-      buckets[step].colors[rgb] or= 0
-      buckets[step].colors[rgb]  += 1
+    colors = Object.keys(counts).sort (a, b) ->
+      counts[b] - counts[a]
 
-    buckets
-
-  round: (colors) ->
-    for color in colors
-      Math.round(color / 25) * 25
+    i = 0
+    while colors[i]
+      j = i + 1
+      while colors[j]
+        if @are_differing(colors[i], colors[j])
+          j++
+        else
+          counts[colors[i]] += counts[colors[j]]
+          colors.splice(j, 1)
+      i++
+    colors.sort (a, b) ->
+      counts[b] - counts[a]
 
   ybr: (rgbs) ->
     return @ybr(rgbs.split(',')) if typeof rgbs is 'string'
@@ -97,7 +91,7 @@ class window.ColorFinder
       sum += Math.pow(a[i] - b[i], 2)
     sum
 
-  are_differing: (a, b, diff = 2000) ->
+  are_differing: (a, b, diff = 3000) ->
     @distance_squared(a, b) > diff
 
   is_dark: (color) ->
