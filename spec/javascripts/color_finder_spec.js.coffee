@@ -33,31 +33,38 @@ describe "ColorFinder", ->
     ctx.fillStyle = fg
     ctx.fillRect(offset, offset, canvas.width - offset * 2, canvas.height - offset * 2)
 
-  ybr     = ColorFinder::ybr
+  it "sorts colors by count", ->
+    sort = ColorFinder::colors_sorted_by_count
+    expect(sort({a:3,c:1,b:2})).to.deep.equal ['a','b','c']
 
-  black = ybr([0,   0,   0])
-  white = ybr([255, 255, 255])
-  gray  = ybr([127, 127, 127])
-  red   = ybr([255, 0, 0])
-  blue  = ybr([0, 0, 255])
+  it "groups colors by count", ->
+    group = ColorFinder::group_colors_by_count.bind(new ColorFinder)
+    expect(group({'255,255,255':9, '254,254,254':8}, 100)).to.deep.equal {'255,255,255': 17}
+    expect(group({'255,255,255':9, '0,0,0':8}, 100)).to.deep.equal {'255,255,255': 9, '0,0,0':8}
+
+  it "counts colors", ->
+    count = ColorFinder::count_colors.bind(new ColorFinder)
+    expect(count [255,0,0,0, 0,255,0,0, 255,0,0,0]                      ).to.deep.equal {'255,0,0':2, '0,255,0':1}
 
   it "finds correct list of colors", ->
-    expect([255,0,0,0, 0,255,0,0, 255,0,0,0]).to.find_colors '255,0,0', '0,255,0'
+    expect([255,0,0,0, 0,255,0,0, 255,0,0,0]                      ).to.find_colors '255,0,0', '0,255,0'
     expect([255,0,0,0, 0,255,0,0, 254,0,0,0, 253,0,0,0, 0,255,0,0]).to.find_colors '255,0,0', '0,255,0'
 
   it "converts to Y'CbCr", ->
-    expect(black).to.be.about [0  , 128, 128]
-    expect(white).to.be.about [255, 128, 128]
-    expect(gray ).to.be.about [127, 128, 128]
-    expect(red  ).to.be.about [76 , 85 , 255]
-    expect(blue ).to.be.about [29 , 255, 107]
+    y = ColorFinder::ybr.bind(new ColorFinder)
+    expect(y '0,0,0'      ).to.be.about [0  , 128, 128] # black
+    expect(y '255,255,255').to.be.about [255, 128, 128] # white
+    expect(y '127,127,127').to.be.about [127, 128, 128] # gray
+    expect(y '255,0,0'    ).to.be.about [76 , 85 , 255] # red
+    expect(y '0,0,255'    ).to.be.about [29 , 255, 107] # blue
 
   it 'detects darkness', ->
     expect('0,0,0'  ).to.be.dark
     expect('255,0,0').to.be.dark
     expect('0,0,255').to.be.dark
 
-    expect('255,255,255').not.to.be.dark
+    expect('255,255,255').not.to.be.dark # white
+    expect('255,255,0'  ).not.to.be.dark # yellow
 
   it 'determines contrasting colors', ->
     expect('0,0,0'      ).to.contrast '255,255,255'
