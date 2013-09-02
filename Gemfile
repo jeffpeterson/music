@@ -13,6 +13,8 @@ gem 'stylus', git: 'https://github.com/lucasmazza/ruby-stylus.git', branch: 'rai
 gem 'thin'
 gem 'uglifier', '>= 1.3.0'
 
+gem 'chloroform', path: '../chloroform'
+
 group :development do
   gem "better_errors"
   gem "binding_of_caller"
@@ -21,5 +23,6 @@ end
 
 group :test, :development do
   # gem 'jasmine-rails'
+  gem 'poltergeist'
   gem 'konacha'
 end

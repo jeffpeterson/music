@@ -12,6 +12,8 @@ class App.Adapters.Rdio extends App.Adapters.Base
       App.trigger 'rdio:ready'
 
   initialize:  (options = {}) ->
+    super(arguments...)
+
     @translate 'album',
       name:         'name'
       streamable:   'canStream'

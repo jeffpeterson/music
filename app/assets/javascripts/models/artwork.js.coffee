@@ -16,13 +16,13 @@ class App.Models.Artwork extends Backbone.Model
     @compute 'icon-500', ->
       @get('icon-200').replace("square-200", "square-500")
 
-    @set('icon', @get('icon-500')) if devicePixelRatio > 1
+    @set('icon', @get('icon-500')) #if devicePixelRatio > 1
     @analyze()
 
   analyze: ->
     if colors = App.memo('colors', @get('icon'))
       return @set {colors}
 
-    ColorFinder.analyze @get('icon'), (colors) =>
+    Chloroform.analyze @get('icon-200'), (colors) =>
       @set 'colors', colors
-      App.memo 'colors', @get('icon'), -> colors
+      App.memo 'colors', @get('icon-200'), -> colors

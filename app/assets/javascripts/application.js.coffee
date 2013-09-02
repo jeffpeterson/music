@@ -7,7 +7,7 @@
 #= require backbone
 #= require better_router
 #= require computed_attributes
-#= require color_finder
+#= require chloroform
 #= require form_builder
 #= require_tree ./templates
 #= require app

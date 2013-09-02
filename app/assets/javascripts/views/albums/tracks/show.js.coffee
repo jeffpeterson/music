@@ -7,5 +7,6 @@ class App.Views.AlbumTrackShow extends App.Views.TrackShow
     'click .play-now':          'play_now'
     'click':                    'highlight'
     'dragstart':                'dragstart'
+    'dblclick':                 'play_now'
 
   template: JST['templates/albums/tracks/show']

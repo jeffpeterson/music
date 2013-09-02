@@ -6,8 +6,13 @@ class App.Adapters.Base
     _.extend this, Backbone.Events
     @initialize(arguments...)
 
-  initialize:  (options = {}) -> this
+  initialize:  (options = {}) ->
+    @translations = {}
+    this
+
   translate:   (type, mappings = {}) ->
+    @translations[type] = mappings
+
   loaded: ->
     @is_loaded = true
 

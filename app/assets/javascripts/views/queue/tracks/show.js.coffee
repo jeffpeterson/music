@@ -69,3 +69,4 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
 
   current: =>
     @$el.attr id: 'current-track'
+    @$el.addClass 'sticky'

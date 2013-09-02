@@ -51,15 +51,15 @@ class App.Views.AlbumExpanded extends Backbone.View
 
   render_colors: ->
     @styles.css
-      '.cover, .card':
+      '.cover, .album':
         backgroundImage: "url(#{@model.artwork.get('icon-500')})"
       '.back, .modal .track-list, .modal .track':
         backgroundColor: "rgba(#{@colors.background}, 1)"
         color:           "rgb(#{@colors.secondary})"
       '.modal .album-name':
-        color: "rgba(#{@colors.primary}, 1.0)"
+        color: "rgb(#{@colors.primary})"
       '.modal .artist-name, .modal .release-date':
-        color: "rgba(#{@colors.primary}, 0.5)"
+        color: "rgb(#{@colors.primary})"
       '.modal button, .modal button:active, i':
         color: "rgb(#{@colors.detail})"
       '.modal .track.is-highlighted, .modal .track.is-highlighted:hover':

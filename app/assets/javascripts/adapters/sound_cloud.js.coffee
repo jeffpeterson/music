@@ -1,5 +1,7 @@
 class App.Adapters.SoundCloud extends App.Adapters.Base
   initialize: (options) ->
+    super(arguments...)
+
     @translate 'album',
       name:         'name'
       streamable:   'canStream'
