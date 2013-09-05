@@ -8,7 +8,6 @@ class App.Views.Bar extends Backbone.View
 
   initialize: ->
     @listenTo Backbone.history, 'route', @render_current_path
-    @listenTo App.queue, 'change:current_track', @render_background
     @$el.html @template()
     @player_view = new App.Views.PlayerShow(model: App.player)
     @player_view.render()
@@ -22,13 +21,6 @@ class App.Views.Bar extends Backbone.View
     @$('a.current').removeClass('current')
     @$("a[href='##{fragment}']").addClass('current')
     this
-
-  render_background: (current_track) ->
-    canvas = document.createElement('canvas')
-    canvas.height = @$el.height()
-    canvas.width  = @$el.width()
-    canvas.blur 100, src: App.queue.get('current_track').get('icon'), done: (canvas) =>
-      @$el.css backgroundImage: "url(#{canvas.toDataURL()})"
 
   search: (event) ->
     App.trigger('search', event.target.value)
