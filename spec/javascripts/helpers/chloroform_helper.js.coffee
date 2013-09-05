@@ -20,29 +20,29 @@ before ->
     canvas.toDataURL()
 
   chai.Assertion.addProperty 'dark', ->
-    @assert Chloroform::isDark(@Obj),
-      "expected #{@Obj} to be dark",
-      "expected #{@Obj} to not be dark"
+    @assert Chloroform::isDark(@_obj),
+      "expected #{@_obj} to be dark",
+      "expected #{@_obj} to not be dark"
 
   chai.Assertion.addMethod 'differFrom', (otherColor) ->
-    logColor(@Obj)
+    logColor(@_obj)
     logColor(otherColor)
 
-    @assert Chloroform::areDiffering(@Obj, otherColor),
-      "expected #{@Obj} to differ from #{otherColor}",
-      "expected #{@Obj} not to differ from #{otherColor}"
+    @assert Chloroform::areDiffering(@_obj, otherColor),
+      "expected #{@_obj} to differ from #{otherColor}",
+      "expected #{@_obj} not to differ from #{otherColor}"
 
   chai.Assertion.addMethod 'about', (expected, precision = 1) ->
     for n, i in expected
-      @assert Math.abs(@Obj[i] - n) <= precision,
-        "expected #{@Obj} to be about #{expected}",
-        "expected #{@Obj} to not be about #{expected}"
+      @assert Math.abs(@_obj[i] - n) <= precision,
+        "expected #{@_obj} to be about #{expected}",
+        "expected #{@_obj} to not be about #{expected}"
 
   chai.Assertion.addMethod 'contrast', (otherColor) ->
-    @assert Chloroform::areContrasting(@Obj, otherColor),
-      "expected #{@Obj} to contrast #{otherColor}",
-      "expected #{@Obj} not to contrast #{otherColor}"
+    @assert Chloroform::areContrasting(@_obj, otherColor),
+      "expected #{@_obj} to contrast #{otherColor}",
+      "expected #{@_obj} not to contrast #{otherColor}"
 
   chai.Assertion.addMethod 'findColors', (colors...) ->
     cf = new Chloroform
-    new chai.Assertion(cf.findColors(@Obj)).to.deep.equal(colors)
+    new chai.Assertion(cf.findColors(@_obj)).to.deep.equal(colors)
