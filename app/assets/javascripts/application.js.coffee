@@ -2,6 +2,7 @@
 #= require jquery_ujs
 #= require jquery.scrollTo
 #= require jquery.transit
+#= require stack_blur
 #= require monkey_patches
 #= require underscore
 #= require backbone
