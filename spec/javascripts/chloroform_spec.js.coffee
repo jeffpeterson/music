@@ -25,8 +25,8 @@ describe "Chloroform", ->
     canvas.toDataURL()
 
   draw = (fg, options) ->
-    bg     = options.on
-    offset = options.offset or canvas.width * 0.2
+    bg            = options.on
+    offset        = options.offset or canvas.width * 0.2
     ctx.fillStyle = bg
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
