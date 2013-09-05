@@ -8,6 +8,7 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
     @listenTo @model, "current", @current
     @listenTo @model, 'change', @render
     @listenTo @model.artwork, 'change', @render_colors
+    @listenTo @model.artwork, 'change:icon', @render_background
 
   events:
     'click .remove': 'remove_from_queue'
@@ -24,8 +25,19 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
     if @model is @model.collection.get('current_track')
       @current()
 
+    @render_background()
     @render_colors()
     this
+
+  render_background: ->
+    return unless @model.get('icon')
+
+    canvas = document.createElement('canvas')
+    blur   = @$('.blurred-area')
+    canvas.height = 300
+    canvas.width  = 300
+    canvas.blur 50, src: @model.get('icon'), done: (canvas) =>
+      blur.css backgroundImage: "url(#{canvas.toDataURL()})"
 
   render_colors: ->
     return unless colors = @model.artwork.colors()
@@ -34,6 +46,7 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
     @$el.css
         backgroundImage: "-webkit-linear-gradient(top, rgba(#{bg}, 0.9), rgba(#{bg}, 0.9) 75px, transparent 75px), url(#{@model.artwork.get('icon-500')})"
         color:      "rgb(#{colors.primary})"
+        textShadow: "0 0 3px rgb(#{bg})"
     @$('.artist-name').css
         color:      "rgb(#{colors.secondary})"
 

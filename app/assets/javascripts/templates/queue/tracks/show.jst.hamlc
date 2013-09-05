@@ -1,3 +1,4 @@
+.blurred-area
 .text
   .track-name= @track.get('name')
   .artist-name= @track.get('artist')

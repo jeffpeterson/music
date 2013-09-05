@@ -19,6 +19,8 @@
       > .controls > button
         visibility: visible
     > .text
+      position: relative
+      z-index: 1
       padding: 12px 0
       > .artist-name
         &:before
@@ -57,3 +59,13 @@ li#current-track-fixed.track
   color: #888
   line-height: 75px
   text-align: center
+
+.blurred-area
+  background-repeat no-repeat
+  background-position center top
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  height: 75px
+  box-shadow 0 1px 30px rgba(black, 0.5)
