@@ -5,6 +5,7 @@ class App.Views.ItemIndex extends Backbone.View
     @listenTo @collection, "reset", @render
     @listenTo @collection, "add", @add
     @listenTo @collection, "change:current_request", @loading
+    @listenTo @collection, 'filter', @filter
 
   in: ->
     @$el.css x: '100%', opacity: 0
@@ -17,13 +18,26 @@ class App.Views.ItemIndex extends Backbone.View
     @remove()
 
   render: =>
+    @styles or= new App.Views.Style
     @$el.empty()
+    @$el.append @styles.render().el
 
     @$el.append $('<div>').addClass('loading') if @collection.length is 0
 
     @collection.each (model) =>
       @add(model)
     this
+
+  filter: (query) ->
+    @styles.clear()
+    if query is ''
+      @styles.render()
+      return
+
+    css = {}
+    css["#content > ul > li:not([data-index*=\"#{query}\"])"] = display: 'none !important'
+    @styles.css css
+    @styles.render()
 
   flush_append_queue: ->
     @append_queue = []

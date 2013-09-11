@@ -7,17 +7,13 @@ class App.Views.Style extends Backbone.View
     scoped: true
 
   initialize: ->
-    @changed = true
     @styles  = {}
 
   render: ->
-    if @changed
-      @$el.html @stringified_styles()
-      @changed = false
+    @$el.html @stringified_styles()
     this
 
   css: (selector, properties) ->
-    @changed = true
     unless properties
       for sel, props of selector
         @css(sel, props)
@@ -27,6 +23,9 @@ class App.Views.Style extends Backbone.View
 
     el = @styles[selector] or= {}
     @styles[selector] = _.defaults cleaned_properties, el
+
+  clear: ->
+    @styles  = {}
 
   stringified_styles: ->
     sels = for selector, properties of @styles

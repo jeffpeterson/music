@@ -16,6 +16,10 @@ class App.Views.ItemShow extends Backbone.View
     'click .add-to-collection': 'add_to_collection'
     'dragstart':                'dragstart'
 
+
+  render: ->
+    @$el.attr 'data-index': @model.get('query')
+
   add_to_collection: (event) ->
     event.preventDefault()
     event.stopPropagation()

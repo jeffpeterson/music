@@ -16,6 +16,7 @@ class App.Views.AlbumShow extends App.Views.ItemShow
     @listenTo @model.artwork, 'change', @render_colors
 
   render: ->
+    super()
     unless @model.get("canStream")
       @$el.addClass "unavailable" 
       @$el.attr draggable: false
