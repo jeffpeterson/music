@@ -378,10 +378,18 @@ button:active, a:active
     display: inline-block
   #bar, #sidebar
     right: -300px
-  #container
-    -webkit-transition: -webkit-transform 0.5s
-    &.slide-to-left
-      -webkit-transform: translate(-300px, 0)
+    -webkit-transition all 0.5s
+  #container.slide-to-left
+    #bar
+      left -300px
+      right 0px
+    // #main
+    //   margin-right 300px
+    //   margin-left -300px
+    #sidebar
+      background-color rgba(black, 0.8)
+      box-shadow 0 0 30px rgba(black, 0.9)
+      right 0
   #main
     margin-right: 0
     -webkit-transition: margin 0.5s
