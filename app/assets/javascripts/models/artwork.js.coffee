@@ -2,6 +2,7 @@ class App.Models.Artwork extends Backbone.Model
   defaults:
     icon: ''
     'icon-500': ''
+
     colors:
       background: "0,0,0"
       primary:    "255,255,255"

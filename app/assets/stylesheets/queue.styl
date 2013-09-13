@@ -6,8 +6,9 @@
   box-sizing: border-box
   padding: 60px 0 0
   > li
-    margin-top: 1px
-    height: 75px
+    margin-top 1px
+    height 75px
+    margin-right 1px
   > .track
     position: relative
     background-size: 100% auto
@@ -15,6 +16,7 @@
     -webkit-align-items: flex-start
     font-size: 20px
     line-height: 25px
+    border-radius 4px
     &:hover
       > .controls > button
         visibility: visible
@@ -28,6 +30,7 @@
           opacity: 0.7
         font-size: 0.8em
     > .controls
+      z-index: 1
       height: 75px
 
 #queue > #current-track
@@ -35,25 +38,8 @@
   > .controls
     > .remove
       display: none
-
-li#current-track-fixed.track
-  height: 75px !important
-  margin-top: 0 !important
-  position: fixed
-  width: 300px
-  right: 0
-  z-index: 1
-  display: none
-  box-shadow: 0 0 5px rgba(0,0,0, 0.9)
-  > .remove
-    display: none
-  &.top
-    display: block
-    top: 75px !important
-  &.bottom
-    display: block
-    bottom: 0 !important
-
+  > .blurred-area
+    border-radius 4px 4px 1px 1px
 
 .add-more-to-queue
   color: #888
@@ -64,8 +50,10 @@ li#current-track-fixed.track
   background-repeat no-repeat
   background-position center top
   position: absolute
+  opacity 0.5
   top: 0
   left: 0
   right: 0
   height: 75px
-  box-shadow 0 1px 30px rgba(black, 0.5)
+  box-shadow 0 1px 30px rgba(black, 0.5), inset 0 -1px 0 rgba(white, 0.2)
+  border-radius 4px
