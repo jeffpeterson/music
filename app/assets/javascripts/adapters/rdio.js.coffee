@@ -6,9 +6,7 @@ class App.Adapters.Rdio extends App.Adapters.Base
 
     App.trigger 'rdio:loaded'
     R.ready =>
-      if R.authenticated()
-        @is_authenticated = true
-        @trigger 'change'
+      @_set 'isAuthenticated', true if R.authenticated()
       App.trigger 'rdio:ready'
 
   initialize:  (options = {}) ->
@@ -21,9 +19,7 @@ class App.Adapters.Rdio extends App.Adapters.Base
 
   authenticate: (options = {}) ->
     if R.authenticated()
-      @is_authenticated = true
-      @triggger 'change'
-      return
+      @_set 'isAuthenticated', true
     else
       R.authenticate()
 

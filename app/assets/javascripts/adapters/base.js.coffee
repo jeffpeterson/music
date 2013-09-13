@@ -1,18 +1,17 @@
-class App.Adapters.Base
-  is_authenticated: false
-  is_loaded:        false
+class App.Adapters.Base extends Backbone.Model
+  defaults:
+    isAuthenticated: false
+    isLoaded:        false
 
-  constructor: (options = {}) ->
-    _.extend this, Backbone.Events
-    @initialize(arguments...)
-
-  initialize:  (options = {}) ->
+  initialize: (options = {}) ->
     @translations = {}
     this
 
-  translate:   (type, mappings = {}) ->
+  translate: (type, mappings = {}) ->
     @translations[type] = mappings
 
   loaded: ->
-    @is_loaded = true
+    @_set 'isLoaded', true
 
+  _get: Backbone.Model::get
+  _set: Backbone.Model::set
