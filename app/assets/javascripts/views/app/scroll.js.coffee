@@ -3,7 +3,7 @@ class App.Views.Scroll extends Backbone.View
   events:
     scroll: (event) ->
       @total_height      = document.body.scrollHeight
-      @y                 = window.scrollY + document.body.clientHeight
+      @y                 = window.scrollY + window.innerHeight
       @seconds           = new Date() / 1000
       if @previous_y? and @previous_seconds?
         @pixels_per_second = (@y - @previous_y) / (@seconds - @previous_seconds)

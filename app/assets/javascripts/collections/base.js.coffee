@@ -4,8 +4,8 @@ class App.Collections.Base extends Backbone.Collection
     super(arguments...)
 
   lazy_fetch: (options = {}) ->
-    if @length is 0
-      _.defaults options, reset: true
+    if @length is 0 or @isStale
+      _.defaults options, reset: true, start: 0
       @fetch(options)
     this
 
@@ -33,8 +33,9 @@ class App.Collections.Base extends Backbone.Collection
     return unless @store_key
 
     store_key = @store_key?() or @store_key
-    keys = App.get_local(store_key, [])
+    keys = App.store.get(store_key, [])
 
+    @isStale = true
     @reset ({key} for key in keys)
     for model in @models
       model.load()
@@ -44,4 +45,4 @@ class App.Collections.Base extends Backbone.Collection
     store_key = @store_key?() or @store_key
 
     model.store() for model in @models
-    App.set_local store_key, @pluck('key')
+    App.store.set store_key, @pluck('key')

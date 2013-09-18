@@ -12,5 +12,10 @@
 #= require form_builder
 #= require_tree ./templates
 #= require app
+#= require store
 #= require sync
-#= require_tree .
+#= require_tree ./adapters
+#= require_tree ./models
+#= require_tree ./collections
+#= require_tree ./routers
+#= require_tree ./views

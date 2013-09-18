@@ -14,6 +14,9 @@ Inflections =
   pluralize: (singular_word) ->
     singular_word + 's'
 
+  dasherize: (camel_case_or_underscore_word) ->
+    Inflections.underscore(camel_case_or_underscore_word).replace('_', '-')
+
 for name, fn of Inflections
   ((fn) -> String::[name] = -> fn(this, arguments...))(fn)
 

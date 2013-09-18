@@ -14,7 +14,7 @@ class App.Adapters.SoundCloud extends App.Adapters.Base
       client_id:    '6da9f906b6827ba161b90585f4dd3726'
       redirect_uri: 'http://music.dev/callback.html'
 
-    if token = App.get_local('sound_cloud_token')
+    if token = App.store.get('sound_cloud_token')
       @is_authenticated = true
       @trigger 'change'
       SC.accessToken token
@@ -22,7 +22,7 @@ class App.Adapters.SoundCloud extends App.Adapters.Base
   authenticate: (options = {}) ->
     SC.connect =>
       @is_authenticated = true
-      App.set_local sound_cloud_token: SC.accessToken()
+      App.store.set sound_cloud_token: SC.accessToken()
 
       @trigger 'change'
       console.log 'SoundCloud authenticated.'

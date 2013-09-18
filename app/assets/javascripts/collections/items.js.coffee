@@ -7,7 +7,7 @@ class App.Collections.Items extends App.Collections.Base
 
   initialize: (models, options) ->
     @load()
-    @on 'add reset set', (collection) => @store()
+    @on 'add reset remove', (collection) => @store()
     super(arguments...)
 
   fetch: (options = {}) ->

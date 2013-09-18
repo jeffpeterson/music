@@ -13,8 +13,6 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
     'click .remove': 'remove_from_queue'
     'click .text':   'expand'
     dragstart:       'dragstart'
-    dragenter:       'dragenter'
-    dragleave:       'dragleave'
     drop:            'drop'
 
   render: ->
@@ -32,8 +30,9 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
     bg = colors.background
 
     @$el.css
-        backgroundImage: "-webkit-linear-gradient(top, rgba(#{bg}, 0.9), rgba(#{bg}, 0.9) 75px, transparent 75px), url(#{@model.artwork.get('icon-500')})"
+        backgroundImage: "linear-gradient(to top, rgba(#{bg}, 1), transparent 300px), url(#{@model.artwork.get('icon-500')})"
         color:      "rgb(#{colors.primary})"
+        textShadow: "0 1px 0 rgb(#{bg}), 0 -1px 0 rgb(#{bg}), 1px 0 0 rgb(#{bg}), -1px 0 0 rgb(#{bg})"
     @$('.artist-name').css
         color:      "rgb(#{colors.secondary})"
 
@@ -51,10 +50,6 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
   expand: (event) =>
     event.preventDefault()
     App.queue.play(@model)
-
-  dragstart: (event) -> true
-  dragenter: => @$el.addClass("dragover")
-  dragleave: => @$el.removeClass("dragover")
 
   remove_from_queue: =>
     @model.collection.remove @model

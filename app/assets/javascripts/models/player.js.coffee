@@ -55,5 +55,5 @@ class App.Models.Player extends Backbone.Model
     R.player.position(float * R.player.playingTrack().get("duration"))
     @set position: float
 
-  store: -> App.set_local 'Player': this
-  load:  -> @set App.get_local('Player')
+  store: -> App.store.set 'Player': this
+  load:  -> @set App.store.get('Player')

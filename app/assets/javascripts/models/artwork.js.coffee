@@ -20,9 +20,12 @@ class App.Models.Artwork extends Backbone.Model
     @analyze()
 
   analyze: ->
-    if colors = App.memo('colors', @get('icon'))
+    if colors = App.store.get('colors', {})[@get('icon-200')]
       return @set {colors}
 
     Chloroform.analyze @get('icon-200'), (colors) =>
       @set 'colors', colors
-      App.memo 'colors', @get('icon-200'), -> colors
+
+      stored_colors = App.store.get('colors', {})
+      stored_colors[@get('icon-200')] = colors
+      App.store.set 'colors', stored_colors

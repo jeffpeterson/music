@@ -7,17 +7,21 @@ modal-album-height             = 500px
   -webkit-flex-wrap: wrap
   -webkit-justify-content: space-around
   -webkit-align-items: flex-start
-  padding-left: 1px
   position: relative
   > .album
+    position relative
     display: inline-block
     vertical-align: middle
-    margin-right: 1px
-    margin-top: 1px
     width: -webkit-calc(16.66667% \- 1px)
     max-width: 400px
     -webkit-flex-grow: 1
     -webkit-flex-basis: 180px
+    // &:hover
+    //   z-index -1
+    //   -webkit-transition -webkit-transform 30s linear
+    //   -webkit-transform-origin 20% 20%
+    //   transform scale(1.2)
+
     &:before
       content: ""
       display: block
@@ -33,7 +37,7 @@ modal-album-height             = 500px
 
 .album
   position relative
-  background-size 100% auto
+  background-size auto 101%
   background-repeat no-repeat
 
 .modal > .album

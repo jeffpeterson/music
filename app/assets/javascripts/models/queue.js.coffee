@@ -63,9 +63,8 @@ class App.Models.Queue extends App.Models.Playlist
     index
 
   store: ->
-    localStorage.state = JSON.stringify this
-    App.set_local state: this, queue: @tracks
+    App.store.set state: this, queue: @tracks
 
   load: ->
-    @tracks.reset App.get_local('queue')
-    @set App.get_local('state')
+    @tracks.reset App.store.get('queue')
+    @set App.store.get('state')

@@ -23,12 +23,12 @@ class App.Models.Item extends Backbone.Model
     return unless @store_key
 
     store_key = @store_key?() or @store_key
-    App.set_local store_key, this
+    App.store.set store_key, this
 
   load: ->
     return unless @store_key
 
     store_key = @store_key?() or @store_key
 
-    @set App.get_local(store_key, {})
+    @set App.store.get(store_key, {})
     this

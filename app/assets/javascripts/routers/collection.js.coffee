@@ -22,4 +22,3 @@ class App.Routers.Collection extends BetterRouter
 
   set_collection: (collection) ->
     @collection = collection.lazy_fetch()
-

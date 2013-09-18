@@ -6,15 +6,17 @@
   box-sizing: border-box
   padding: 60px 0 0
   > li
-    margin-top: 1px
     height: 75px
   > .track
     position: relative
     background-size: 100% auto
+    background-position center top
     transition: all 0.2s
-    -webkit-align-items: flex-start
+    -webkit-align-items: flex-end
     font-size: 20px
     line-height: 25px
+    &.dragover
+      margin-top: 30px
     &:hover
       > .controls > button
         visibility: visible

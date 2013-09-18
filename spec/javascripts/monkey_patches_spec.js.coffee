@@ -7,6 +7,15 @@ describe "Inflections", ->
       expect("camelCase".underscore()).to.equal "camel_case"
       expect("CSI".underscore()      ).to.equal "csi"
 
+  describe '#dasherize', ->
+    it 'dasherizes camelized words', ->
+      expect("CamelCase".dasherize()).to.equal 'camel-case'
+      expect("camelCase".dasherize()).to.equal 'camel-case'
+      expect("CSI".dasherize()      ).to.equal 'csi'
+
+    it 'dasherizes underscored words', ->
+      expect("thing_one".dasherize()).to.equal 'thing-one'
+
   describe '#camelize', ->
     it 'camelizes underscored words', ->
       expect("camel_case".camelize()).to.equal 'CamelCase'

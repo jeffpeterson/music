@@ -39,9 +39,6 @@ class App.Views.ItemIndex extends Backbone.View
     @styles.css css
     @styles.render()
 
-  flush_append_queue: ->
-    @append_queue = []
-
   append: (el, index) ->
     # $children = @$el.children()
     @$el.append el
