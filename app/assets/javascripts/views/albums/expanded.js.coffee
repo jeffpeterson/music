@@ -26,7 +26,7 @@ class App.Views.AlbumExpanded extends Backbone.View
     @$el.append @template(album: @model)
     @$el.attr(style: '')
 
-    @$('.back').append @track_list.render().el
+    @$('.content').append @track_list.render().el
 
     @render_click_shield()
     this
@@ -51,11 +51,13 @@ class App.Views.AlbumExpanded extends Backbone.View
 
   render_colors: ->
     @styles.css
-      '.cover, .album':
+      '.modal .album':
+        backgroundColor: "rgb(#{@colors.background})"
+        color:           "rgb(#{@colors.secondary})"
+      '.cover':
         backgroundImage: "url(#{@model.artwork.get('icon-500')})"
       '.back, .modal .track-list, .modal .track':
-        backgroundColor: "rgba(#{@colors.background}, 1)"
-        color:           "rgb(#{@colors.secondary})"
+        backgroundColor: "rgb(#{@colors.background})"
       '.modal .album-name':
         color: "rgb(#{@colors.primary})"
       '.modal .artist-name, .modal .release-date':
@@ -63,10 +65,10 @@ class App.Views.AlbumExpanded extends Backbone.View
       '.modal button, .modal button:active, i':
         color: "rgb(#{@colors.detail})"
       '.modal .track.is-highlighted, .modal .track.is-highlighted:hover':
-        backgroundColor: "rgb(#{@colors.secondary})"
+        backgroundImage: "linear-gradient(-50deg, rgb(#{@colors.detail}), transparent 50%)"
       '.modal .track:hover':
-        backgroundColor: "rgba(#{@colors.primary}, 0.1)"
-      '.modal .track.is-highlighted, .modal .track.is-highlighted i, .modal .track.is-highlighted button':
+        backgroundImage: "linear-gradient(-50deg, rgba(#{@colors.detail}, 0.1), transparent 50%)"
+      '.modal .track.is-highlighted .controls i, .modal .track.is-highlighted .controls button':
         color:           "rgb(#{@colors.background})"
     this
 

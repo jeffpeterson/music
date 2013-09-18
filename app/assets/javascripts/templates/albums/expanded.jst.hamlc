@@ -11,3 +11,4 @@
         %button.play-station.icon-microphone
         %button.add-to-collection.icon-plus-sign
         .release-date= @album.get('displayDate')
+    .content

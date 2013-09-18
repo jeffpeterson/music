@@ -1,10 +1,10 @@
-%button.repeat.icon-repeat
-%button.prev.icon-fast-backward
+%button.repeat.icon-repeat.is-on
+%button.prev.icon-backward
 - if @state is 'playing'
   %button.pause.icon-pause
 - else
   %button.play.icon-play
-%button.next.icon-fast-forward
+%button.next.icon-forward
 %button.shuffle.icon-random
 #progress
   .position

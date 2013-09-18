@@ -10,8 +10,9 @@
   overflow: hidden
   position: relative
   display: -webkit-flex
-  align-items: center
-  padding: 0 10px
+  align-items: stretch
+  padding: 0
+  padding-left 10px
   > .status
     flex-shrink 0
     text-align center
@@ -29,12 +30,14 @@
     > .controls > button
       visibility: visible
   > .text
-    flex-grow: 1
-  > .remove
-    text-align: center
+    flex-grow 1
   > .controls 
     -webkit-flex-shrink: 0
     display: -webkit-flex
     -webkit-align-items: center
+    -webkit-justify-content flex-end
+    min-width 4em
+    max-width 50%
+    padding-right 10px
     > button
       visibility: hidden

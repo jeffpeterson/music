@@ -37,10 +37,11 @@ modal-album-height             = 500px
 
 .album
   position relative
-  background-size auto 101%
+  background-size 100% 100%
   background-repeat no-repeat
 
 .modal > .album
+  background-size auto 100%
   position: relative
   display: -webkit-flex
   max-width: 100%
@@ -53,6 +54,7 @@ modal-album-height             = 500px
     background-size: 100% auto
     background-repeat: no-repeat
     -webkit-flex-shrink: 0
+    // -webkit-mask-image: linear-gradient(to left, transparent, black)
     &:before
       content: ""
       display: block
@@ -60,8 +62,10 @@ modal-album-height             = 500px
   > .back
     z-index: 10
     height: modal-album-height
-    overflow: auto
     -webkit-overflow-scrolling: touch
+    overflow hidden
+    display flex
+    flex-direction column
     > .info
       -webkit-flex-shrink: 0
       padding: 10px
@@ -84,6 +88,13 @@ modal-album-height             = 500px
         > .release-date
           font-size:   0.7em
           line-height: 1em
+    > .content
+      -webkit-mask-image linear-gradient(to top, transparent, black 30px, black -webkit-calc(100% - 30px), transparent)
+      overflow: auto
+      margin-bottom 10px
+      > .track-list
+        padding 30px 0 50px
+
 
 @media (max-width: 1200px)
   .modal > .album
@@ -92,10 +103,12 @@ modal-album-height             = 500px
     overflow: auto
     max-height: 100%
     > .cover
-      visibility: hidden
+      // -webkit-mask-image none !important
     > .back
       -webkit-flex-shrink: 0
       height: auto
       overflow: hidden
+      > .content
+        -webkit-mask-image none
     .track
       line-height: 3em

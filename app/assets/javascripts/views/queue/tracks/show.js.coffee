@@ -30,7 +30,7 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
     bg = colors.background
 
     @$el.css
-        backgroundImage: "linear-gradient(to top, rgba(#{bg}, 1), transparent 300px), url(#{@model.artwork.get('icon-500')})"
+        backgroundImage: "linear-gradient(to top right, rgb(#{bg}), transparent 450px), url(#{@model.artwork.get('icon-500')})"
         color:      "rgb(#{colors.primary})"
         textShadow: "0 1px 0 rgb(#{bg}), 0 -1px 0 rgb(#{bg}), 1px 0 0 rgb(#{bg}), -1px 0 0 rgb(#{bg})"
     @$('.artist-name').css
