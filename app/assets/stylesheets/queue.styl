@@ -19,8 +19,8 @@
     &.dragover
       margin-top: 30px
     &:hover
-      > .controls
-        display: -webkit-flex
+      > .controls > button
+        display: block
     > .text
       padding: 12px 0
       > .artist-name
@@ -30,10 +30,7 @@
         font-size: 0.8em
     > .controls
       height: 75px
-      display none
       min-width 0
-      > button
-        visibility visible
 
 #queue > #current-track
   height: 300px
