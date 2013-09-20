@@ -4,6 +4,8 @@
   .cover
   .back
     .info
+      .controls-spacer
+        .release-date= @album.get('displayDate')
       .text
         .album-name= @album.get('name')
         .artist-name= @album.get('artist')

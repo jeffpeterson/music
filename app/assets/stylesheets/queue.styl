@@ -15,11 +15,12 @@
     -webkit-align-items: flex-end
     font-size: 20px
     line-height: 25px
+    padding-left 10px
     &.dragover
       margin-top: 30px
     &:hover
-      > .controls > button
-        visibility: visible
+      > .controls
+        display: -webkit-flex
     > .text
       padding: 12px 0
       > .artist-name
@@ -29,6 +30,10 @@
         font-size: 0.8em
     > .controls
       height: 75px
+      display none
+      min-width 0
+      > button
+        visibility visible
 
 #queue > #current-track
   height: 300px

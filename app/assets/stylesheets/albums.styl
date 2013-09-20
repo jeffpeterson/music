@@ -37,7 +37,7 @@ modal-album-height             = 500px
 
 .album
   position relative
-  background-size 100% 100%
+  background-size cover
   background-repeat no-repeat
 
 .modal > .album
@@ -68,17 +68,19 @@ modal-album-height             = 500px
     flex-direction column
     > .info
       -webkit-flex-shrink: 0
-      padding: 10px
+      padding: 15px 20px 0 10px
+      padding-bottom 0
       display: -webkit-flex
+      line-height 40px
       > .text
+        text-align center
         -webkit-flex-grow: 1
         > .album-name
-          font-size: 1.5em
-          line-height: 1.5em
+          padding-right 10px
+          font-size 25px
         > .artist-name
-          font-size: 1.1em
-          line-height: 1.5em
-          margin-top: -10px
+          padding-right 10px
+          font-size 20px
           &:before
             content: "by "
             opacity: 0.7
@@ -86,12 +88,18 @@ modal-album-height             = 500px
         -webkit-flex-shrink: 0
         text-align: right
         > .release-date
-          font-size:   0.7em
-          line-height: 1em
+          font-size 15px
+      > .controls-spacer
+        -webkit-flex-shrink 100
+        visibility hidden
+        > .release-date
+          white-space nowrap
+          overflow hidden
+          font-size 15px
     > .content
-      -webkit-mask-image linear-gradient(to top, transparent, black 30px, black -webkit-calc(100% - 30px), transparent)
+      -webkit-mask-image linear-gradient(to top, transparent, black 30px, black -webkit-calc(100% \- 30px), transparent)
       overflow: auto
-      margin-bottom 10px
+      margin-bottom 1px
       > .track-list
         padding 30px 0 50px
 

@@ -361,7 +361,8 @@ button:active, a:active
 .track-name, .album-name, .artist-name
   white-space: nowrap
   overflow: hidden
-  text-overflow: ellipsis
+  // text-overflow: ellipsis
+  -webkit-mask-image: linear-gradient(to left, transparent, black 10px)
 
 .unavailable
   opacity: 0.3

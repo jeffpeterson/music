@@ -12,11 +12,10 @@
   display: -webkit-flex
   align-items: stretch
   padding: 0
-  padding-left 10px
   > .status
     flex-shrink 0
     text-align center
-    width 2em
+    width 60px
     > .play-now
       display: none
     > .track-number
@@ -28,7 +27,7 @@
       > .play-now
         display: inline-block
     > .controls > button
-      visibility: visible
+      display: block
   > .text
     flex-grow 1
   > .controls 
@@ -36,8 +35,7 @@
     display: -webkit-flex
     -webkit-align-items: center
     -webkit-justify-content flex-end
-    min-width 4em
     max-width 50%
     padding-right 10px
     > button
-      visibility: hidden
+      display none

@@ -65,11 +65,11 @@ class App.Views.AlbumExpanded extends Backbone.View
       '.modal button, .modal button:active, i':
         color: "rgb(#{@colors.detail})"
       '.modal .track.is-highlighted, .modal .track.is-highlighted:hover':
-        backgroundImage: "linear-gradient(-50deg, rgb(#{@colors.detail}), transparent 50%)"
+        backgroundColor: "rgb(#{@colors.detail})"
       '.modal .track:hover':
-        backgroundImage: "linear-gradient(-50deg, rgba(#{@colors.detail}, 0.1), transparent 50%)"
-      '.modal .track.is-highlighted .controls i, .modal .track.is-highlighted .controls button':
-        color:           "rgb(#{@colors.background})"
+        backgroundColor: "rgba(#{@colors.detail}, 0.1)"
+      '.modal .track.is-highlighted, .modal .track.is-highlighted i, .modal .track.is-highlighted button':
+        color: "rgb(#{@colors.background})"
     this
 
   flip_over: ->
