@@ -85,7 +85,7 @@ class App.Views.AlbumExpanded extends Backbone.View
   remove: ->
     $('body').removeClass('freeze')
     $("#main").removeClass('blur')
-    App.go 'collection/albums', trigger: false
+    App.go 'back:collection/albums', trigger: false
     @out =>
       super(arguments...)
 

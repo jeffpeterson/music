@@ -11,6 +11,7 @@ App.Routers     = {}
 App.adapters   = {}
 App.routers    = {}
 App.collection = {}
+App.catalog    = {}
 
 App.debug_on = true
 App.memo_pad = {}
@@ -27,6 +28,9 @@ App.initialize = ->
   App.collection.playlists      = new App.Collections.Playlists
   App.collection.heavy_rotation = new App.Collections.HeavyRotation
 
+  App.catalog.top_charts        = new App.Collections.TopCharts
+  App.catalog.new_releases      = new App.Collections.NewReleases
+
   App.collection.playlists.fetch(start: 0)
 
   App.player = new App.Models.Player
@@ -40,9 +44,17 @@ App.initialize = ->
 
   Backbone.history.start pushState: false
 
+App.history = []
 App.go = (fragment, options = {}) ->
   _.defaults options, trigger: true
-  Backbone.history.navigate fragment, options
+  if match = fragment.match /back:?(.*)/
+    if url = App.history.pop()
+      Backbone.history.navigate url, options
+    else
+      App.go(match[1] or 'collection/albums', options)
+  else
+    App.history.push Backbone.history.fragment
+    Backbone.history.navigate fragment, options
 
 App.debug = (args...) ->
   console.log("-- DEBUG:", args...) if App.debug_on
@@ -63,4 +75,5 @@ $ ->
 App.on 'rdio:ready', ->
   console.timeEnd "R.ready"
   App.store.set current_user: R.currentUser
-  App.go 'home' if not R.authenticated()
+  if not R.authenticated()
+    App.go 'catalog'

@@ -1,7 +1,7 @@
-class App.Routers.Collection extends BetterRouter
+class App.Routers.Catalog extends BetterRouter
   routes:
-    '':                          'index'
-    'collection(/:type)':        'index'
+    '':                       'index'
+    'catalog(/:type)':        'index'
 
   el: '#content'
 
@@ -11,9 +11,9 @@ class App.Routers.Collection extends BetterRouter
     super(arguments...)
 
   index: (type) ->
-    return App.go 'collection/albums' unless type
+    return App.go 'catalog/top-charts' unless type
 
-    @set_collection App.collection[type.underscore()]
+    @set_collection App.catalog[type.underscore()]
 
     @bind_events()
     @swap new App.Views[type.singularize().camelize() + 'Index'](collection: @collection)
