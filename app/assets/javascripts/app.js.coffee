@@ -1,3 +1,5 @@
+#= require components/App/Header/Header
+
 window.App or= {}
 
 App.version = 5
@@ -7,6 +9,7 @@ App.Adapters    = {}
 App.Models      = {}
 App.Collections = {}
 App.Routers     = {}
+App.Component   = {}
 
 App.adapters   = {}
 App.routers    = {}
@@ -39,7 +42,8 @@ App.initialize = ->
   new App.Views.Touch
   new App.Views.Scroll
   new App.Views.Drag
-  new App.Views.Bar().render()
+  # new App.Views.Bar().render()
+  new L.Component.App.Header().render()
   new App.Views.QueueShow(model: App.queue).render()
 
   Backbone.history.start pushState: false

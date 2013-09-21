@@ -1,6 +1,7 @@
 #= require monkey_patches
 #= require jquery
 #= require underscore
+#= require backbone
 
 window.L = {}
 L.tap = (fn) ->
@@ -10,10 +11,13 @@ L.tap = (fn) ->
 
 Object.setPrototypeOf ||= (obj, proto) -> obj.__proto__ = proto
 
-window.App or= {}
-base = App
+base = L
 
-base.Component = (options) -> @initialize(options)
+
+base.Component = Backbone.View.extend()
+
+
+# base.Component = (options) -> @initialize(options)
 base.Component.EmptyComponent = ->
 
 base.Component.parent                 = base.Component.EmptyComponent
@@ -34,14 +38,6 @@ base.Component.init = L.tap (@parent) ->
 
   @requirements = {}
   @children     = {}
-  @filters      =
-    before: {}
-    after:  {}
-    around: {}
-
-  for type of @parent.filters
-    for name, filter of @parent.filters[type]
-      @addFilter type, name, filter
 
 base.Component.init(base.Component.parent)
 
@@ -124,25 +120,22 @@ base.Component.extends = (names...) ->
     _.extend @prototype, @deref(name)
 
 base.Component.def = (name, fn) ->
-  c = this
-  this::[name] = (args...) ->
-    if c.callFilter(this, 'before', name, args)
-      result = fn.apply(this, args)
-      c.callFilter(this, 'after', name, args)
-      return result
+  this::[name] = fn
 
-base.Component.after  = (name, callback) -> @addFilter 'after',  name, callback
-base.Component.before = (name, callback) -> @addFilter 'before', name, callback
-base.Component.around = (name, callback) -> @addFilter 'around', name, callback
+base.Component.after = (name, callback) ->
+  fn = this::[name]
+  this::[name] = ->
+    r = fn.apply(this, arguments)
+    callback.apply(this, arguments)
+    return r
 
-base.Component.def 'createElement', ->
-  if not @el
-    @el  = document.createElement(@tagName)
-  @el.classList.add @classNames...
+base.Component.before = (name, callback) ->
+  fn = this::[name]
+  this::[name] = ->
+    callback.apply(this, arguments)
+    fn.apply(this, arguments)
 
-base.Component.before 'initialize', -> @createElement(); true
-base.Component.def    'initialize', -> this
-
-base.Component.def 'toggleClass', (name) ->
-  @el.classList.toggle(name)
-
+base.Component.around = (name, callback) ->
+  fn = this::[name]
+  this::[name] = ->
+    callback.call(this, fn, arguments...)

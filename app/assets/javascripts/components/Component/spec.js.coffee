@@ -12,121 +12,127 @@ describe "L", ->
     expect(dog.bark()).to.equal dog
     expect(dog.name  ).to.equal 'Ralph'
 
-describe 'App.Component', ->
+describe 'L.Component', ->
   beforeEach ->
-    App.Component.new 'Leg'
-    App.Component.new 'Animal', ->
+    L.Component.new 'Leg'
+    L.Component.new 'Animal', ->
       @requires 'Leg'
-    App.Component.Animal.new 'Cat'
+    L.Component.Animal.new 'Cat'
 
   afterEach ->
-    App.Component.delete 'Animal', 'Leg'
+    L.Component.delete 'Animal', 'Leg'
 
   it 'exists', ->
-    expect(App.Component).to.exist
+    expect(L.Component).to.exist
 
   it 'prevents duplicates', ->
-    expect(-> App.Component.new('Animal')).to.throw(Error)
-    expect(-> App.Component.new('Test')  ).not.to.throw(Error)
-    delete App.Component.Test
+    expect(-> L.Component.new('Animal')).to.throw(Error)
+    expect(-> L.Component.new('Test')  ).not.to.throw(Error)
+    L.Component.delete('Test')
 
   it 'can create child components', ->
-    App.Component.Animal.Cat.new 'Lion'
-    expect(App.Component.Animal).to.exist
+    L.Component.Animal.Cat.new 'Lion'
+    expect(L.Component.Animal).to.exist
 
   it 'keeps references to children', ->
-    expect(App.Component.children).to.have.property 'Animal', App.Component.Animal
-    expect(App.Component.children).to.have.property 'Leg',    App.Component.Leg
+    expect(L.Component.children).to.have.property 'Animal', L.Component.Animal
+    expect(L.Component.children).to.have.property 'Leg',    L.Component.Leg
 
   it 'assigns a name', ->
-    expect(App.Component._name           ).to.equal 'Component'
-    expect(App.Component.Animal._name    ).to.equal 'Animal'
-    expect(App.Component.Animal.Cat._name).to.equal 'Animal.Cat'
+    expect(L.Component._name           ).to.equal 'Component'
+    expect(L.Component.Animal._name    ).to.equal 'Animal'
+    expect(L.Component.Animal.Cat._name).to.equal 'Animal.Cat'
 
   it "can dereference names of children", ->
-    expect(App.Component.Animal.deref('Cat')).to.equal App.Component.Animal.Cat
-    expect(App.Component.deref('Animal.Cat')).to.equal App.Component.Animal.Cat
+    expect(L.Component.Animal.deref('Cat')).to.equal L.Component.Animal.Cat
+    expect(L.Component.deref('Animal.Cat')).to.equal L.Component.Animal.Cat
 
   it "can dereference names of ancestors", ->
-    expect(App.Component.Animal    .deref('Component' )).to.equal App.Component
-    expect(App.Component.Animal.Cat.deref('Animal.Cat')).to.equal App.Component.Animal.Cat
-    expect(App.Component           .deref('Animal.Cat')).to.equal App.Component.Animal.Cat
+    expect(L.Component.Animal    .deref('Component' )).to.equal L.Component
+    expect(L.Component.Animal.Cat.deref('Animal.Cat')).to.equal L.Component.Animal.Cat
+    expect(L.Component           .deref('Animal.Cat')).to.equal L.Component.Animal.Cat
 
 
   describe '.EmptyComponent', ->
-    it 'is the parent of App.Component', ->
-      expect(App.Component.parent).to.equal App.Component.EmptyComponent
+    it 'is the parent of L.Component', ->
+      expect(L.Component.parent).to.equal L.Component.EmptyComponent
 
-    it "has App.Component as it's only child", ->
-      expect(App.Component.EmptyComponent.children).to.deep.equal {Component: App.Component}
+    it "has L.Component as it's only child", ->
+      expect(L.Component.EmptyComponent.children).to.deep.equal {Component: L.Component}
 
   describe 'requirements', ->
     it "are an object", ->
-      expect(App.Component.Animal.requirements).to.be.an.instanceof Object
+      expect(L.Component.Animal.requirements).to.be.an.instanceof Object
 
     it "contain it's prototype", ->
-      expect(App.Component.Animal.requirements).to.have.property  'Component', App.Component
-      expect(App.Component.Animal.Cat.requirements).to.have.property 'Animal', App.Component.Animal
+      expect(L.Component.Animal.requirements).to.have.property  'Component', L.Component
+      expect(L.Component.Animal.Cat.requirements).to.have.property 'Animal', L.Component.Animal
 
     it "includes requires", ->
-      expect(App.Component.Animal.requirements).to.have.property 'Leg', App.Component.Leg
+      expect(L.Component.Animal.requirements).to.have.property 'Leg', L.Component.Leg
 
     it 'lists allRequirements', ->
-      expect(App.Component.Animal.allRequirements())    .to.deep.equal {Component: App.Component, Leg: App.Component.Leg}
-      expect(App.Component.Animal.Cat.allRequirements()).to.deep.equal {Component: App.Component, Leg: App.Component.Leg, Animal: App.Component.Animal}
+      expect(L.Component.Animal.allRequirements())    .to.deep.equal {Component: L.Component, Leg: L.Component.Leg}
+      expect(L.Component.Animal.Cat.allRequirements()).to.deep.equal {Component: L.Component, Leg: L.Component.Leg, Animal: L.Component.Animal}
 
     describe 'instance methods', ->
       it 'can be defined', ->
-        App.Component.Animal.def 'five', -> 5
-        expect((new App.Component.Animal).five()).to.equal 5
+        L.Component.Animal.def 'five', -> 5
+        expect((new L.Component.Animal).five()).to.equal 5
 
       it 'can reference themselves with "this"', ->
-        App.Component.Animal.def 'self', -> this
-        a = new App.Component.Animal
+        L.Component.Animal.def 'self', -> this
+        a = new L.Component.Animal
         expect(a.self()).to.equal a
 
       it 'passes arguments', ->
-        App.Component.Animal.def 'same', (x) -> x
-        expect((new App.Component.Animal).same(1)).to.equal 1
+        L.Component.Animal.def 'same', (x) -> x
+        expect((new L.Component.Animal).same(1)).to.equal 1
 
       # it 'passes calls with super', ->
-      #   App.Component.Animal.test     = (x) -> x + 'd'
-      #   App.Component.Animal.Cat.test = (x) ->
+      #   L.Component.Animal.test     = (x) -> x + 'd'
+      #   L.Component.Animal.Cat.test = (x) ->
       #     @super('test', x + 'c')
 
-      #   App.Component.Animal.Cat.new 'Lion', ->
+      #   L.Component.Animal.Cat.new 'Lion', ->
       #     @test = (x) ->
       #       @super('test', x + 'b')
 
-      #   App.Component.Animal.Cat.new 'Tiger'
+      #   L.Component.Animal.Cat.new 'Tiger'
 
-      #   expect(App.Component.Animal.Cat.Lion.test('a')).to.equal 'abcd'
-      #   expect(App.Component.Animal.Cat.Tiger.test('a')).to.equal 'acd'
+      #   expect(L.Component.Animal.Cat.Lion.test('a')).to.equal 'abcd'
+      #   expect(L.Component.Animal.Cat.Tiger.test('a')).to.equal 'acd'
 
 
   describe 'filters', ->
     beforeEach ->
-      App.Component.new 'T', ->
-        @def 'nogo', -> throw new Error('Uh oh!')
+      L.Component.new 'T', ->
+        @def 'go', ->
+          @t.push(1)
+          @t
+
+      L.Component.T.before 'go', -> @t = []
 
     afterEach ->
-      delete App.Component.T
+      L.Component.delete('T')
 
-    it 'stops the call if a before filter returns false', ->
-      t = new App.Component.T
-      App.Component.T.before 'nogo', -> true
-      expect(t.nogo).to.throw(Error)
-      App.Component.T.before 'nogo', -> false
-      expect(t.nogo).to.not.throw(Error)
+    it 'calls before filters before the method', ->
+      t = new L.Component.T
+      expect(t.go()).to.deep.equal [1]
+
+    it 'calls after filters after the method', ->
+      L.Component.T.after 'go', -> @t.push(2)
+      t = new L.Component.T
+      expect(t.go()).to.deep.equal [1, 2]
 
   describe 'an instance', ->
     it 'can be created with new', ->
-      expect((new App.Component       ).constructor).to.equal App.Component
-      expect((new App.Component.Animal).constructor).to.equal App.Component.Animal
-      expect( new App.Component       ).to.be.instanceOf      App.Component
+      expect((new L.Component       ).constructor).to.equal L.Component
+      expect((new L.Component.Animal).constructor).to.equal L.Component.Animal
+      expect( new L.Component       ).to.be.instanceOf      L.Component
 
     it 'has a default className', ->
-      expect((new App.Component           ).classNames).to.deep.equal ['component']
-      expect((new App.Component.Animal    ).classNames).to.deep.equal ['animal']
-      expect((new App.Component.Animal.Cat).classNames).to.deep.equal ['animal-cat']
+      expect((new L.Component           ).classNames).to.deep.equal ['component']
+      expect((new L.Component.Animal    ).classNames).to.deep.equal ['animal']
+      expect((new L.Component.Animal.Cat).classNames).to.deep.equal ['animal-cat']
 
