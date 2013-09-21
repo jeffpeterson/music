@@ -16,6 +16,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'chloroform', path: '../chloroform'
 
 group :development do
+  gem 'coffee-rails-source-maps'
   gem "better_errors"
   gem "binding_of_caller"
   gem 'pry-rails'
