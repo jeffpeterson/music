@@ -1,5 +1,3 @@
-#= require components/App/Header/Header
-
 window.App or= {}
 
 App.version = 5
@@ -21,6 +19,7 @@ App.memo_pad = {}
 
 App.initialize = ->
   App.store.clear()
+  App.store.keep 'queue', 'state', 'colors'
 
   for name, router of App.Routers
     App.routers[name] = new router
@@ -30,6 +29,8 @@ App.initialize = ->
   App.collection.tracks         = new App.Collections.Tracks
   App.collection.playlists      = new App.Collections.Playlists
   App.collection.heavy_rotation = new App.Collections.HeavyRotation
+
+  App.collection.offline_tracks = new App.Collections.OfflineTracks
 
   App.catalog.top_charts        = new App.Collections.TopCharts
   App.catalog.new_releases      = new App.Collections.NewReleases
@@ -42,8 +43,7 @@ App.initialize = ->
   new App.Views.Touch
   new App.Views.Scroll
   new App.Views.Drag
-  # new App.Views.Bar().render()
-  new L.Component.App.Header().render()
+  new App.Component.Header().render()
   new App.Views.QueueShow(model: App.queue).render()
 
   Backbone.history.start pushState: false

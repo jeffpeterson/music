@@ -8,6 +8,8 @@ class App.Models.Queue extends App.Models.Playlist
   initialize: (models) ->
     super()
     @load()
+    # @tracks.each (track) ->
+    #   track.fetch_by_url()
 
     @compute 'current_track', ->
       @tracks.get @get('current_key')

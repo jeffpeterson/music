@@ -1,7 +1,9 @@
+#= require ./template
+
 class App.Component.Header extends App.Component
   el: "#bar"
 
-  template: JST['']
+  template: JST['App/Header/template']
 
   events:
     'input #search': 'search'

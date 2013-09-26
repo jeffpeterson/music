@@ -5,7 +5,11 @@
   .track-name=   @track.get('name')
 .controls
   %button.add-to-queue.icon-share-alt
-  - if @track.get('isInCollection')
+  - if App.collection.offline_tracks.get(@track)
+    %i.is-available-offline.icon-mobile-phone
+  - else if @track.get('isInCollection')
     %i.is-in-collection.icon-ok
   - else
     %button.add-to-collection.icon-plus-sign
+.duration
+  = @track.get('time')

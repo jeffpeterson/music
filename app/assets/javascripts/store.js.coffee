@@ -31,11 +31,12 @@ store.commitNow = ->
 
 store.commit = _.debounce store.commitNow, 1000
 
-store.keep = (key) ->
-  store.whiteList[key] = true
+store.keep = (keys...) ->
+  for key in keys
+    store.whiteList[key] = true
 
 store.prune = ->
-  # delete non-whitelisted keys
+  debugger
 
 store.clear = ->
   regex = new RegExp("^v#{App.version}/")

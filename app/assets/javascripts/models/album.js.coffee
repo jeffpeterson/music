@@ -3,6 +3,9 @@
 
 class App.Models.Album extends App.Models.Item
   method: 'get'
+
+  toJSON: -> this.pick 'name', 'url', 'icon', 'artist', 'displayDate', 'canStream'
+
   initialize: ->
     @artwork          = new App.Models.Artwork(icon: @get('icon'))
     @track_list       = new App.Collections.TrackList
