@@ -10,7 +10,8 @@ $color            = hsl(220, 15%, 30%)
 $highlight        = lighten($color, 15%)
 $background-color = $white
 
-blue = hsl(200, 70, 50)
+blue      = hsl(200, 70, 50)
+dark-blue = hsl(250, 50, 40)
 
 modal-animation-duration = 0.7s
 
@@ -25,6 +26,13 @@ square()
     content: ''
     display: block
     padding-top: 100%
+
+blue-background()
+  background-color blue
+  background-image repeating-radial-gradient(circle 1000px at 20% -30%, transparent, rgba(dark-blue, 0.7), transparent),
+    repeating-radial-gradient(circle 1000px at right bottom, transparent, rgba(dark-blue, 0.5), transparent),
+    repeating-radial-gradient(circle 1000px at left bottom, transparent, rgba(dark-blue, 0.5), transparent)
+  background-attachment fixed
 
 ::-webkit-scrollbar
   display: none
@@ -45,7 +53,7 @@ body
   display: -webkit-flex
   font-weight: $normal
   font-family: Raleway, sans-serif
-  background-color: #fff
+  background-color #fff
   color $color
   font-size: 20px
   line-height: 40px
@@ -229,11 +237,16 @@ input
   right: 0
   z-index: 100
   background-color rgba(blue, 0.9)
-  background-image radial-gradient(circle 500px at 20% 0, hsla(230, 50, 50, 0.7), transparent), radial-gradient(circle 500px at 80% 100%, hsla(220, 50, 50, 0.6), transparent), linear-gradient(to bottom, blue, transparent)
+  background-image radial-gradient(circle 500px at 20% 0, rgba(dark-blue, 0.7), transparent),
+    radial-gradient(circle 500px at 80% 20px, rgba(dark-blue, 0.6), transparent),
+    linear-gradient(to bottom, blue, transparent)
+  border-bottom 1px solid rgba(white, 0.1)
+  -webkit-border-image-source linear-gradient(to right, white, black)
   color $color
   color white
   box-shadow: 0 0 100px rgba(0,0,0, 0.5)
-  text-shadow 0 0 3px rgba(black, 0.2)
+  &, button
+    text-shadow 0 0 3px rgba(black, 0.2)
   > a, > button
     -webkit-align-self: stretch
     -webkit-flex-shrink: 1
@@ -325,16 +338,19 @@ button:active, a:active
   height: 10px
   cursor: pointer
   z-index: 1
-  > .position
+  > .position, > .empty
     height: 2px
     position: absolute
-    bottom: 2px
+    bottom: 3px
     left: 0
     z-index: 1
-    background-color: $color
+    background-color: white
     width: 0
-    transition: height 0.2s//, width 1s linear
-    border-radius: 4px
+    transition: height 0.2s
+    border-radius: 9px
+  > .empty
+    background-color rgba(white, 0.2)
+    width 100%
 
 #main
   margin-right: 300px
