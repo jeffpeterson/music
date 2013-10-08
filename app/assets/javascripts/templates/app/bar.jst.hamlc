@@ -2,14 +2,9 @@
 
 %input#search{type: "text", placeholder: "search . . ."}
 
-%a.top-charts.icon-list-ol{href: "#catalog/top-charts", title: 'Top Charts'}
-
-%div &nbsp;
-
-%a.heavy-rotation.icon-heart{href: "#collection/heavy-rotation", title: 'Heavy Rotation'}
-%a.playlists.icon-list{      href: "#collection/playlists",      title: 'Playlists'}
-%a.albums.icon-th-large{     href: "#collection/albums",         title: 'Albums'}
-%a.artists.icon-group{       href: "#collection/artists",        title: 'Artists'}
+%a{href: '#catalog/top-charts'       } top charts
+%a{href: '#collection/heavy-rotation'} heavy rotation
+%a{href: '#collection/albums'        } collection
 
 %button#show-sidebar.slidable.icon-chevron-left
 

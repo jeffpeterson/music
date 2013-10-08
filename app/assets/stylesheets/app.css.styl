@@ -27,6 +27,15 @@ square()
     display: block
     padding-top: 100%
 
+bar-blue-background()
+  db = rgba(dark-blue, 0.7)
+  tp = transparent
+  background-color rgba(blue, 0.9)
+  background-image radial-gradient(circle closest-corner at 20% 0, db, tp),
+    radial-gradient(circle closest-corner at 75% 0, db, tp),
+    linear-gradient(to bottom, blue, tp)
+
+
 blue-background()
   background-color blue
   background-image repeating-radial-gradient(circle 1000px at 20% -30%, transparent, rgba(dark-blue, 0.7), transparent),
@@ -227,6 +236,7 @@ input
   width: 100%
 
 #bar
+  white-space nowrap
   -webkit-transition: height 0.25s
   display: -webkit-flex
   -webkit-align-items: center
@@ -236,10 +246,7 @@ input
   left: 0
   right: 0
   z-index: 100
-  background-color rgba(blue, 0.9)
-  background-image radial-gradient(circle 500px at 20% 0, rgba(dark-blue, 0.7), transparent),
-    radial-gradient(circle 500px at 80% 20px, rgba(dark-blue, 0.6), transparent),
-    linear-gradient(to bottom, blue, transparent)
+  bar-blue-background()
   border-bottom 1px solid rgba(white, 0.1)
   -webkit-border-image-source linear-gradient(to right, white, black)
   color $color
@@ -247,23 +254,25 @@ input
   box-shadow: 0 0 100px rgba(0,0,0, 0.5)
   &, button
     text-shadow 0 0 3px rgba(black, 0.2)
+  a, button
+    &:active
+      color: rgba(white, 0.8)
   > a, > button
     -webkit-align-self: stretch
     -webkit-flex-shrink: 1
-    padding: 0
+    overflow hidden
+    text-overflow ellipsis
     display: -webkit-flex
-    width 60px
+    padding 2px 8px 0
     border-bottom 2px solid transparent
-    padding-top 2px
     transition border-color 0.5s
-    &:active
-      color: rgba(white, 0.8)
     -webkit-align-items: center
     -webkit-justify-content: center
     &:hover
       border-color rgba(white, 0.3)
     &.current
       border-color white
+      -webkit-mask-image none
 
 #logo
   width: 60px
@@ -271,8 +280,8 @@ input
   cursor: default
   -webkit-flex-shrink: 0
   box-sizing: border-box
-  &:hover
-    color: $highlight
+  &:active
+    color rgba(white, 0.8)
 
 button:active, a:active
   color: $highlight
