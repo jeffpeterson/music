@@ -1,0 +1,1 @@
+../../../chloroform/app/assets/javascripts/chloroform.js.coffee
