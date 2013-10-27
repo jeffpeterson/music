@@ -19,5 +19,5 @@ class App.Models.Album extends App.Models.Item
       return unless match   = url.match("/artist/([^/]+)/album/([^/]+)/")
       [full, artist, album] = match
 
-      "artists/#{artist}/albums/#{album}"
+      "#{artist}/#{album}"
 

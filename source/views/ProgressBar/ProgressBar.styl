@@ -1,0 +1,41 @@
+.progress-bar
+  font-size 11px
+  line-height 15px
+  position: absolute
+  left: 0
+  right: 0
+  bottom: 0
+  z-index: 1
+  margin-left 1px
+
+  > .time
+    visibility hidden
+    padding 2px
+    position absolute
+    bottom 0px
+    -webkit-transform translateX(-50%)
+  &:hover
+    > .time
+      visibility visible
+
+  > .click-area
+    height 10px
+    cursor: pointer
+
+    > .empty
+      background-color rgba(white, 0.2)
+      bottom 0
+      height: 2px
+      left 0
+      position absolute
+      right 0
+
+      > .position
+        height 100%
+        position: absolute
+        left: 0
+        z-index: 1
+        background-color: white
+        width: 0
+        transition: height 0.2s
+

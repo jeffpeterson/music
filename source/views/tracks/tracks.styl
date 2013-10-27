@@ -1,41 +1,7 @@
 .track-list
-  padding: 10px 0
-  background: none
-  width: 100%
-  position: relative
-
-.track
-  -webkit-column-break-inside: avoid
-  cursor: pointer
-  overflow: hidden
-  position: relative
-  display: -webkit-flex
-  align-items: stretch
-  padding: 0
-  > .status
-    flex-shrink 0
-    text-align center
-    width 60px
-    > .play-now
-      display: none
-    > .track-number
-      font-size 0.6em
-  &.is-highlighted
-    > .status
-      > .track-number
-        display: none
-      > .play-now
-        display: inline-block
-    > .controls > button
-      display: block
-  > .text
-    flex-grow 1
-  > .controls 
-    -webkit-flex-shrink: 0
-    display: -webkit-flex
-    -webkit-align-items: center
-    -webkit-justify-content flex-end
-    max-width 50%
-    padding-right 10px
-    > button
-      display none
+  background none
+  overflow hidden
+  display block
+  padding 10px 0
+  position relative
+  width 100%

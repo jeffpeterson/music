@@ -1,7 +1,8 @@
 class App.Routers.Collection extends BetterRouter
   routes:
-    '':                          'index'
-    'collection(/:type)':        'index'
+    '':                   'index'
+    'collection(/:type)': 'index'
+    'heavy-rotation':     'heavyRotation'
 
   el: '#content'
 
@@ -10,9 +11,10 @@ class App.Routers.Collection extends BetterRouter
 
     super(arguments...)
 
-  index: (type) ->
-    return App.go 'collection/albums' unless type
+  heavyRotation: ->
+    @index('heavy-rotation')
 
+  index: (type = 'albums') ->
     @set_collection App.collection[type.underscore()]
 
     @bind_events()

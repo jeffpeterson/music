@@ -19,7 +19,7 @@ class App.Models.Queue extends App.Models.Playlist
     @listenTo @tracks, 'reset', -> @set('current_key', null)
     @listenTo @tracks, 'reset add remove', @store
     @listenTo App.player, "change:position", (player, position) ->
-      @next() if (1 - position) * @get('current_track').get('duration') < 2
+      @next() if @get('current_track').get('duration') - position < 2
 
   rdio_ready: ->
     console.log App.player.get('state'), @get('current_track')
@@ -38,14 +38,14 @@ class App.Models.Queue extends App.Models.Playlist
     key = key.id if key.id?
 
     @set current_key: key
-    R.player.play source: key, initialPosition: position * @get('current_track').get('duration')
+    R.player.play source: key, initialPosition: position
 
   next: ->
     @play @tracks.at(@relative(1))
 
   prev: (restart = true) ->
-    if restart and @get('position') > 3
-      R.player.position(0)
+    if restart and App.player.get('position') > 3
+      App.player.set_position(0)
       R.player.play()
     else
       @play @tracks.at(@relative(-1))

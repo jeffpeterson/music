@@ -6,6 +6,3 @@
   %button.play.icon-play
 %button.next.icon-fast-forward
 %button.shuffle.icon-random
-#progress
-  .empty
-  .position

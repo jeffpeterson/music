@@ -1,7 +1,7 @@
 class App.Views.Bar extends Backbone.View
   el: "#bar"
 
-  template: JST['bar']
+  template: JST['Header']
 
   events:
     'input #search': 'search'

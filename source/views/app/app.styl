@@ -14,9 +14,6 @@ $color            = hsl(220, 15%, 30%)
 $highlight        = lighten($color, 15%)
 $background-color = $white
 
-blue      = hsl(200, 70, 50)
-dark-blue = hsl(250, 50, 40)
-
 modal-animation-duration = 0.7s
 
 square()
@@ -24,15 +21,6 @@ square()
     content: ''
     display: block
     padding-top: 100%
-
-bar-blue-background()
-  db = rgba(dark-blue, 0.7)
-  tp = transparent
-  background-color rgba(blue, 0.9)
-  background-image radial-gradient(circle closest-corner at 20% 0, db, tp),
-    radial-gradient(circle closest-corner at 75% 0, db, tp),
-    linear-gradient(to bottom, blue, tp)
-
 
 blue-background()
   background-color blue
@@ -141,7 +129,7 @@ input
   left 0
   right 300px
   bottom 0
-  z-index 50
+  z-index 1
   display -webkit-flex
   align-items center
   justify-content space-around
@@ -150,7 +138,7 @@ input
   > div
     box-shadow: 0 0 100px rgba(black, 0.5)
   > .close
-    z-index: 1000
+    z-index: 1
     font-size: 1.2em
     width: 40px
     line-height: 40px
@@ -224,104 +212,8 @@ input
   text-align center
   color $black
 
-#bar > #show-sidebar
-  display: none
-  -webkit-flex-shrink: 0
-  &.slide-to-left:before
-    content: '\f054'
-
 #container
   width: 100%
-
-#bar
-  white-space nowrap
-  -webkit-transition: height 0.25s
-  display: -webkit-flex
-  -webkit-align-items: center
-  height: 60px
-  position: fixed
-  top: 0
-  left: 0
-  right: 0
-  z-index: 100
-  bar-blue-background()
-  border-bottom 1px solid rgba(white, 0.1)
-  -webkit-border-image-source linear-gradient(to right, white, black)
-  color $color
-  color white
-  box-shadow: 0 0 100px rgba(0,0,0, 0.5)
-  &, button
-    text-shadow 0 0 3px rgba(black, 0.2)
-  a, button
-    &:active
-      color: rgba(white, 0.8)
-  > a, > button
-    -webkit-align-self: stretch
-    -webkit-flex-shrink: 1
-    overflow hidden
-    text-overflow ellipsis
-    display: -webkit-flex
-    padding 2px 8px 0
-    border-bottom 2px solid transparent
-    transition border-color 0.5s
-    -webkit-align-items: center
-    -webkit-justify-content: center
-    &:hover
-      border-color rgba(white, 0.3)
-    &.current
-      border-color white
-      -webkit-mask-image none
-
-#logo
-  width: 60px
-  text-align: center
-  cursor: default
-  -webkit-flex-shrink: 0
-  box-sizing: border-box
-  &:active
-    color rgba(white, 0.8)
-
-button:active, a:active
-  color: $highlight
-
-#search
-  width: 100%
-  -webkit-flex: 100px 1 1
-  margin: 0
-  padding-left: 10px
-  height: 100%
-  background: none
-  transition: background-color 0.2s
-  overflow: hidden
-  text-overflow: ellipsis
-  &::-webkit-input-placeholder
-    color: rgba(white, 0.6)
-
-#player
-  width: 300px
-  z-index: 20
-  position: relative
-  display: -webkit-flex
-  -webkit-justify-content: center
-  -webkit-align-items: center
-  -webkit-align-self: stretch
-  -webkit-flex-shrink: 0
-  > [class *= 'icon']
-    width 30px
-    text-align: center
-  > .play, > .pause
-    font-size: 26px
-    width 60px
-  > .next, > .prev
-    font-size: 16px
-  > .shuffle, > .repeat
-    opacity: 0.5
-    font-size: 14px
-    -webkit-flex-grow 1
-    &.is-on
-      opacity: 1
-    &:hover
-      opacity: 0.75
 
 #volume
   -webkit-appearance: none
@@ -336,28 +228,6 @@ button:active, a:active
     border-radius: 20px
     &:active
       background-color: $blue
-
-#progress
-  position: absolute
-  left: 5px
-  right: 5px
-  bottom: 0
-  height: 10px
-  cursor: pointer
-  z-index: 1
-  > .position, > .empty
-    height: 2px
-    position: absolute
-    bottom: 3px
-    left: 0
-    z-index: 1
-    background-color: white
-    width: 0
-    transition: height 0.2s
-    border-radius: 9px
-  > .empty
-    background-color rgba(white, 0.2)
-    width 100%
 
 #main
   margin-right: 300px
@@ -415,18 +285,10 @@ button:active, a:active
     display: block
   .track-list
     -webkit-columns: 1
-  #bar > #show-sidebar
-    display: inline-block
-  #bar, #sidebar
-    right: -300px
-    -webkit-transition all 0.5s
   #container.slide-to-left
     #bar
       left -300px
       right 0px
-    // #main
-    //   margin-right 300px
-    //   margin-left -300px
     #sidebar
       background-color rgba(white, 0.7)
       box-shadow 0 0 50px rgba(black, 0.7)
@@ -438,9 +300,5 @@ button:active, a:active
     right: 0
 
 @media (max-height: 400px)
-  #bar
-    height: 40px
-    > [class *= 'icon']
-      line-height: 40px
   #content > ul, #queue
     padding-top: 40px

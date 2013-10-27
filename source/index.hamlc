@@ -5,15 +5,14 @@
   %link{rel: 'stylesheet', href: url}
 
 :coffeescript
-  view = (path) ->
-    parts = path.split('/')
-    name = parts.pop()
-    path = parts.join('/')
-    path = "/views/#{path}/#{name}/#{name}"
+  view = (p) =>
+    name = @path.basename(p)
+    dir  = @path.dirname(p)
+    file = @path.join('/views', dir, name, name)
 
-    css(path + '.css')
-    script(path + '.jst')
-    script(path + '.js')
+    css(file + '.css')
+    script(file + '.jst')
+    script(file + '.js')
 
   adapter = (name) ->
     script("/adapters/#{name}.js")
@@ -62,7 +61,7 @@
     = script '/libs/chloroform.js'
     = script '/libs/form_builder.js'
 
-    /= css '/libs/font-awesome/font-awesome.css'
+    -#= css '/libs/font-awesome/font-awesome.css'
     = css '//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css'
 
     = view   'app'
@@ -105,10 +104,10 @@
     = view 'style'
     = view 'drag'
     = view 'scroll'
-    = view 'progress_bar'
+    = view 'ProgressBar'
     = view 'queue'
     = view 'player'
-    = view 'bar'
+    = view 'Header'
     = view 'items'
     = view 'albums'
     = view 'tracks'

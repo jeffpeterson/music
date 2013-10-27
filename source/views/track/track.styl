@@ -1,0 +1,39 @@
+.track
+  -webkit-column-break-inside: avoid
+  cursor pointer
+  overflow hidden
+  padding 0
+  position relative
+  display -webkit-flex
+
+  > .status
+    text-align center
+    width 60px
+
+    > .play-now
+      display: none
+
+    > .track-number
+      font-size 0.6em
+
+  > .text
+    -webkit-flex-grow 1
+    -webkit-flex-shrink 1
+
+  &.is-highlighted
+    > .status
+      > .track-number
+        display: none
+
+      > .play-now
+        display: inline-block
+
+    > .controls > button
+      display: inline-block
+
+  > .controls
+    text-align right
+    white-space nowrap
+    padding-right 10px
+    > button
+      display none

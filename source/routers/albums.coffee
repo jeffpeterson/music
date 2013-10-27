@@ -1,6 +1,6 @@
 class App.Routers.Albums extends BetterRouter
   routes:
-    'artists/:artist/albums/:album': 'show'
+    ':artist/:album': 'show'
 
   initialize: ->
     @el = '#content'

@@ -3,8 +3,8 @@
 %input#search{type: "text", placeholder: "search . . ."}
 
 %a{href: '#catalog/top-charts'       } top charts
-%a{href: '#collection/heavy-rotation'} heavy rotation
-%a{href: '#collection/albums'        } collection
+%a{href: '#heavy-rotation'} heavy rotation
+%a{href: '#collection'        } collection
 
 %button#show-sidebar.slidable.icon-chevron-left
 

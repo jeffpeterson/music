@@ -10,6 +10,7 @@ class App.Views.PlayerShow extends Backbone.View
     'input #volume': 'update_volume'
 
   initialize: ->
+    @progressBar = new App.Views.ProgressBar(model: @model)
     @listenTo @model, 'change:state', @render
 
     $(window).on 'keydown', @keypress
@@ -19,7 +20,7 @@ class App.Views.PlayerShow extends Backbone.View
 
     @render_repeat()
 
-    new App.Views.ProgressBarShow(model: @model).render()
+    @$el.append @progressBar.render().el
 
     this
 

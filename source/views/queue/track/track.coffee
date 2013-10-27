@@ -1,10 +1,11 @@
 #= require views/tracks/show.js
 
 class App.Views.QueueTrackShow extends App.Views.TrackShow
+  className: 'track queue-track'
   template: HAML['queue/track']
 
   initialize: ->
-    @listenTo @model.collection, "remove", @removed
+    @listenTo App.queue.tracks, "remove", @removed
     @listenTo @model, "current", @current
     @listenTo @model, 'change', @render
     @listenTo @model.artwork, 'change', @render_colors
@@ -30,9 +31,9 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
     bg = colors.background
 
     @$el.css
-        backgroundImage: "linear-gradient(to top right, rgb(#{bg}), transparent 450px), url(#{@model.artwork.get('icon-500')})"
+        backgroundImage: "linear-gradient(to top, rgba(#{bg}, 0.95) 60px, transparent 150px), url(#{@model.artwork.get('icon-500')})"
         color:      "rgb(#{colors.primary})"
-        textShadow: "0 1px 0 rgb(#{bg}), 0 -1px 0 rgb(#{bg}), 1px 0 0 rgb(#{bg}), -1px 0 0 rgb(#{bg})"
+        textShadow: "0 1px 1px rgb(#{bg}), 0 -1px 1px rgb(#{bg}), 1px 0 1px rgb(#{bg}), -1px 0 1px rgb(#{bg})"
     @$('.artist-name').css
         color:      "rgb(#{colors.secondary})"
 
@@ -52,7 +53,7 @@ class App.Views.QueueTrackShow extends App.Views.TrackShow
     App.queue.play(@model)
 
   remove_from_queue: =>
-    @model.collection.remove @model
+    App.queue.tracks.remove @model
 
   removed: (model) ->
     return if model isnt @model

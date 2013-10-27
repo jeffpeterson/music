@@ -2,6 +2,7 @@ class App.Models.Artwork extends Backbone.Model
   defaults:
     icon: ''
     'icon-500': ''
+    'icon-1200': ''
     colors:
       background: "0,0,0"
       primary:    "255,255,255"
@@ -15,6 +16,9 @@ class App.Models.Artwork extends Backbone.Model
 
     @compute 'icon-500', ->
       @get('icon-200').replace("square-200", "square-500")
+
+    @compute 'icon-1200', ->
+      @get('icon-200').replace("square-200", "square-1200")
 
     @set('icon', @get('icon-500')) #if devicePixelRatio > 1
     @analyze()

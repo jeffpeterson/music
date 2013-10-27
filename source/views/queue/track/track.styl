@@ -1,0 +1,30 @@
+.queue-track
+  display -webkit-flex
+  height: 60px
+  position: relative
+  background-size: 100% auto
+  background-position center center
+  transition: all 0.2s
+  -webkit-align-items flex-end
+  padding-left 15px
+  &.dragover
+    margin-top: 30px
+  &:hover
+    > .controls > button
+      display: block
+  > .text
+    -webkit-flex-grow 1
+    padding: 8px 0
+    > .track-name
+      line-height: 22px
+      font-size: 18px
+    > .artist-name
+      line-height: 22px
+      font-size: 14px
+      &:before
+        content: "by "
+  > .controls
+    height: 60px
+    min-width 0
+    display -webkit-flex
+    -webkit-align-items center

@@ -55,7 +55,7 @@ class App.Views.AlbumExpanded extends Backbone.View
         backgroundColor: "rgb(#{@colors.background})"
         color:           "rgb(#{@colors.secondary})"
       '.cover':
-        backgroundImage: "url(#{@model.artwork.get('icon-500')})"
+        backgroundImage: "url(#{@model.artwork.get('icon-1200')})"
       '.back, .modal .track-list, .modal .track':
         backgroundColor: "rgb(#{@colors.background})"
       '.modal .album-name':
@@ -85,7 +85,7 @@ class App.Views.AlbumExpanded extends Backbone.View
   remove: ->
     $('body').removeClass('freeze')
     $("#main").removeClass('blur')
-    App.go 'back:collection/albums', trigger: false
+    App.go 'back:collection', trigger: false
     @out =>
       super(arguments...)
 

@@ -1,6 +1,5 @@
 class App.Routers.Catalog extends BetterRouter
   routes:
-    '':                       'index'
     'catalog(/:type)':        'index'
 
   el: '#content'

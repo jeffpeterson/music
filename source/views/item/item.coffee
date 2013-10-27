@@ -4,7 +4,7 @@ class App.Views.ItemShow extends Backbone.View
   attributes:
     draggable: true
 
-  template: JST['templates/items/show']
+  template: JST['item']
 
   initialize: ->
     @listenTo @model, 'change', @render

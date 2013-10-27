@@ -15,7 +15,7 @@ class App.Models.Player extends Backbone.Model
     App.on 'rdio:ready', => @rdio_ready()
 
   rdio_ready: ->
-    R.player.on "change:position", => @set position: R.player.position() / R.player.playingTrack().get('duration')
+    R.player.on "change:position", => @set position: R.player.position()
     R.player.on "change:volume",   => @set volume:   R.player.volume()
     R.player.on "change:playState", (rdio_play_state) =>
       state = switch rdio_play_state
@@ -51,9 +51,14 @@ class App.Models.Player extends Backbone.Model
     R.player.volume(float)
     @set volume: float
 
-  set_position: (float) ->
-    R.player.position(float * R.player.playingTrack().get("duration"))
-    @set position: float
+  set_position: (seconds) ->
+    R.player.position(seconds)
+    @set position: seconds
+
+  setFloatPosition: (float) ->
+    seconds = Math.floor(float * App.queue.get('current_track').get('duration'))
+    R.player.position(seconds)
+    @set position: seconds
 
   store: -> App.store.set 'Player': this
   load:  -> @set App.store.get('Player')
