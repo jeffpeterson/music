@@ -2,6 +2,7 @@ class App.Views.ItemIndex extends Backbone.View
   tagName: "ul"
 
   initialize: ->
+    _.bindAll this, 'render'
     @listenTo @collection, "reset", @render
     @listenTo @collection, "add", @add
     @listenTo @collection, "change:current_request", @loading
@@ -17,7 +18,7 @@ class App.Views.ItemIndex extends Backbone.View
   leave: ->
     @remove()
 
-  render: =>
+  render: ->
     @styles or= new App.Views.Style
     @$el.empty()
     @$el.append @styles.render().el

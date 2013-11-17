@@ -9,6 +9,7 @@ class App.Views.ItemShow extends Backbone.View
   initialize: ->
     @listenTo @model, 'change', @render
     @listenTo @model, 'remove', @remove
+    _.bindAll this, 'add_to_collection', 'removeFromCollection'
 
   events:
     'click .play-now':          'play_now'
@@ -20,12 +21,13 @@ class App.Views.ItemShow extends Backbone.View
   render: ->
     @$el.attr 'data-index': @model.get('query')
 
-  add_to_collection: (event) ->
-    event.preventDefault()
-    event.stopPropagation()
-
+  add_to_collection: ->
     @model.add_to_collection()
+
+  removeFromCollection: ->
+    @model.removeFromCollection()
 
   dragstart: (event) ->
     event.originalEvent.dataTransfer.setData "text/json", JSON.stringify(@model)
+    event.originalEvent.dataTransfer.setData "text/richtext", @model.get('rtfLink')
     event.originalEvent.dataTransfer.setData "text/plain", @model.get('full')

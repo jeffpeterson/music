@@ -1,3 +1,3 @@
 #= require ../albums/index
 
-class App.Views.HeavyRotationIndex extends App.Views.AlbumIndex
+class App.Views.HeavyRotationIndex extends Component.Albums

@@ -13,7 +13,7 @@ class File
     @dir  = path.dirname(p)
     @name = path.basename(p, ext) or 'index'
     @path = path.join(@dir, @name) + ext
-    @compact = _.last(@dir.match(/(\/views\/)(.*)/)) or @dir
+    @compact = _.last(@dir.match(/(\/(views|components)\/)(.*)/)) or @dir
     @ext  = ext.slice(1)
 
   exists: (options = {}) ->

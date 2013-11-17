@@ -18,7 +18,7 @@ class App.Routers.Collection extends BetterRouter
     @set_collection App.collection[type.underscore()]
 
     @bind_events()
-    @swap new App.Views[type.singularize().camelize() + 'Index'](collection: @collection)
+    @swap new Component[type.camelize()](collection: @collection)
 
   bind_events: ->
     @listenTo App, 'search', (query) ->

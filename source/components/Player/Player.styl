@@ -1,0 +1,25 @@
+.player
+  width: 300px
+  z-index: 20
+  position: relative
+  display: -webkit-flex
+  -webkit-justify-content: center
+  -webkit-align-items: center
+  -webkit-align-self: stretch
+  -webkit-flex-shrink: 0
+  > [class *= 'icon']
+    width 30px
+    text-align: center
+  > .play, > .pause
+    font-size: 26px
+    width 60px
+  > .next, > .prev
+    font-size: 16px
+  > .shuffle, > .repeat
+    opacity: 0.5
+    font-size: 14px
+    -webkit-flex-grow 1
+    &.is-on
+      opacity: 1
+    &:hover
+      opacity: 0.75

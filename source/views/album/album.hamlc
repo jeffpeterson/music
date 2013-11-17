@@ -1,5 +1,0 @@
-.text
-  .album-name
-    = @album.get('name')
-  .artist-name
-    = @album.get('artist')

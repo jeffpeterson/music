@@ -1,0 +1,5 @@
+.text
+  .album-name
+    = @name
+  .artist-name
+    = @artist

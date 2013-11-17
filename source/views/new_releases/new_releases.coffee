@@ -1,3 +1,3 @@
 #= require ../albums/index
 
-class App.Views.NewReleaseIndex extends App.Views.AlbumIndex
+class App.Views.NewReleaseIndex extends Component.Albums

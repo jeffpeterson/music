@@ -39,8 +39,8 @@ App.initialize = ->
   new App.Views.Touch
   new App.Views.Scroll
   new App.Views.Drag
-  new App.Views.Bar().render()
-  new App.Views.QueueShow(model: App.queue).render()
+  new Component.Header().render()
+  new Component.Queue(model: App.queue).render()
 
   Backbone.history.start pushState: false
 

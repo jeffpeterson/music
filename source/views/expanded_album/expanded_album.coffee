@@ -2,10 +2,11 @@ class App.Views.AlbumExpanded extends Backbone.View
   className: 'modal'
 
   events:
-    'click .station':      'play_station'
-    'click .close':        'remove'
-    'click .click-shield': 'remove'
-    'click':               'unhighlight'
+    'click .station':       'play_station'
+    'click .close':         'remove'
+    'click .click-shield':  'remove'
+    'click':                'unhighlight'
+    'click .view-huge-art': 'viewHugeArt'
 
   template: JST['expanded_album']
 
@@ -51,7 +52,7 @@ class App.Views.AlbumExpanded extends Backbone.View
 
   render_colors: ->
     @styles.css
-      '.modal .album':
+      '.modal .album, .modal .album .action-menu':
         backgroundColor: "rgb(#{@colors.background})"
         color:           "rgb(#{@colors.secondary})"
       '.cover':
@@ -64,11 +65,11 @@ class App.Views.AlbumExpanded extends Backbone.View
         color: "rgb(#{@colors.primary})"
       '.modal button, .modal button:active, i':
         color: "rgb(#{@colors.detail})"
-      '.modal .track.is-highlighted, .modal .track.is-highlighted:hover':
+      '.modal .track.is-highlighted, .modal .track.is-highlighted:hover, .modal .album .action-menu li:hover':
         backgroundColor: "rgb(#{@colors.detail})"
       '.modal .track:hover':
-        backgroundColor: "rgba(#{@colors.detail}, 0.1)"
-      '.modal .track.is-highlighted, .modal .track.is-highlighted i, .modal .track.is-highlighted button':
+        color: "rgb(#{@colors.detail})"
+      '.modal .track.is-highlighted, .modal .track.is-highlighted i, .modal .track.is-highlighted button, .modal .album .action-menu li:hover':
         color: "rgb(#{@colors.background})"
     this
 
@@ -102,3 +103,5 @@ class App.Views.AlbumExpanded extends Backbone.View
     event.preventDefault()
     @$('.is-highlighted').removeClass('is-highlighted')
 
+  viewHugeArt: (event) ->
+    window.open @model.artwork.get('icon-1200')

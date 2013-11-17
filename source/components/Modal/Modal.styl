@@ -1,0 +1,24 @@
+.modal
+  position fixed
+  top 60px
+  left 0
+  right 300px
+  bottom 0
+  z-index 1
+  display -webkit-flex
+  align-items center
+  justify-content space-around
+  background-image radial-gradient(farthest-corner, transparent, rgba(black, 0.8))
+  animation fade-in modal-animation-duration
+
+  > .modal-inner
+    box-shadow: 0 0 100px rgba(black, 0.5)
+
+  > .close
+    z-index: 1
+    font-size: 1.2em
+    width: 40px
+    line-height: 40px
+    position: absolute
+    top: 0
+    left: 0

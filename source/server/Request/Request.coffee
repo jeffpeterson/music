@@ -56,9 +56,12 @@ class Request
       css:  (file, done) ->
         done.call this, file.contents
       styl: (file, done) ->
-        stylus.render file.contents, filename: file.path, (err, css) =>
-          unless @error(err)
-            done.call this, css
+        stylus(file.contents)
+          .set('filename', file.path)
+          .import(path.resolve(__dirname, '../../views/app/vendor'))
+          .render (err, css) =>
+            unless @error(err)
+              done.call this, css
 
   route: ->
     @file.withPrefix('static').exists

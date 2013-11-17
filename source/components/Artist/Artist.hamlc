@@ -1,0 +1,3 @@
+%img.album-art{src: @icon}
+.artist-name
+  = @name

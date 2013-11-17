@@ -20,7 +20,7 @@ store.get = (key, default_value = null) ->
 
 store.commitNow = ->
   keys = Object.keys(store.changed)
-  App.debug "commiting #{keys.join(', ')} to store."
+  # App.debug "commiting #{keys.join(', ')} to store."
   try
     for key in keys
       store.localStorage["v#{App.version}/#{key}"] = JSON.stringify(store.memo[key])

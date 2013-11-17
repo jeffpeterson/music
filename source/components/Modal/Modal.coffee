@@ -1,0 +1,2 @@
+Component.new 'Modal',
+  initialize: ->

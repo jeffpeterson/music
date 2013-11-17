@@ -5,6 +5,16 @@
   %link{rel: 'stylesheet', href: url}
 
 :coffeescript
+  component = (name) =>
+    p    = name.replace(/\./g, '/')
+    name = @path.basename(p)
+    dir  = @path.dirname(p)
+    file = @path.join('/components', dir, name, name)
+
+    css(file + '.css')
+    script(file + '.jst')
+    script(file + '.js')
+
   view = (p) =>
     name = @path.basename(p)
     dir  = @path.dirname(p)
@@ -54,15 +64,18 @@
     = script '/libs/stack_blur.js'
     = script '/libs/underscore.js'
     = script '/libs/backbone.js'
+    = script '/libs/L.js'
 
     = script '/monkey_patches.js'
     = script '/libs/better_router.js'
     = script '/libs/computed_attributes.js'
     = script '/libs/chloroform.js'
     = script '/libs/form_builder.js'
+    = script '/components/Component/Component.js'
 
     -#= css '/libs/font-awesome/font-awesome.css'
     = css '//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css'
+    = css '//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css'
 
     = view   'app'
 
@@ -97,28 +110,32 @@
     = router 'base'
     = router 'collection'
     = router 'catalog'
-    = router 'albums'
+    = router 'item'
     = router 'artists'
 
     = view 'touch'
     = view 'style'
     = view 'drag'
     = view 'scroll'
-    = view 'ProgressBar'
-    = view 'queue'
-    = view 'player'
-    = view 'Header'
+    = component 'Modal'
+    = component 'ProgressBar'
+    = component 'ActionMenu'
+    = component 'Queue'
+    = component 'Player'
+    = component 'Header'
     = view 'items'
-    = view 'albums'
+    = component 'Albums'
     = view 'tracks'
     = view 'item'
     = view 'track'
     = view 'artist'
-    = view 'album'
-    = view 'expanded_album'
-    = view 'expanded_album/tracks'
-    = view 'expanded_album/track'
-    = view 'queue/track'
+
+    = component 'Album'
+    = component 'Album.Modal'
+    = component 'Album.Modal.Tracks'
+    = component 'Album.Modal.Track'
+
+    = component 'Queue.Track'
     = view 'top_charts'
     = view 'top_charts'
     = view 'heavy_rotation'

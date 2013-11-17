@@ -1,0 +1,97 @@
+bright-blue = hsl(240, 90, 40)
+blue        = hsl(200, 70, 50)
+dark-blue   = hsl(210, 70, 10)
+purple      = hsl(270, 50, 40)
+
+bar-blue-background()
+  background-color rgba(blue, 0.8)
+  background-image:
+    radial-gradient(ellipse 70% 190% at 100% 50%, rgba(dark-blue, 0.7), rgba(dark-blue, 0)),
+    radial-gradient(circle closest-corner at 30% 0, rgba(purple, 0.5), rgba(purple, 0)),
+    radial-gradient(ellipse 50% 190% at -5% 50%, rgba(dark-blue, 0.7), rgba(dark-blue, 0)),
+    radial-gradient(circle closest-corner at 65% 100%, rgba(bright-blue, 0.3), rgba(bright-blue, 0)),
+    radial-gradient(ellipse 20% 150% at 20% -70%, rgba(white, 0.6), rgba(white, 0)),
+    linear-gradient(to bottom, blue, rgba(blue, 0))
+
+#bar > #show-sidebar
+  display: none
+  -webkit-flex-shrink: 0
+  &.slide-to-left:before
+    content: '\f054'
+
+#bar
+  font-size 16px
+  white-space nowrap
+  -webkit-transition: height 0.25s
+  display: -webkit-flex
+  -webkit-align-items: center
+  height: 60px
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  z-index: 100
+  bar-blue-background()
+  border-bottom 1px solid rgba(white, 0.1)
+  -webkit-border-image-source linear-gradient(to right, white, black)
+  color $color
+  color white
+  box-shadow: 0 0 80px rgba(0,0,0, 0.7)
+  &, button
+    text-shadow 0 0 3px rgba(black, 0.2)
+  a, button
+    &:active
+      color: rgba(white, 0.8)
+  > a, > button
+    -webkit-align-self: stretch
+    -webkit-flex-shrink: 1
+    overflow hidden
+    text-overflow ellipsis
+    display: -webkit-flex
+    padding 2px 6px 0
+    border-bottom 2px solid transparent
+    transition border-color 0.5s
+    -webkit-align-items: center
+    -webkit-justify-content: center
+    &:hover
+      border-color rgba(white, 0.3)
+    &.current
+      border-color white
+      -webkit-mask-image none
+
+#logo
+  width: 60px
+  text-align: center
+  cursor: default
+  -webkit-flex-shrink: 0
+  box-sizing: border-box
+  &:active
+    color rgba(white, 0.8)
+
+button:active, a:active
+  color: $highlight
+
+#search
+  width: 100%
+  -webkit-flex: 100px 1 1
+  margin: 0
+  padding-left: 10px
+  height: 100%
+  background: none
+  transition: background-color 0.2s
+  overflow: hidden
+  text-overflow: ellipsis
+  &::-webkit-input-placeholder
+    color: rgba(white, 0.6)
+
+@media (max-width: 780px)
+  #bar > #show-sidebar
+    display: inline-block
+  #bar, #sidebar
+    right: -300px
+    -webkit-transition all 0.5s
+@media (max-height: 400px)
+  #bar
+    height: 40px
+    > [class *= 'icon']
+      line-height: 40px
