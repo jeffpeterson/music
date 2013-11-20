@@ -13,14 +13,16 @@ modal-album-height             = 500px
     position: relative
   > .cover
     position: relative
-    background-size: 100% auto
-    background-repeat: no-repeat
+    background-size cover
+    background-repeat no-repeat
     -webkit-flex-shrink: 0
-    // -webkit-mask-image: linear-gradient(to left, transparent, black)
     &:before
-      content: ""
-      display: block
-      padding-top: 100%
+      content ""
+      display block
+      padding-top 100%
+      background-size cover
+      background-repeat no-repeat
+
   > .back
     z-index: 10
     height: modal-album-height

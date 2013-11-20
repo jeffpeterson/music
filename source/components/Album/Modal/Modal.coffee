@@ -52,6 +52,8 @@ Component.Album.new 'Modal', parent = Component.Modal,
         backgroundColor: "rgb(#{@colors.background})"
         color:           "rgb(#{@colors.secondary})"
       '.cover':
+        backgroundImage: "url(#{@model.artwork.get('icon-500')})"
+      '.cover:before':
         backgroundImage: "url(#{@model.artwork.get('icon-1200')})"
       '.back, .modal .tracks, .modal .track':
         backgroundColor: "rgb(#{@colors.background})"
