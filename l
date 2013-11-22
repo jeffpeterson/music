@@ -1,7 +1,6 @@
 #!/usr/bin/env coffee
 
 global.L = require('./source/libs/L.js').L
-require './source/monkey_patches.coffee'
 
 exec = require('child_process').exec
 fs    = require 'fs'
@@ -16,13 +15,8 @@ task = (name, desc, action) ->
 desc = (text) ->
   arguments.callee.caller.desc = text
 
-# option '-p', '--port NUMBER',     'port to listen on'
-# option '-a', '--address ADDRESS', 'address to listen at'
-# option '-S', '--socket PATH',     'unix socket to bind to'
-# option '-F', '--fake',            'disable APIs and use fake data'
-
 task 'serve', ->
-  require('./source/server/server.coffee').serve()
+  require('./source/server/server.coffee')()
 
 task 'install', ->
   puts "do something here"

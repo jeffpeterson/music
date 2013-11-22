@@ -2,12 +2,14 @@ cluster = require 'cluster'
 os      = require 'os'
 coffee  = require 'coffee-script'
 
-exports.serve = (options) ->
+module.exports = (options) ->
   cluster.setupMaster
     exec: __dirname + '/Worker/Worker.coffee'
 
   cpus = os.cpus()
+
   console.log "Spawning #{cpus.length} workers..."
+
   for cpu, i in cpus
     cluster.fork(options)
 
