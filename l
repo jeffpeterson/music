@@ -36,6 +36,7 @@ task 'spec', 'run the server specs', ->
 
 task 'component:new', 'create a new component', (fullName) ->
   return puts "component:new NAME" unless fullName
+
   parts = fullName.split('.')
   path  = "./source/components/#{parts.join('/')}"
   name  = parts.slice(-1)
@@ -46,7 +47,7 @@ task 'component:new', 'create a new component', (fullName) ->
 
   exec "mkdir -p #{path}"
   exec "echo \"#{parent}.new '#{name}', \n  initialize: ->\" > #{path}/#{name}.coffee"
-  exec "echo \".#{parts.join('_').dasherize()}\" > #{path}/#{name}.styl"
+  exec "echo \".#{L.dasherize(parts.join('_'))}\" > #{path}/#{name}.styl"
   exec "touch #{path}/#{name}.hamlc"
 
 task 'component:convert', 'convert a view to a component', (viewName, compName) ->

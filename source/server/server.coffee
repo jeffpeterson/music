@@ -2,8 +2,6 @@ cluster = require 'cluster'
 os      = require 'os'
 coffee  = require 'coffee-script'
 
-nop = ->
-
 exports.serve = (options) ->
   cluster.setupMaster
     exec: __dirname + '/Worker/Worker.coffee'
