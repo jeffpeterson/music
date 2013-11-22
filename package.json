@@ -11,6 +11,7 @@
     "mocha":         "1.14.0",
     "sinon":         "1.7.3",
     "sinon-chai":    "2.4.0",
-    "stylus":        "0.38.0"
+    "stylus":        "0.38.0",
+    "underscore":        "1.5.2"
   }
 }
