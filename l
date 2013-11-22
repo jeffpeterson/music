@@ -22,7 +22,7 @@ desc = (text) ->
 # option '-F', '--fake',            'disable APIs and use fake data'
 
 task 'serve', ->
-  require('./source/Server/Server.coffee').serve()
+  require('./source/server/server.coffee').serve()
 
 task 'install', ->
   puts "do something here"
@@ -32,7 +32,7 @@ task 'build', 'build the site for production', ->
 task 'push', 'push the site to production', ->
 
 task 'spec', 'run the server specs', ->
-  require('./source/Server/Server.coffee').spec()
+  require('./source/server/server.coffee').spec()
 
 task 'component:new', 'create a new component', (fullName) ->
   return puts "component:new NAME" unless fullName
