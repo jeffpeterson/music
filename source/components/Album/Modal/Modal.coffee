@@ -48,14 +48,14 @@ Component.Album.new 'Modal', parent = Component.Modal,
 
   render_colors: ->
     @styles.css
-      '.modal .album, .modal .album .action-menu':
+      '.album-modal-tracks, .album-modal-tracks .action-menu':
         backgroundColor: "rgb(#{@colors.background})"
         color:           "rgb(#{@colors.secondary})"
       '.cover':
         backgroundImage: "url(#{@model.artwork.get('icon-500')})"
       '.cover:before':
         backgroundImage: "url(#{@model.artwork.get('icon-1200')})"
-      '.back, .modal .tracks, .modal .track':
+      '.back, .album-modal-tracks, .album-modal-tracks .track':
         backgroundColor: "rgb(#{@colors.background})"
       '.modal .album-name':
         color: "rgb(#{@colors.primary})"
