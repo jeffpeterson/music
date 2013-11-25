@@ -20,7 +20,7 @@ class App.Models.Artwork extends Backbone.Model
     @compute 'icon-1200', ->
       @get('icon-200').replace("square-200", "square-1200")
 
-    @set('icon', @get('icon-500')) #if devicePixelRatio > 1
+    @set('icon', @get('icon-1200')) if devicePixelRatio > 1
     @analyze()
 
   analyze: ->
