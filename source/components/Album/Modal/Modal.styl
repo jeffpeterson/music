@@ -7,15 +7,18 @@ modal-album-height             = 500px
   position: relative
   display: -webkit-flex
   max-width: 100%
+
   > .cover, > .back
     max-width: 100%
     width: modal-album-width
     position: relative
+
   > .cover
     position: relative
     background-size cover
     background-repeat no-repeat
     -webkit-flex-shrink: 0
+
     &:before
       content ""
       display block
@@ -30,29 +33,36 @@ modal-album-height             = 500px
     overflow hidden
     display -webkit-flex
     flex-direction column
+
     > .info
       -webkit-flex-shrink: 0
       padding: 15px 20px 0 10px
       padding-bottom 0
       display: -webkit-flex
       line-height 40px
+
       > .text
         text-align center
         -webkit-flex-grow: 1
+
         > .album-name
           padding-right 10px
           font-size 25px
+
         > .artist-name
           padding-right 10px
           font-size 16px
+
           &:before
             content: "by "
             opacity: 0.7
+
       > .controls
         -webkit-flex-shrink: 0
         text-align: right
         > .release-date
           font-size 15px
+
       > .controls-spacer
         -webkit-flex-shrink 100
         visibility hidden

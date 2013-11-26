@@ -6,10 +6,6 @@ Component.Album.new 'Modal', parent = Component.Modal,
     'click':                'unhighlight'
     'click .view-huge-art': 'viewHugeArt'
 
-  initialize: (options) ->
-    @original = options.original
-    @$el.removeClass('is-expanded') if @original
-
   render: ->
     @delegateEvents()
     @styles     or= new App.Views.Style
@@ -29,22 +25,6 @@ Component.Album.new 'Modal', parent = Component.Modal,
     this
 
   in: ->
-    @move_to_original()
-    @flip_over()
-
-  move_to_original: ->
-    return unless @original
-
-    offset = @original.$el.offset()
-    width  = @original.$el.width()
-    scale  = width / 500
-    y      = offset.top - window.scrollY# - (500 - width) / 2
-    x      = offset.left# - (500 - width) / 2
-
-    @$el.css
-      webkitTransform: "scale(#{scale})"
-      left: x
-      top: y
 
   render_colors: ->
     @styles.css
@@ -70,11 +50,6 @@ Component.Album.new 'Modal', parent = Component.Modal,
       '.modal .track.is-highlighted, .modal .track.is-highlighted i, .modal .track.is-highlighted button, .modal .album .action-menu li:hover':
         color: "rgb(#{@colors.background})"
     this
-
-  flip_over: ->
-    requestAnimationFrame =>
-      @$el.addClass('is-expanded')
-      @$el.attr(style: '')
 
   render_click_shield: ->
     $("body").addClass('freeze')
