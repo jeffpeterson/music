@@ -2,11 +2,15 @@
   position relative
   display: inline-block
   vertical-align: middle
-  max-width 50%
+  max-width 450px
   flex-grow: 1
   flex-basis 300px
-  @media (max-width: 800px)
-    flex-basis 250px
+
+  @media (max-width: 900px)
+    flex-basis 200px
+
+  @media (max-width: 600px)
+    flex-basis 150px
 
   &::before
     content: ""
