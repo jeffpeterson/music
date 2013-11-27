@@ -2,9 +2,11 @@
   position relative
   display: inline-block
   vertical-align: middle
-  max-width: 400px
-  -webkit-flex-grow: 1
-  -webkit-flex-basis: 300px
+  max-width 50%
+  flex-grow: 1
+  flex-basis 300px
+  @media (max-width: 800px)
+    flex-basis 250px
 
   &::before
     content: ""
