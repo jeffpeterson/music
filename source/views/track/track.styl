@@ -5,28 +5,17 @@
   position relative
   display -webkit-flex
 
-  > .status
+  > .track-number
+    font-size 0.6em
     text-align center
     width 60px
-
-    > .play-now
-      display: none
-
-    > .track-number
-      font-size 0.6em
+    flex-shrink 0
 
   > .text
-    -webkit-flex-grow 1
-    -webkit-flex-shrink 1
+    flex-grow 1
+    flex-shrink 1
 
-  &:hover, &.is-highlighted
-    > .status
-      > .track-number
-        display: none
-
-      > .play-now
-        display: inline-block
-
+  &:hover
     > .controls > button
       opacity 0.8
 
@@ -34,6 +23,8 @@
     text-align right
     white-space nowrap
     padding-right 10px
+    padding-left 10px
+    flex-shrink 0
     > button
       opacity 0.05
 

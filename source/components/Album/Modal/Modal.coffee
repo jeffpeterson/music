@@ -5,6 +5,7 @@ Component.Album.new 'Modal', parent = Component.Modal,
     'click .click-shield':  'remove'
     'click':                'unhighlight'
     'click .view-huge-art': 'viewHugeArt'
+    'click .action-menu-button': 'showActionMenu'
 
   render: ->
     @delegateEvents()
@@ -62,6 +63,18 @@ Component.Album.new 'Modal', parent = Component.Modal,
     App.go 'back:collection', trigger: false
     @out =>
       parent::remove.apply(this, arguments)
+
+  showActionMenu: (event) ->
+    isInCollection = @model.get('isInCollection')
+    offset = $(event.target).offset()
+
+    new Component.ActionMenu
+      y: offset.top - $(window).scrollTop()
+      x: offset.left - $(window).scrollLeft()
+      items: [
+        ['Add to Collection',      this.add_to_collection,    !isInCollection]
+        ['Remove from Collection', this.removeFromCollection, isInCollection]
+      ]
 
   out: (complete) ->
     @$el.transit

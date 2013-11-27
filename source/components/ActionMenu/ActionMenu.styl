@@ -1,17 +1,23 @@
 .action-menu
-  position absolute
-  top 80%
-  right 6px
-  cursor pointer
-  text-align left
-  background-color inherit
-  z-index 1
-  padding 6px 0
-  font-size 14px
-  line-height 30px
-  box-shadow 0 0 20px rgba(black, 0.5)
-  border-radius 3px
-  > li
-    padding 0 24px
-    &:hover
-      opacity: 0.8
+  position fixed
+  top 0
+  left 0
+  right 0
+  bottom 0
+  z-index 3
+
+  > ul
+    position absolute
+    cursor pointer
+    text-align left
+    background-color white
+    padding 6px 0
+    font-size 14px
+    line-height 30px
+    box-shadow 0 0 20px rgba(black, 0.5)
+    border-radius 5px
+    > li
+      padding 0 24px
+      &:hover
+        background-color blue
+        color white

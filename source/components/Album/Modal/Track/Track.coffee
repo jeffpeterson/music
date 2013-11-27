@@ -1,30 +1,24 @@
 Component.Album.Modal.new 'Track', App.Views.TrackShow,
   events:
-    'click .action-menu-button': 'toggleActionMenu'
+    'click .action-menu-button': 'showActionMenu'
     'click .add-to-collection':  'add_to_collection'
     'click .add-to-queue':       'add_to_queue'
-    'click .play-now':           'play_now'
-    'click':                     'highlight'
+    'click':                     'play_now'
     'dragstart':                 'dragstart'
 
-  toggleActionMenu: (event) ->
-    if @$el.has('.action-menu').length
-      @hideActionMenu()
-    else
-      @showActionMenu()
+  showActionMenu: (event) ->
+    event.stopPropagation()
 
-  showActionMenu: ->
     isInCollection = @model.get('isInCollection')
-    new Component.ActionMenu(items: [
-      ['Play Now',               this.play_now]
-      ['Play Next',              this.playNext]
-      ['Add to Queue',           this.add_to_queue]
-      ['Add to Collection',      this.add_to_collection,    !isInCollection]
-      ['Remove from Collection', this.removeFromCollection, isInCollection]
-    ])
+    offset = $(event.target).offset()
 
-    @$el.append App.actionMenu.render().el
-
-  hideActionMenu: ->
-    App.actionMenu?.remove()
-    delete App.actionMenu
+    new Component.ActionMenu
+      y: offset.top - $(window).scrollTop()
+      x: offset.left - $(window).scrollLeft()
+      items: [
+        ['Play Now',               this.play_now]
+        ['Play Next',              this.playNext]
+        ['Add to Queue',           this.add_to_queue]
+        ['Add to Collection',      this.add_to_collection,    !isInCollection]
+        ['Remove from Collection', this.removeFromCollection, isInCollection]
+      ]

@@ -11,7 +11,6 @@
         .artist-name= @album.get('artist')
       .controls
         %button.view-huge-art.fa.fa-search-plus
-        %button.play-station.icon-microphone
-        %button.add-to-collection.icon-plus-sign
+        %button.action-menu-button.fa.fa-angle-down
         .release-date= @album.get('displayDate')
     .content

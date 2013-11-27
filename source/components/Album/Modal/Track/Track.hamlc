@@ -1,11 +1,8 @@
-.status
-  .track-number= @track.get('trackNum')
-  %button.play-now.icon-play-sign
+.track-number= @track.get('trackNum')
 .text
-  .track-name=   @track.get('name')
+  .track-name= @track.get('name')
+
 .controls
   - if @track.get('isInCollection')
     %i.is-in-collection.icon-ok
-  - else
-    %button.add-to-collection.icon-plus-sign
   %button.action-menu-button.fa.fa-angle-down

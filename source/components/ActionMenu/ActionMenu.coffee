@@ -1,6 +1,4 @@
 Component.new 'ActionMenu',
-  tagName: 'ul'
-
   events:
     click: 'close'
 
@@ -8,19 +6,32 @@ Component.new 'ActionMenu',
     App.actionMenu?.remove()
     App.actionMenu = this
 
+    @x = options.x
+    @y = options.y
+
     @items = options.items
+    @render()
 
   render: ->
     @delegateEvents()
-    @$el.empty()
+    @$el.html @template()
+    $ul = @$('ul')
+
+    $ul.css left: -1000, top: -1000
 
     for [text, callback, only] in @items
       continue if only? and not only
 
       $li = $("<li>")
       $li.text(text)
-      $li.on 'click', callback
-      @$el.append $li
+      $li.click callback
+      $ul.append $li
+
+    $(document.body).append(@$el)
+
+    $ul.css
+      left: Math.min(@x, @$el.width() - $ul.width())
+      top:  Math.min(@y, @$el.height() - $ul.height())
 
     this
 

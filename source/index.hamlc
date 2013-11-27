@@ -65,6 +65,7 @@
     = script '/libs/underscore.js'
     = script '/libs/backbone.js'
     = script '/libs/L.js'
+    = script '/libs/idb.js'
 
     = script '/monkey_patches.js'
     = script '/libs/better_router.js'
