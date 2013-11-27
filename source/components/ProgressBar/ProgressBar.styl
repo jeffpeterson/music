@@ -1,3 +1,5 @@
+bar-color = hsl(200, 70, 10)
+
 .progress-bar
   font-size 11px
   line-height 15px
@@ -25,7 +27,7 @@
 
     > .empty
       pointer-events none
-      background-color rgba(white, 0.2)
+      background-color rgba(bar-color, 0.2)
       bottom 0
       height: 2px
       left 0
@@ -38,7 +40,7 @@
         position: absolute
         left: 0
         z-index: 1
-        background-color: white
+        background-color bar-color
         width: 0
         transition: height 0.2s
 
