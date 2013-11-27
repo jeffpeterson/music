@@ -14,4 +14,3 @@ class App.Views.Home extends Backbone.View
 
   authorize: ->
     R.authenticate()
-

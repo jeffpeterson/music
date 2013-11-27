@@ -15,10 +15,10 @@ class App.Routers.Collection extends BetterRouter
     @index('heavy-rotation')
 
   index: (type = 'albums') ->
-    @set_collection App.collection[type.underscore()]
+    @set_collection App.collection[L.underscore(type)]
 
     @bind_events()
-    @swap new Component[type.camelize()](collection: @collection)
+    @swap new Component[L.camelize(type)](collection: @collection)
 
   bind_events: ->
     @listenTo App, 'search', (query) ->

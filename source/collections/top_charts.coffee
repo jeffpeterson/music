@@ -5,4 +5,4 @@ class App.Collections.TopCharts extends App.Collections.Albums
   comparator: 'playCount'
 
   fetch: (options = {}) ->
-    super _.defaults options, type: 'albums', extras: ['playCount']
+    super _.defaults(options, type: 'albums', extras: ['playCount'])

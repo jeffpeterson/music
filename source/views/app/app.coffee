@@ -19,8 +19,9 @@ App.memo_pad = {}
 App.initialize = ->
   App.store.clear()
 
-  for name, router of App.Routers
-    App.routers[name] = new router
+  App.routers.item       = new App.Routers.Item
+  App.routers.catalog    = new App.Routers.Catalog
+  App.routers.collection = new App.Routers.Collection
 
   App.collection.artists        = new App.Collections.Artists
   App.collection.albums         = new App.Collections.Albums
@@ -28,10 +29,8 @@ App.initialize = ->
   App.collection.playlists      = new App.Collections.Playlists
   App.collection.heavy_rotation = new App.Collections.HeavyRotation
 
-  App.catalog.top_charts        = new App.Collections.TopCharts
-  App.catalog.new_releases      = new App.Collections.NewReleases
-
-  App.collection.playlists.fetch(start: 0)
+  App.catalog.top_charts   = new App.Collections.TopCharts
+  App.catalog.new_releases = new App.Collections.NewReleases
 
   App.player = new App.Models.Player
   App.queue  = new App.Models.Queue
@@ -41,6 +40,9 @@ App.initialize = ->
   new App.Views.Drag
   new Component.Header().render()
   new Component.Queue(model: App.queue).render()
+
+  App.adapters.rdio.on 'change:isAuthenticated', (authed) ->
+    App.go 'catalog/top-charts' unless authed
 
   Backbone.history.start pushState: false
 
@@ -72,8 +74,11 @@ console.time "R.ready"
 $ ->
   App.time "App.initialize"
 
+
+
 App.on 'rdio:ready', ->
   console.timeEnd "R.ready"
+
   App.store.set current_user: R.currentUser
-  if not R.authenticated()
-    App.go 'catalog'
+
+  App.go 'catalog/top-charts' unless R.authenticated()

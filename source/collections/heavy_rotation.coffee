@@ -5,5 +5,5 @@ class App.Collections.HeavyRotation extends App.Collections.Albums
   method:     'getHeavyRotation'
 
   fetch: (options = {}) ->
-    super _.defaults options, type: 'albums', user: R.currentUser.get('key'), friends: true
+    super _.defaults(options, type: 'albums', user: App.store.get('current_user').key, friends: true)
 

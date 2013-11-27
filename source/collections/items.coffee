@@ -8,7 +8,9 @@ class App.Collections.Items extends App.Collections.Base
   initialize: (models, options) ->
     @load()
     @on 'add reset remove', (collection) => @store()
-    @on 'error', -> console.log "SYNC ERROR in", @constructor.name, arguments
+    @on 'error', ->
+      console.log "SYNC ERROR in", @constructor.name, arguments
+      @current_request = null
     super(arguments...)
 
   fetch: (options = {}) ->

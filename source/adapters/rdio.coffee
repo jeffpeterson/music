@@ -5,8 +5,11 @@ class App.Adapters.Rdio extends App.Adapters.Base
     super()
 
     App.trigger 'rdio:loaded'
+
+    R.on 'change:authenticated', =>
+      @_set 'isAuthenticated', R.authenticated()
+
     R.ready =>
-      @_set 'isAuthenticated', true if R.authenticated()
       App.trigger 'rdio:ready'
 
   initialize:  (options = {}) ->
@@ -18,10 +21,8 @@ class App.Adapters.Rdio extends App.Adapters.Base
       release_date: 'releaseDate'
 
   authenticate: (options = {}) ->
-    if R.authenticated()
-      @_set 'isAuthenticated', true
-    else
-      R.authenticate()
+    R.authenticate()
+
 
   # e.g. adapter.get('albums', count: 10, start: 20)
   get: (type, options = {}) ->

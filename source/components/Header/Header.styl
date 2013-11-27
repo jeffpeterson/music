@@ -4,16 +4,7 @@ dark-blue   = hsl(210, 70, 10)
 purple      = hsl(270, 50, 40)
 cyan        = hsl(180, 90, 50)
 
-bar-blue-background()
-  background-color rgba(blue, 0.8)
-  background-image:
-    radial-gradient(ellipse 70% 190% at 100% 50%, rgba(dark-blue, 0.7), rgba(dark-blue, 0)),
-    radial-gradient(circle closest-corner at 30% 0, rgba(purple, 0.5), rgba(purple, 0)),
-    radial-gradient(ellipse 50% 190% at -5% 50%, rgba(dark-blue, 0.7), rgba(dark-blue, 0)),
-    radial-gradient(circle closest-corner at 65% 100%, rgba(bright-blue, 0.3), rgba(bright-blue, 0)),
-    radial-gradient(ellipse 20% 150% at 20% -70%, rgba(white, 0.6), rgba(white, 0)),
-    linear-gradient(to bottom, blue, rgba(blue, 0)),
-    linear-gradient(to top, cyan, rgba(cyan, 0) 50%)
+font-color = hsl(200, 70, 10)
 
 #bar > #show-sidebar
   display: none
@@ -23,25 +14,30 @@ bar-blue-background()
     content: '\f054'
 
 #bar
+  bg = white
+
+  background-color rgba(bg, 0.8)
+  background-image:
+    linear-gradient(to top, rgba(bg, 0), bg),
+    linear-gradient(to top, bg, rgba(bg, 0))
+
   font-size 16px
   white-space nowrap
-  -webkit-transition: height 0.25s
+  transition: height 0.25s
   display: -webkit-flex
-  -webkit-align-items: center
+  align-items: center
   height: 60px
   position: fixed
   top: 0
   left: 0
   right: 0
   z-index: 100
-  bar-blue-background()
   border-bottom 1px solid rgba(white, 0.1)
   -webkit-border-image-source linear-gradient(to right, white, black)
-  color $color
-  color white
+  color font-color
   box-shadow: 0 0 80px rgba(0,0,0, 0.7)
   &, button
-    text-shadow 0 0 3px rgba(black, 0.2)
+    // text-shadow 0 0 3px rgba(black, 0.2)
   a, button
     &:active
       color: rgba(white, 0.8)
@@ -57,9 +53,9 @@ bar-blue-background()
     -webkit-align-items: center
     -webkit-justify-content: center
     &:hover
-      border-color rgba(white, 0.3)
+      border-color rgba(font-color, 0.3)
     &.current
-      border-color white
+      border-color font-color
       -webkit-mask-image none
 
 #logo
@@ -84,8 +80,10 @@ button:active, a:active
   transition: background-color 0.2s
   overflow: hidden
   text-overflow: ellipsis
+  line-height 1.5
   &::-webkit-input-placeholder
-    color: rgba(white, 0.6)
+    line-height 1.5
+    color: rgba(font-color, 0.6)
 
 @media (max-width: 780px)
   #bar > #show-sidebar

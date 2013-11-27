@@ -2,8 +2,11 @@
 
 %input#search{type: "text", placeholder: "search . . ."}
 
-%a{href: '#catalog/top-charts'       } top charts
-%a{href: '#heavy-rotation'} heavy rotation
-%a{href: '#collection'        } collection
+- if App.adapters.rdio._get('isAuthenticated')
+  %a{href: '#collection'         } collection
+- else
+  %a{href: '#', class: 'sign-in'} sign in
+
+%a{href: '#catalog/top-charts' } top charts
 
 %button#show-sidebar.slidable.icon-chevron-left

@@ -2,7 +2,7 @@
 
 global.L = require('./source/libs/L.js').L
 
-exec = require('child_process').exec
+exec  = require('child_process').exec
 fs    = require 'fs'
 puts  = console.log
 tasks = {}
@@ -39,10 +39,10 @@ task 'component:new', 'create a new component', (fullName) ->
   if fs.existsSync(path)
     return puts "#{fullName} already exists!"
 
-  exec "mkdir -p #{path}"
-  exec "echo \"#{parent}.new '#{name}', \n  initialize: ->\" > #{path}/#{name}.coffee"
-  exec "echo \".#{L.dasherize(parts.join('_'))}\" > #{path}/#{name}.styl"
-  exec "touch #{path}/#{name}.hamlc"
+  exec "mkdir -p #{path}", ->
+    exec "echo \"#{parent}.new '#{name}', \n  initialize: ->\" > #{path}/#{name}.coffee"
+    exec "echo \".#{L.dasherize(parts.join('_'))}\" > #{path}/#{name}.styl"
+    exec "touch #{path}/#{name}.hamlc"
 
 task 'component:convert', 'convert a view to a component', (viewName, compName) ->
   return puts "component:convert view_name component_name" unless viewName and compName
