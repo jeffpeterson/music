@@ -40,7 +40,8 @@ font-color = hsl(200, 70, 10)
     // text-shadow 0 0 3px rgba(black, 0.2)
   a, button
     &:active
-      color: rgba(white, 0.8)
+      color: rgba(font-color, 0.8)
+
   > a, > button
     -webkit-align-self: stretch
     -webkit-flex-shrink: 1
@@ -65,7 +66,7 @@ font-color = hsl(200, 70, 10)
   -webkit-flex-shrink: 0
   box-sizing: border-box
   &:active
-    color rgba(white, 0.8)
+    color rgba(font-color, 0.8)
 
 button:active, a:active
   color: $highlight
