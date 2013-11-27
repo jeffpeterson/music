@@ -10,7 +10,6 @@ Component.new 'Header', ->
     initialize: ->
       @listenTo Backbone.history, 'route', @render_current_path
       @playerView = new Component.Player(model: App.player)
-      @playerView.render()
       @render()
 
       @listenTo App.adapters.rdio, 'change:isAuthenticated', @render
@@ -18,7 +17,7 @@ Component.new 'Header', ->
 
     render: ->
       @$el.html @template()
-      @$el.append @playerView.el
+      @$el.append @playerView.render().el
 
       @render_current_path()
       this

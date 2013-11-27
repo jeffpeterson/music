@@ -14,6 +14,7 @@ Component.new 'Player',
     $(window).on 'keydown', @keypress
 
   render: ->
+    @delegateEvents()
     @$el.html @template(@model.attributes)
 
     @render_repeat()
