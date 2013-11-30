@@ -2,17 +2,17 @@
 @import url("http://fonts.googleapis.com/css?family=Raleway:300,500")
 @import './vendor'
 
-$normal           = 300
-$bold             = 500
-$white            = #eee
-$black            = #666
-$red              = #dd777a
-$blue             = #79c
-$green            = #8c8
-$brown            = #7F6A5B
-$color            = hsl(220, 15%, 30%)
-$highlight        = lighten($color, 15%)
-$background-color = $white
+$normal          = 300
+$bold            = 500
+$white           = #eee
+$black           = #666
+$red             = #dd777a
+$blue            = #79c
+$green           = #8c8
+$brown           = #7F6A5B
+$color           = hsl(220, 15%, 30%)
+$highlight       = lighten($color, 15%)
+background-color = black
 
 modal-animation-duration = 0.7s
 
@@ -48,7 +48,7 @@ body
   display: -webkit-flex
   font-weight: $normal
   font-family: Raleway, sans-serif
-  background-color #fff
+  background-color background-color
   color $color
   font-size: 20px
   line-height: 40px
@@ -257,7 +257,7 @@ input
   width: 75px
   -webkit-flex-shrink: 0
 
-@media (max-width: 780px)
+@media (max-width: 900px)
   .album-list > .album
     width: 150px
   #progress

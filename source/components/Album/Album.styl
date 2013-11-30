@@ -1,21 +1,25 @@
 .albums > .album
   position relative
-  display: inline-block
-  vertical-align: middle
-  max-width 450px
-  flex-grow: 1
-  flex-basis 300px
+  display block
+  float left
+  width 100%
 
-  @media (max-width: 900px)
-    flex-basis 200px
+  @media (min-width: 300px)
+    width 50%
 
-  @media (max-width: 600px)
-    flex-basis 150px
+  @media (min-width: 600px)
+    width 33.333%
+
+  @media (min-width: 1200px)
+    width 25%
+
+  @media (min-width: 1800px)
+    width 20%
 
   &::before
-    content: ""
-    display: block
-    padding-top: 100%
+    content ""
+    display block
+    padding-top 100%
 
   &.unavailable
     opacity: 1

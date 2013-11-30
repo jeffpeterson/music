@@ -1,46 +1,38 @@
-bar-color = hsl(200, 70, 10)
+bar-color = white
 
 .progress-bar
+  bottom 0
   font-size 11px
+  left 0
   line-height 15px
-  position: absolute
-  left: 0
-  right: 0
-  bottom: 0
-  z-index: 1
   margin-left 1px
+  position absolute
+  right 0
+  z-index: 1
 
-  > .time
-    pointer-events none
-    visibility hidden
-    padding 2px
-    position absolute
-    bottom 0px
-    // -webkit-transform translateX(-50%)
   &:hover
     > .time
       visibility visible
 
+  > .time
+    // -webkit-transform translateX(-50%)
+    bottom 0px
+    padding 2px
+    pointer-events none
+    position absolute
+    visibility hidden
+
   > .click-area
+    cursor pointer
     height 10px
-    cursor: pointer
 
-    > .empty
-      pointer-events none
-      background-color rgba(bar-color, 0.2)
+    > .position
+      background-color bar-color
       bottom 0
-      height: 2px
+      height 2px
       left 0
+      pointer-events none
       position absolute
-      right 0
-
-      > .position
-        pointer-events none
-        height 100%
-        position: absolute
-        left: 0
-        z-index: 1
-        background-color bar-color
-        width: 0
-        transition: height 0.2s
+      transition height 0.2s
+      width 0
 
