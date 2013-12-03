@@ -46,7 +46,6 @@ Component.Album.new 'Modal', parent = Component.Modal,
 
   renderBlur: ->
     @model.artwork.blur (url) =>
-      console.log url
       @styles.css
         '.front':
           backgroundImage: "url('#{url}')"
