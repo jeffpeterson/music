@@ -4,29 +4,24 @@ modal-album-height             = 500px
 
 .album-modal > .modal-inner
   background-size auto 100%
-  position: relative
-  display: -webkit-flex
-  max-width: 100%
-
-  > .cover, > .back
-    max-width: 100%
-    width: modal-album-width
-    position: relative
+  max-width 100%
+  position relative
+  width modal-album-width
+  height modal-album-height
 
   > .cover
-    position: relative
+    bottom 0
+    left 0
+    position absolute
+    right 0
+    top 0
+
+  > .front
     background-size cover
     background-repeat no-repeat
-    -webkit-flex-shrink: 0
-
-    &:before
-      content ""
-      display block
-      padding-top 100%
-      background-size cover
-      background-repeat no-repeat
 
   > .back
+    transition background-color 1s
     z-index: 10
     height: modal-album-height
     -webkit-overflow-scrolling: touch

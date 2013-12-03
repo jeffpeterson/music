@@ -1,15 +1,17 @@
 Component.new 'Player',
   events:
-    'click .pause': -> @model.pause()
-    'click .play':  -> @model.play()
-    'click .next':  -> @model.next()
-    'click .prev':  -> @model.prev()
+    'click .pause':  -> @model.pause()
+    'click .play':   -> @model.play()
+    'click .next':   -> @model.next()
+    'click .prev':   -> @model.prev()
+    'click .repeat': -> @model.toggleRepeat()
     'input .volume': 'update_volume'
 
   initialize: ->
     _.bindAll this, 'keypress', 'update_volume'
     @progressBar = new Component.ProgressBar(model: @model)
     @listenTo @model, 'change:state', @render
+    @listenTo @model, 'change:repeat', @renderRepeat
 
     $(window).on 'keydown', @keypress
 
@@ -17,14 +19,14 @@ Component.new 'Player',
     @delegateEvents()
     @$el.html @template(@model.attributes)
 
-    @render_repeat()
+    @renderRepeat()
 
     @$el.append @progressBar.render().el
 
     this
 
-  render_repeat: ->
-    @$('.repeat').removeClass('all one none').addClass(@model.get 'repeat')
+  renderRepeat: ->
+    @$('.repeat').toggleClass 'is-on', @model.get('repeat')
     this
 
   update_volume: ->

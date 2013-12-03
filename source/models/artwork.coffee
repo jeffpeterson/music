@@ -26,6 +26,35 @@ class App.Models.Artwork extends Backbone.Model
     @set('icon', @get('icon-500')) 
     @analyze()
 
+  blur: (callback) ->
+    unless @get('icon-200')
+      @once 'change:icon-200', @blur(callback)
+
+    if @get('blurUrl')
+      callback?(@get('blurUrl'))
+      return this
+
+    src    = @get('icon-200')
+    canvas = document.createElement('canvas')
+    img    = new Image()
+
+    img.crossOrigin = "anonymous" unless /^data:/.test(src)
+
+    img.onload = =>
+      w = img.width
+      h = img.height
+      canvas.height = h
+      canvas.width  = w
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+      stackBlurCanvasRGB(canvas, 0, 0, w, h, 40)
+
+      @set('blurUrl', canvas.toDataURL())
+
+      callback?(@get('blurUrl'))
+
+    img.src = src
+    this
+
   analyze: ->
     if colors = App.store.get('colors', {})[@get('icon-200')]
       return @set {colors}

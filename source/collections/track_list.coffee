@@ -7,7 +7,15 @@ class App.Collections.TrackList extends App.Collections.Base
   comparator: 'trackNum'
 
   fetch: (options = {}) ->
-    super _.defaults(options, keys: (@album.get('itemTrackKeys') or @album.get('trackKeys')).join(','), extras: 'isInCollection')
+    keys = @album.get('itemTrackKeys') or @album.get('trackKeys')
+    call = arguments.callee
+
+    if keys
+      super _.defaults(options, keys: keys.join(','), extras: 'isInCollection')
+    else
+      @album.once 'change:trackKeys change:itemTrackKeys', =>
+        call.apply(this, arguments)
+
 
   parse: (response, options) ->
     tracks = response.result

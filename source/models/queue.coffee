@@ -1,5 +1,3 @@
-#= require models/playlist
-
 class App.Models.Queue extends App.Models.Playlist
   defaults:
     current_key:   null
@@ -18,8 +16,6 @@ class App.Models.Queue extends App.Models.Playlist
 
     @listenTo @tracks, 'reset', -> @set('current_key', null)
     @listenTo @tracks, 'reset add remove', @store
-    @listenTo App.player, "change:position", (player, position) ->
-      @next() if @get('current_track').get('duration') - position < 2
 
   rdio_ready: ->
     console.log App.player.get('state'), @get('current_track')

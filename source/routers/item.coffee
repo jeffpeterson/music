@@ -7,7 +7,7 @@ class App.Routers.Item extends BetterRouter
     super(arguments...)
 
   album: (artist_name, album_name) ->
-    App.routers.Collection.index('albums')
+    App.routers.collection.index('albums')
 
     album = App.collection.albums.findWhere url: "/artist/#{artist_name}/album/#{album_name}/"
     unless album
@@ -19,7 +19,7 @@ class App.Routers.Item extends BetterRouter
     $("body").append view.render().el
 
   # artist: (artist_name) ->
-  #   App.routers.Collection.index('albums')
+  #   App.routers.collection.index('albums')
 
   #   url = "/artist/#{artist_name}/"
 

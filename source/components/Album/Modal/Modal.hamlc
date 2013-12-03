@@ -1,8 +1,8 @@
 .click-shield
 %button.close.icon-remove-sign
 .modal-inner
-  .cover
-  .back
+  .front.cover
+  .back.cover
     .info
       .controls-spacer
         .release-date= @album.get('displayDate')

@@ -1,4 +1,4 @@
-%button.repeat.fa.fa-repeat.is-on
+%button.repeat.fa.fa-repeat
 %button.prev.icon-fast-backward
 - if @state is 'playing'
   %button.pause.icon-pause

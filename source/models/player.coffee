@@ -3,12 +3,19 @@ class App.Models.Player extends Backbone.Model
     volume:   1
     position: 0
     shuffle:  false
-    repeat:   "all"
+    repeat:   false
     state:    "stopped"
 
   initialize: ->
     super()
     @load()
+
+    @listenTo this, "change:position", (player, position) ->
+      if App.queue.get('current_track').get('duration') - position < 2
+        if @get('repeat')
+          @set_position(0)
+        else
+          App.queue.next()
 
     @on 'change', @store
 
@@ -54,6 +61,10 @@ class App.Models.Player extends Backbone.Model
   set_position: (seconds) ->
     R.player.position(seconds)
     @set position: seconds
+
+  toggleRepeat: ->
+    @set 'repeat', !@get('repeat')
+    this
 
   setFloatPosition: (float) ->
     seconds = Math.floor(float * App.queue.get('current_track').get('duration'))
