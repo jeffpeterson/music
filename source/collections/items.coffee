@@ -16,7 +16,7 @@ class App.Collections.Items extends App.Collections.Base
   fetch: (options = {}) ->
     @current_request or= do =>
       App.debug("Fetching #{@constructor.name}.")
-      super _.defaults(options, count: 300, sort: 'dateAdded', remove: false)
+      super _.defaults(options, count: 80, sort: 'dateAdded', remove: false)
 
   parse: (response, options = {}) ->
     App.debug "Parsing #{@constructor.name}."
@@ -25,6 +25,6 @@ class App.Collections.Items extends App.Collections.Base
 
   sync: (method, collection, options) ->
     Backbone.sync method, collection, _.defaults options,
-      count: 300
+      count: 80
       sort: 'dateAdded'
       start: collection.length
