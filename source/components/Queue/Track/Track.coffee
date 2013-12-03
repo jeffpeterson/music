@@ -13,7 +13,7 @@ Component.Queue.new 'Track', ->
       @listenTo App.queue.tracks, "remove", @removed
       @listenTo @model, "current", @current
       @listenTo @model, 'change', @render
-      @listenTo @model.artwork, 'change', @render_colors
+      @listenTo @model.artwork, 'change', @renderColors
 
     render: ->
       @$el.empty()
@@ -22,19 +22,33 @@ Component.Queue.new 'Track', ->
       if @model is @model.collection.get('current_track')
         @current()
 
-      @render_colors()
+      @renderColors()
       this
 
-    render_colors: ->
-      return unless colors = @model.artwork.colors()
-      bg = colors.background
+    renderBlur: ->
+      @model.artwork.blur (url) =>
+        @$('.blur').css
+          backgroundImage: "url('#{url}')"
+
+        @$('.shadow').css
+          backgroundColor: "rgba(#{@colors.background}, 0.8)"
+
+    renderColors: ->
+      return unless @colors = @model.artwork.colors()
+      bg = @colors.background
 
       @$el.css
-          backgroundImage: "linear-gradient(to top, rgba(#{bg}, 0.95) 60px, rgba(#{bg},0) 150px), url(#{@model.artwork.get('icon-500')})"
-          color:      "rgb(#{colors.primary})"
-          textShadow: "0 1px 1px rgb(#{bg}), 0 -1px 1px rgb(#{bg}), 1px 0 1px rgb(#{bg}), -1px 0 1px rgb(#{bg})"
+        backgroundImage: "url(#{@model.artwork.get('icon-500')})"
+        color:           "rgb(#{@colors.primary})"
+        textShadow:      "0 1px 1px rgb(#{bg}), 0 -1px 1px rgb(#{bg}), 1px 0 1px rgb(#{bg}), -1px 0 1px rgb(#{bg})"
+
+      @$('.shadow').css
+        backgroundColor: "rgb(#{bg})"
+
       @$('.artist-name').css
-          color:      "rgb(#{colors.secondary})"
+        color: "rgb(#{@colors.secondary})"
+
+      @renderBlur()
 
     play: (event) ->
       event.preventDefault()

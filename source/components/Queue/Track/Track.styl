@@ -8,11 +8,26 @@
   transition: all 0.2s
   -webkit-align-items flex-end
   padding-left 15px
+
   &.dragover
     margin-top: 30px
   &:hover
     > .controls > button
       display: block
+
+  > .shield
+    mask-image linear-gradient(to top, black 60px, transparent 300px)
+    &, > .blur, > .shadow
+      position absolute
+      top 0
+      left 0
+      right 0
+      bottom 0
+
+    > .blur
+      background-size cover
+      background-position center center
+
   > .text
     -webkit-flex-grow 1
     padding: 8px 0

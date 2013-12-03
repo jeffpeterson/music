@@ -1,3 +1,7 @@
+.shield
+  .blur
+  .shadow
+
 .text
   .track-name= @track.get('name')
   .artist-name= @track.get('artist')
