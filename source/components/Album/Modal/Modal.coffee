@@ -30,10 +30,10 @@ Component.Album.new 'Modal', parent = Component.Modal,
   in: ->
 
   render_colors: ->
-    @renderBlur()
     @styles.css
       '.album-modal-tracks':
         color:           "rgb(#{@colors.secondary})"
+        textShadow:      "0 0 3px rgba(#{@colors.background}, 1)"
       '.front, .back':
         backgroundColor: "rgb(#{@colors.background})"
       '.modal .album-name':
@@ -42,6 +42,7 @@ Component.Album.new 'Modal', parent = Component.Modal,
         color: "rgb(#{@colors.primary})"
       '.modal button, .modal button:active, i':
         color: "rgb(#{@colors.detail})"
+    @renderBlur()
     this
 
   renderBlur: ->

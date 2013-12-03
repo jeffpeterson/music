@@ -11,12 +11,15 @@
 
   &.dragover
     margin-top: 30px
+
   &:hover
     > .controls > button
       display: block
 
   > .shield
     mask-image linear-gradient(to top, black 60px, transparent 300px)
+    pointer-events none
+
     &, > .blur, > .shadow
       position absolute
       top 0
