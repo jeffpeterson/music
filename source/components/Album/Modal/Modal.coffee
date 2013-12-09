@@ -33,7 +33,7 @@ Component.Album.new 'Modal', parent = Component.Modal,
     @styles.css
       '.album-modal-tracks':
         color:           "rgb(#{@colors.secondary})"
-        textShadow:      "0 0 3px rgba(#{@colors.background}, 1)"
+        textShadow:      "0 1px 1px rgba(#{@colors.background}, 1)"
       '.front, .back':
         backgroundColor: "rgb(#{@colors.background})"
       '.modal .album-name':

@@ -1,4 +1,5 @@
 .modal
+  transition top 0.25s
   position fixed
   top 60px
   left 0
@@ -12,16 +13,23 @@
   animation fade-in modal-animation-duration
 
   > .modal-inner
-    box-shadow: 0 0 100px rgba(black, 0.5)
+    box-shadow 0 0 100px rgba(black, 0.5)
 
   > .close
-    z-index: 1
-    font-size: 1.2em
-    width: 40px
-    line-height: 40px
-    position: absolute
-    top: 0
-    left: 0
+    z-index 1
+    font-size 1.2em
+    width 40px
+    line-height 40px
+    position absolute
+    top 0
+    left 0
+    opacity 0.9
+
+    &:hover
+      opacity 1
 
   @media (max-width: 900px)
-    right: 0
+    right 0
+
+  @media (max-height: 400px)
+    top 40px

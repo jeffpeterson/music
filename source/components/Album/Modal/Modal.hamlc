@@ -1,5 +1,4 @@
 .click-shield
-%button.close.icon-remove-sign
 .modal-inner
   .front.cover
   .back.cover
@@ -14,3 +13,4 @@
         %button.action-menu-button.fa.fa-angle-down
         .release-date= @album.get('displayDate')
     .content
+%button.close.icon-remove-sign

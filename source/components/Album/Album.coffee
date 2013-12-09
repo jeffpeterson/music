@@ -1,6 +1,5 @@
 Component.new 'Album', ->
   @superClass App.Views.ItemShow
-  @className 'click'
   @events
     click:     'show'
     dragstart: 'dragstart'

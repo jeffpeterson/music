@@ -22,7 +22,6 @@ modal-album-height             = 500px
 
   > .back
     transition background-color 1s
-    z-index: 10
     height: modal-album-height
     -webkit-overflow-scrolling: touch
     overflow hidden
@@ -66,26 +65,22 @@ modal-album-height             = 500px
           overflow hidden
           font-size 15px
     > .content
-      -webkit-mask-image linear-gradient(to top, transparent, black 30px, black -webkit-calc(100% \- 30px), transparent)
+      -webkit-mask-image linear-gradient(to top, transparent, black 5%, black 95%, transparent)
       overflow: auto
       margin-bottom 1px
       > .tracks
         padding 30px 0 50px
 
 
-@media (max-width: 1200px)
+@media (max-width: 500px)
   .album-modal > .modal-inner
-    -webkit-flex-direction: column
     -webkit-overflow-scrolling: touch
     overflow: auto
     max-height: 100%
-    > .cover
-      // -webkit-mask-image none !important
     > .back
       -webkit-flex-shrink: 0
       height: auto
       overflow: hidden
-      > .content
-        -webkit-mask-image none
+
     .track
       line-height: 3em

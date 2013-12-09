@@ -40,7 +40,7 @@ Component.Queue.new 'Track', ->
       @$el.css
         backgroundImage: "url(#{@model.artwork.get('icon-500')})"
         color:           "rgb(#{@colors.primary})"
-        textShadow:      "0 1px 1px rgb(#{bg}), 0 -1px 1px rgb(#{bg}), 1px 0 1px rgb(#{bg}), -1px 0 1px rgb(#{bg})"
+        textShadow:      "0 1px 1px rgba(#{bg}, 1)"
 
       @$('.shadow').css
         backgroundColor: "rgb(#{bg})"

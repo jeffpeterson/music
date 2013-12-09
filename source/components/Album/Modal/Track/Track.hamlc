@@ -1,8 +1,11 @@
-.track-number= @track.get('trackNum')
-.text
-  .track-name= @track.get('name')
 
-.controls
-  - if @track.get('isInCollection')
-    %i.is-in-collection.icon-ok
-  %button.action-menu-button.fa.fa-angle-down
+.info
+  .track-number= @track.get('trackNum')
+
+  .controls
+    - if @track.get('isInCollection')
+      %i.is-in-collection.icon-ok
+    %button.action-menu-button.fa.fa-angle-down
+
+  .text
+    .track-name= @track.get('name')

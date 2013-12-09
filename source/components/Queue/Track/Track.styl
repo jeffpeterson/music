@@ -1,20 +1,18 @@
 .queue-track
   overflow hidden
-  display -webkit-flex
   height: 60px
   position: relative
   background-size: 100% auto
   background-position center center
   transition: all 0.2s
-  -webkit-align-items flex-end
-  padding-left 15px
 
   &.dragover
     margin-top: 30px
 
   &:hover
-    > .controls > button
-      display: block
+    > .shield
+      > .shadow
+        opacity 0.3
 
   > .shield
     mask-image linear-gradient(to top, black 60px, transparent 300px)
@@ -28,24 +26,37 @@
       right 0
       bottom 0
 
+    > .shadow
+      transition opacity 0.5s
+
     > .blur
       background-size cover
       background-position center center
 
-  > .text
-    -webkit-flex-grow 1
-    padding: 8px 0
-    > .track-name
-      line-height: 22px
-      font-size: 18px
-    > .artist-name
-      line-height: 22px
-      font-size: 14px
-      &:before
-        content: "by "
-  > .controls
-    height: 60px
-    min-width 0
-    display -webkit-flex
-    -webkit-align-items center
-    -webkit-flex-shrink 0
+  > .info
+    bottom 0
+    height 60px
+    left 0
+    padding-left 15px
+    position absolute
+    right 0
+
+    > .text
+      height 100%
+      padding: 8px 0
+
+      > .track-name
+        line-height: 22px
+        font-size: 18px
+
+      > .artist-name
+        line-height: 22px
+        font-size: 14px
+
+        &:before
+          content: "by "
+
+    > .controls
+      float right
+      height 100%
+      line-height 60px

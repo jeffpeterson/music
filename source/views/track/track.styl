@@ -1,32 +1,33 @@
 .track
   -webkit-column-break-inside: avoid
-  cursor pointer
   padding 0
   position relative
-  display -webkit-flex
-
-  > .track-number
-    font-size 0.6em
-    text-align center
-    width 60px
-    flex-shrink 0
-
-  > .text
-    flex-grow 1
-    flex-shrink 1
 
   &:hover
-    > .controls > button
+    > .info > .controls > button
       opacity 0.8
 
-  > .controls
-    text-align right
-    white-space nowrap
-    padding-right 10px
-    padding-left 10px
-    flex-shrink 0
-    > button
-      opacity 0.05
+  > .info
+    overflow hidden
 
-      &:hover
-        opacity 0.999
+    > .text
+      overflow hidden
+
+    > .track-number
+      font-size 0.6em
+      text-align center
+      width 60px
+      float left
+
+
+    > .controls
+      float right
+      white-space nowrap
+      padding-right 10px
+      padding-left 10px
+
+      > button
+        opacity 0.05
+
+        &:hover
+          opacity 0.999
