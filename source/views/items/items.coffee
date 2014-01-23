@@ -13,7 +13,7 @@ class App.Views.ItemIndex extends Backbone.View
     @$el.transit x: 0, opacity: 1
 
   out: ->
-    @$el.transit x: '-100%', opacity: 0
+    @$el.transit scale: 0.8, opacity: 0
 
   leave: ->
     @remove()

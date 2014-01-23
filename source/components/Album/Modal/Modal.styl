@@ -1,43 +1,59 @@
 modal-album-animation-duration = modal-animation-duration
-modal-album-width              = 500px
-modal-album-height             = 500px
+
+@keyframes fade-out
+  from
+    opacity 0.9999
+  to
+    opacity 0.7
 
 .album-modal > .modal-inner
   background-size auto 100%
-  max-width 100%
   position relative
-  width modal-album-width
-  height modal-album-height
-
-  > .cover
-    bottom 0
-    left 0
-    position absolute
-    right 0
-    top 0
-
-  > .front
-    background-size cover
-    background-repeat no-repeat
+  background-size 100% auto
+  background-repeat no-repeat
+  background-position center top
 
   > .back
-    transition background-color 1s
-    height: modal-album-height
-    -webkit-overflow-scrolling: touch
-    overflow hidden
+    -webkit-overflow-scrolling touch
     display -webkit-flex
     flex-direction column
+    height modal-album-height
+    margin-top 100%
+    min-height 100%
+    overflow hidden
+    position absolute
+    width 100%
+
+    > .blur, > .shadow
+      bottom 0
+      left 0
+      position absolute
+      right 0
+      top 0
+      transform translate3d(0,0,0)
+
+    > .blur
+      background-position center top
+      background-repeat no-repeat
+      background-size 100% auto
+      margin-top -100%
+
+    > .shadow
+      // transition opacity 1s
+      &.translucent
+        // opacity 0.8
+        animation fade-out 5s both
 
     > .info
       -webkit-flex-shrink: 0
-      padding: 15px 20px 0 10px
+      padding 30px 20px 0 30px
       padding-bottom 0
-      display: -webkit-flex
+      display -webkit-flex
       line-height 40px
 
       > .text
         text-align center
-        -webkit-flex-grow: 1
+        flex-grow 1
 
         > .album-name
           padding-right 10px
@@ -54,8 +70,10 @@ modal-album-height             = 500px
       > .controls
         -webkit-flex-shrink: 0
         text-align: right
+        position relative
         > .release-date
           font-size 15px
+          font-weight 400
 
       > .controls-spacer
         -webkit-flex-shrink 100
@@ -65,7 +83,7 @@ modal-album-height             = 500px
           overflow hidden
           font-size 15px
     > .content
-      -webkit-mask-image linear-gradient(to top, transparent, black 5%, black 95%, transparent)
+      // -webkit-mask-image linear-gradient(to top, transparent, black 5%, black 95%, transparent)
       overflow: auto
       margin-bottom 1px
       > .tracks
@@ -74,13 +92,13 @@ modal-album-height             = 500px
 
 @media (max-width: 500px)
   .album-modal > .modal-inner
-    -webkit-overflow-scrolling: touch
-    overflow: auto
-    max-height: 100%
-    > .back
-      -webkit-flex-shrink: 0
-      height: auto
-      overflow: hidden
+  //   -webkit-overflow-scrolling: touch
+  //   overflow: auto
+  //   max-height: 100%
+  //   > .back
+  //     -webkit-flex-shrink: 0
+  //     height: auto
+  //     overflow: hidden
 
     .track
       line-height: 3em

@@ -8,17 +8,19 @@ Component.new 'Header', ->
       'click .sign-in': 'signIn'
 
     initialize: ->
-      @listenTo Backbone.history, 'route', @render_current_path
       @playerView = new Component.Player(model: App.player)
-      @render()
+      @searchView = new Component.Search
 
+      @listenTo Backbone.history,  'route', @render_current_path
+      @listenTo @searchView,       'search', @search
       @listenTo App.adapters.rdio, 'change:isAuthenticated', @render
 
+      @render()
 
     render: ->
       @$el.html @template()
+      @$(".search").replaceWith @searchView.render().el
       @$el.append @playerView.render().el
-
       @render_current_path()
       this
 
@@ -32,5 +34,5 @@ Component.new 'Header', ->
       event.preventDefault()
       R.authenticate()
 
-    search: (event) ->
-      App.trigger('search', event.target.value)
+    search: (query) ->
+      App.trigger('search', query)

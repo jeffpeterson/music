@@ -33,9 +33,6 @@
   collection = (name) ->
     script("/collections/#{name}.js")
 
-  router = (name) ->
-    script("/routers/#{name}.js")
-
 !!!
 %html
   %head
@@ -81,6 +78,7 @@
     = view   'app'
 
     = script 'store.js'
+    = script 'idb.js'
     = script 'sync.js'
 
     = adapter 'base'
@@ -108,11 +106,7 @@
     = collection 'track_list'
     = collection 'tracks'
 
-    = router 'base'
-    = router 'collection'
-    = router 'catalog'
-    = router 'item'
-    = router 'artists'
+    = script '/router.js'
 
     = view 'touch'
     = view 'style'
@@ -123,6 +117,7 @@
     = component 'ActionMenu'
     = component 'Queue'
     = component 'Player'
+    = component 'Search'
     = component 'Header'
     = view 'items'
     = component 'Albums'
@@ -137,8 +132,7 @@
     = component 'Album.Modal.Track'
 
     = component 'Queue.Track'
-    = view 'top_charts'
-    = view 'top_charts'
+    = component 'TopCharts'
     = component 'HeavyRotation'
 
     %script{async: true, src: "//rdio.com/api/api.js?client_id=zpGC9HgrNQDdpyfQdSiwtQ", onload: "App.adapters.rdio.loaded()"}

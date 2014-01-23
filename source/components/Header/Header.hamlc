@@ -1,12 +1,14 @@
 #logo.icon-music
 
-%input#search{type: "text", placeholder: "search . . ."}
+.search
 
 - if App.adapters.rdio._get('isAuthenticated')
-  %a{href: '#collection'         } collection
+  %a{href: '#collection'} Collection
 - else
-  %a{href: '#', class: 'sign-in'} sign in
+  %a.sign-in{href: '#'} Sign In
 
-%a{href: '#catalog/top-charts' } top charts
+%a{href: '#top-charts'} Top Charts
+%a.notifications.fa.fa-bell-o{href: '#notifications'}
+%a.settings.fa.fa-gear{href: '#settings'}
 
 %button#show-sidebar.slidable.icon-chevron-left

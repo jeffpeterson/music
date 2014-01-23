@@ -1,9 +1,9 @@
 @charset "utf-8"
-@import url("http://fonts.googleapis.com/css?family=Raleway:300,500")
+@import url("http://fonts.googleapis.com/css?family=Lato:300,400")
 @import './vendor'
 
 $normal          = 300
-$bold            = 500
+$bold            = 400
 $white           = #eee
 $black           = #666
 $red             = #dd777a
@@ -47,7 +47,7 @@ body
   min-height: 100%
   display: -webkit-flex
   font-weight: $normal
-  font-family: Raleway, sans-serif
+  font-family: Lato, "Lucida Grande", sans-serif
   background-color background-color
   color $color
   font-size: 20px
@@ -66,20 +66,16 @@ a
 
 button
   -webkit-appearance: none
-  border: 0
-  display: inline-block
-  padding: 0
-  font-family inherit
-  font-weight inherit
-  margin: 0
   background: none
-  color: inherit
-  outline: none
-  font-size: inherit
-
-
-button, [class *= 'icon']
-  padding: 4px
+  border 0
+  color inherit
+  display inline-block
+  font-family inherit
+  font-size inherit
+  font-weight inherit
+  margin 0
+  outline none
+  padding 0
 
 h1, h2, h3
   font-weight: $normal
@@ -251,10 +247,6 @@ input
   &:hover
     > .play, > .queue
       display: none
-
-.album-art
-  width: 75px
-  -webkit-flex-shrink: 0
 
 @media (max-width: 900px)
   .album-list > .album

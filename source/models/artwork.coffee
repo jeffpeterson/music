@@ -4,10 +4,11 @@ class App.Models.Artwork extends Backbone.Model
     'icon-500': ''
     'icon-1200': ''
     colors:
+      0: "255,255,255"
+      1: "255,255,255"
+      2: "255,255,255"
       background: "0,0,0"
-      primary:    "255,255,255"
-      secondary:  "255,255,255"
-      detail:     "255,255,255"
+      contrast: "255,255,255"
 
   colors: -> @get('colors')
 
@@ -27,14 +28,14 @@ class App.Models.Artwork extends Backbone.Model
     @analyze()
 
   blur: (callback) ->
-    unless @get('icon-200')
-      @once 'change:icon-200', @blur(callback)
+    unless @get('icon')
+      @once 'change:icon', @blur(callback)
 
     if @get('blurUrl')
       callback?(@get('blurUrl'))
       return this
 
-    src    = @get('icon-200')
+    src    = @get('icon')
     canvas = document.createElement('canvas')
     img    = new Image()
 
@@ -46,7 +47,7 @@ class App.Models.Artwork extends Backbone.Model
       canvas.height = h
       canvas.width  = w
       canvas.getContext('2d').drawImage(img, 0, 0, w, h)
-      stackBlurCanvasRGB(canvas, 0, 0, w, h, 40)
+      stackBlurCanvasRGB(canvas, 0, 0, w, h, w / 10 << 0)
 
       @set('blurUrl', canvas.toDataURL())
 

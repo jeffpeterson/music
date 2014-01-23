@@ -1,5 +1,5 @@
 font-color = hsl(200, 70, 10)
-font-color = white
+font-color = rgba(white, 0.7)
 background-color = hsl(200, 70, 1)
 
 #bar > #show-sidebar
@@ -10,6 +10,7 @@ background-color = hsl(200, 70, 1)
     content: '\f054'
 
 #bar
+  text-transform lowercase
   background-color rgba(background-color, 0.8)
 
   font-size 16px
@@ -23,12 +24,8 @@ background-color = hsl(200, 70, 1)
   left: 0
   right: 0
   z-index: 100
-  // border-bottom 1px solid rgba(white, 0.1)
   -webkit-border-image-source linear-gradient(to right, white, black)
   color font-color
-  // box-shadow: 0 0 10px rgba(0,0,0, 0.7)
-  &, button
-    // text-shadow 0 0 3px rgba(black, 0.2)
   a, button
     &:active
       color: rgba(font-color, 0.8)
@@ -61,21 +58,6 @@ background-color = hsl(200, 70, 1)
 
 button:active, a:active
   color rgba(font-color, 0.8)
-
-#search
-  width: 100%
-  -webkit-flex: 100px 1 1
-  margin: 0
-  padding-left: 10px
-  height: 100%
-  background: none
-  transition: background-color 0.2s
-  overflow: hidden
-  text-overflow: ellipsis
-  line-height 1.5
-  &::-webkit-input-placeholder
-    line-height 1.5
-    color: rgba(font-color, 0.6)
 
 @media (max-width: 900px)
   #bar > #show-sidebar

@@ -1,7 +1,8 @@
 .click-shield
 .modal-inner
-  .front.cover
-  .back.cover
+  .back
+    .blur
+    .shadow
     .info
       .controls-spacer
         .release-date= @album.get('displayDate')
@@ -9,8 +10,8 @@
         .album-name= @album.get('name')
         .artist-name= @album.get('artist')
       .controls
-        %button.view-huge-art.fa.fa-search-plus
-        %button.action-menu-button.fa.fa-angle-down
+        %button.view-huge-art.fa.fa-search-plus.fa-fw
+        %button.action-menu-button.fa.fa-angle-down.fa-fw
         .release-date= @album.get('displayDate')
     .content
 %button.close.icon-remove-sign

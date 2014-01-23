@@ -25,7 +25,8 @@ Component.new 'Album', ->
       event.preventDefault()
 
       view = new Component.Album.Modal model: @model, original: this
-      view.render().in()
+      view.render()
       $("body").append view.el
+      view.in()
 
       App.go @model.get('route'), trigger: false

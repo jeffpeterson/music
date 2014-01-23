@@ -8,9 +8,14 @@
 
 #queue > #current-track
   height: 300px
-  > .controls
-    > .remove
-      display: none
+  > .shield
+    > .blur
+      mask-image linear-gradient(to top, black, transparent 300px)
+    > .shadow
+      mask-image linear-gradient(to top, black 60px, transparent 300px)
+
+  > .info > .controls > .remove
+    display: none
 
 li#current-track-fixed.track
   height: 75px !important

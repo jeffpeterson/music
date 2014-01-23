@@ -21,7 +21,7 @@ class App.Views.ItemShow extends Backbone.View
   render: ->
     @$el.attr 'data-index': @model.get('query')
 
-  add_to_collection: ->
+  addToCollection: ->
     @model.add_to_collection()
 
   removeFromCollection: ->
@@ -31,3 +31,8 @@ class App.Views.ItemShow extends Backbone.View
     event.originalEvent.dataTransfer.setData "text/json", JSON.stringify(@model)
     event.originalEvent.dataTransfer.setData "text/richtext", @model.get('rtfLink')
     event.originalEvent.dataTransfer.setData "text/plain", @model.get('full')
+
+  play_now:          @::playNow
+  play_next:         @::playNext
+  add_to_queue:      @::addToQueue
+  add_to_collection: @::addToCollection

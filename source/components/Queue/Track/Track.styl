@@ -1,10 +1,11 @@
 .queue-track
+  padding 0
   overflow hidden
-  height: 60px
-  position: relative
+  height 60px
+  position relative
   background-size: 100% auto
   background-position center center
-  transition: all 0.2s
+  transition all 0.2s
 
   &.dragover
     margin-top: 30px
@@ -12,10 +13,17 @@
   &:hover
     > .shield
       > .shadow
-        opacity 0.3
+        opacity 0
+      > .blur
+        transition opacity 5s
+        opacity 0
+    > .info > .text
+      opacity 0
+
+    > .info > .controls > button
+      opacity 0.7
 
   > .shield
-    mask-image linear-gradient(to top, black 60px, transparent 300px)
     overflow hidden
     pointer-events none
 
@@ -27,9 +35,10 @@
       bottom 0
 
     > .shadow
-      transition opacity 0.5s
+      transition opacity 1s
 
     > .blur
+      transition opacity 2s
       background-size cover
       background-position center center
 
@@ -37,12 +46,14 @@
     bottom 0
     height 60px
     left 0
-    padding-left 15px
+    padding 0 15px
     position absolute
     right 0
 
     > .text
+      transition opacity 1s
       height 100%
+      overflow hidden
       padding: 8px 0
 
       > .track-name
@@ -60,3 +71,11 @@
       float right
       height 100%
       line-height 60px
+
+      > button
+        transition opacity 0.25s
+        transform translate3d(0,0,0)
+        opacity 0.05
+
+        &:hover
+          opacity 0.999

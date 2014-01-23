@@ -4,7 +4,7 @@
 
 .info
   .controls
-    %button.remove.icon-remove-sign
+    %button.remove.icon-remove-sign.fa-fw
 
   .text
     .track-name= @track.get('name')

@@ -9,7 +9,8 @@ Component.Album.Modal.new 'Track', App.Views.TrackShow,
   showActionMenu: (event) ->
     event.stopPropagation()
 
-    isInCollection = @model.get('isInCollection')
+    isInCollection   = @model.get('isInCollection')
+    isSyncedToMobile = @model.get('isSyncedToMobile')
     offset = $(event.target).offset()
 
     new Component.ActionMenu
@@ -19,6 +20,8 @@ Component.Album.Modal.new 'Track', App.Views.TrackShow,
         ['Play Now',               this.play_now]
         ['Play Next',              this.playNext]
         ['Add to Queue',           this.add_to_queue]
-        ['Add to Collection',      this.add_to_collection,    !isInCollection]
-        ['Remove from Collection', this.removeFromCollection, isInCollection]
+        ['Add to Collection',      this.addToCollection,      !isInCollection   ]
+        ['Sync to Mobile',         this.syncToMobile,         !isSyncedToMobile ]
+        ['Remove from Mobile',     this.removeFromMobile,      isSyncedToMobile ]
+        ['Remove from Collection', this.removeFromCollection,  isInCollection   ]
       ]

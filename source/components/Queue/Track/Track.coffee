@@ -7,6 +7,19 @@ Component.Queue.new 'Track', ->
     dragstart:       'dragstart'
     drop:            'drop'
 
+
+  # @state 'resting', 'removed', ->
+  # @state.from('resting').tap (resting) ->
+  #   resting.to 'removed', ->
+  #   resting.to 'current', ->
+  #     @$el.addClass('current')
+
+  # @state.start 'resting', 'loggedIn'
+
+  # @state.go 'removed'
+
+
+
   @extras
     initialize: ->
       _.bindAll this, 'current', 'remove_from_queue', 'drop', 'expand'
@@ -39,14 +52,13 @@ Component.Queue.new 'Track', ->
 
       @$el.css
         backgroundImage: "url(#{@model.artwork.get('icon-500')})"
-        color:           "rgb(#{@colors.primary})"
-        textShadow:      "0 1px 1px rgba(#{bg}, 1)"
+        color:           "rgb(#{@colors[0]})"
 
       @$('.shadow').css
         backgroundColor: "rgb(#{bg})"
 
       @$('.artist-name').css
-        color: "rgb(#{@colors.secondary})"
+        color: "rgb(#{@colors[1]})"
 
       @renderBlur()
 

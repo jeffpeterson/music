@@ -6,6 +6,7 @@ Component.Album.new 'Modal', parent = Component.Modal,
     'click':                'unhighlight'
     'click .view-huge-art': 'viewHugeArt'
     'click .action-menu-button': 'showActionMenu'
+    'scroll .modal-inner':  'onScroll'
 
   render: ->
     @delegateEvents()
@@ -21,37 +22,43 @@ Component.Album.new 'Modal', parent = Component.Modal,
     @$el.html   @styles.render().el
     @$el.append @template(album: @model)
     @$el.attr(style: '')
+    @renderBlur()
 
     @$('.content').append @tracks.render().el
+    @modalInner = @$(".modal-inner")[0]
+    @blur       = @$(".blur")[0]
+    @back       = @$(".back")[0]
+
+    @modalInner.addEventListener 'scroll', @onScroll.bind(@), false
 
     @render_click_shield()
     this
 
-  in: ->
-
   render_colors: ->
     @styles.css
-      '.album-modal-tracks':
-        color:           "rgb(#{@colors.secondary})"
-        textShadow:      "0 1px 1px rgba(#{@colors.background}, 1)"
-      '.front, .back':
-        backgroundColor: "rgb(#{@colors.background})"
-      '.modal .album-name':
-        color: "rgb(#{@colors.primary})"
-      '.modal .artist-name, .modal .release-date':
-        color: "rgb(#{@colors.primary})"
-      '.modal button, .modal button:active, i':
-        color: "rgb(#{@colors.detail})"
-    @renderBlur()
+      '.album-modal':
+        '.album-modal-tracks':
+          color:           "rgb(#{@colors[1]})"
+        '.shadow, .blur, .modal-inner, .back':
+          backgroundColor: "rgb(#{@colors.background})"
+        '.modal-inner':
+          backgroundImage: "url(#{@model.artwork.get('icon-500')})"
+        '.album-name':
+          color: "rgb(#{@colors[0]})"
+        '.artist-name, .release-date':
+          color: "rgb(#{@colors[0]})"
+        'button, button:active, i':
+          color: "rgb(#{@colors[2]})"
     this
 
   renderBlur: ->
     @model.artwork.blur (url) =>
+      @$(".shadow").addClass 'translucent'
+      $(@modalInner).scrollTo(@$(".back"), 600)
       @styles.css
-        '.front':
-          backgroundImage: "url('#{url}')"
-        '.back':
-          backgroundColor: "rgba(#{@colors.background}, 0.8)"
+        '.album-modal':
+          '.blur':
+            backgroundImage: "url('#{url}')"
       @styles.render()
     this
 
@@ -68,6 +75,23 @@ Component.Album.new 'Modal', parent = Component.Modal,
     @out =>
       parent::remove.apply(this, arguments)
 
+  onScroll: (e) ->
+    @scrollTop = @modalInner.scrollTop
+    @alignBlur()
+
+  alignBlur: do ->
+    ticking = false
+    ->
+      if not ticking
+        ticking = true
+        requestAnimationFrame =>
+          ticking = false
+          shadowOpacity = Math.min(@scrollTop / @modalInner.offsetHeight, 0.3)
+
+          @blur.style.backgroundPosition = "center #{@scrollTop}px"
+          @back.style.boxShadow = "rgba(0,0,0, #{shadowOpacity}) 0 99px 30px 99px"
+
+
   showActionMenu: (event) ->
     isInCollection = @model.get('isInCollection')
     offset = $(event.target).offset()
@@ -79,11 +103,6 @@ Component.Album.new 'Modal', parent = Component.Modal,
         ['Add to Collection',      this.add_to_collection,    !isInCollection]
         ['Remove from Collection', this.removeFromCollection, isInCollection]
       ]
-
-  out: (complete) ->
-    @$el.transit
-      opacity: 0,
-      complete: complete
 
   play_station: (event) ->
     event.preventDefault()

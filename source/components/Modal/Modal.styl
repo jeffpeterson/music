@@ -1,19 +1,26 @@
 .modal
-  transition top 0.25s
-  position fixed
-  top 60px
-  left 0
-  right 300px
-  bottom 0
-  z-index 1
-  display -webkit-flex
   align-items center
-  justify-content space-around
-  background-image radial-gradient(farthest-corner, transparent, rgba(black, 0.8))
   animation fade-in modal-animation-duration
+  background-image radial-gradient(farthest-corner, transparent, rgba(black, 0.8))
+  bottom 0
+  display -webkit-flex
+  justify-content center
+  left 0
+  position fixed
+  right 300px
+  top 60px
+  transition top 0.25s
+  z-index 1
 
   > .modal-inner
+    background-color rgba(white, 0.9)
     box-shadow 0 0 100px rgba(black, 0.5)
+    flex-grow 0
+    flex-shrink 1
+    min-height 600px
+    max-height 95%
+    width 600px
+    overflow auto
 
   > .close
     z-index 1

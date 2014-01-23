@@ -6,10 +6,8 @@ App.Views       = {}
 App.Adapters    = {}
 App.Models      = {}
 App.Collections = {}
-App.Routers     = {}
 
 App.adapters   = {}
-App.routers    = {}
 App.collection = {}
 App.catalog    = {}
 
@@ -19,9 +17,7 @@ App.memo_pad = {}
 App.initialize = ->
   App.store.clear()
 
-  App.routers.item       = new App.Routers.Item
-  App.routers.catalog    = new App.Routers.Catalog
-  App.routers.collection = new App.Routers.Collection
+  App.router = new App.Router
 
   App.collection.artists        = new App.Collections.Artists
   App.collection.albums         = new App.Collections.Albums
@@ -42,7 +38,7 @@ App.initialize = ->
   new Component.Queue(model: App.queue).render()
 
   App.adapters.rdio.on 'change:isAuthenticated', (authed) ->
-    App.go 'catalog/top-charts' unless authed
+    App.go 'top-charts' unless authed
 
   Backbone.history.start pushState: false
 
@@ -53,7 +49,7 @@ App.go = (fragment, options = {}) ->
     if url = App.history.pop()
       Backbone.history.navigate url, options
     else
-      App.go(match[1] or 'collection/albums', options)
+      App.go(match[1] or 'collection', options)
   else
     App.history.push Backbone.history.fragment
     Backbone.history.navigate fragment, options
@@ -81,4 +77,4 @@ App.on 'rdio:ready', ->
 
   App.store.set current_user: R.currentUser
 
-  App.go 'catalog/top-charts' unless R.authenticated()
+  App.go 'top-charts' unless R.authenticated()

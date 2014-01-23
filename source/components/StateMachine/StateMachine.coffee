@@ -10,3 +10,4 @@ Component.new 'StateMachine',
         $el.removeClass('signed-out').addClass('signed-in')
 
   }
+

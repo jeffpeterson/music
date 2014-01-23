@@ -19,7 +19,7 @@ class App.Views.Style extends Backbone.View
         @css(sel, props)
       return
 
-    cleaned_properties = @clean_properties(properties)
+    cleaned_properties = @clean_properties(selector, properties)
 
     el = @styles[selector] or= {}
     @styles[selector] = _.defaults cleaned_properties, el
@@ -38,13 +38,23 @@ class App.Views.Style extends Backbone.View
 
     props.join(' ')
 
-  clean_properties: (properties) ->
+  clean_properties: (selector, properties) ->
     cleaned_properties = {}
 
     for property, value of properties
-      p = property.replace /[A-Z]/, (c) ->
-        "-#{c.toLowerCase()}"
+      if typeof value is 'object'
+        key = property.split(/[ ]*,[ ]*/g).map((k) ->
+          if /&/.test k
+            k.replace /&/g, selector
+          else
+            "#{selector} #{k}"
+        ).join(', ')
+        @css(key, value)
 
-      cleaned_properties[p] = value
+      else
+        p = property.replace /[A-Z]/, (c) ->
+          "-#{c.toLowerCase()}"
+
+        cleaned_properties[p] = value
 
     cleaned_properties

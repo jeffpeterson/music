@@ -24,14 +24,20 @@
   &.unavailable
     opacity: 1
 
-    &::before
-      display -webkit-flex
-      line-height 50px
-      background-color rgba(255,255,255, 0.7)
-      padding-top -webkit-calc(100% \- 50px)
+    &::after
+      align-items flex-end
+      background-image linear-gradient(to top, black, rgba(black, 0.4))
+      bottom 0
+      color white
       content "Unavailable"
+      display -webkit-flex
+      justify-content center
+      left 0
       padding-left 15px
-      color #333
+      padding-bottom 15px
+      position absolute
+      right 0
+      top 0
 
 .album
   position relative

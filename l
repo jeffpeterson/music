@@ -41,7 +41,7 @@ task 'component:new', 'create a new component', (fullName) ->
 
   exec "mkdir -p #{path}", ->
     exec "echo \"#{parent}.new '#{name}', \n  initialize: ->\" > #{path}/#{name}.coffee"
-    exec "echo \".#{L.dasherize(parts.join('_'))}\" > #{path}/#{name}.styl"
+    exec "echo \".#{L.dasherize(parts.join('_'))}\n  visibility visible\" > #{path}/#{name}.styl"
     exec "touch #{path}/#{name}.hamlc"
 
 task 'component:convert', 'convert a view to a component', (viewName, compName) ->

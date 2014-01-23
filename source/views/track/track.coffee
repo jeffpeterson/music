@@ -26,7 +26,7 @@ class App.Views.TrackShow extends App.Views.ItemShow
     @$el.html @template(track: @model)
     this
 
-  play_now: (event) ->
+  playNow: (event) ->
     if @playNext(event)
       App.queue.play(@model)
 
@@ -37,7 +37,7 @@ class App.Views.TrackShow extends App.Views.ItemShow
     return this
 
 
-  add_to_queue: ->
+  addToQueue: ->
     return unless @model.get('canStream')
 
     App.queue.tracks.add @model
@@ -48,4 +48,6 @@ class App.Views.TrackShow extends App.Views.ItemShow
     requestAnimationFrame =>
       @$el.addClass('is-highlighted')
 
-
+  play_now:     @::playNow
+  play_next:    @::playNext
+  add_to_queue: @::addToQueue
