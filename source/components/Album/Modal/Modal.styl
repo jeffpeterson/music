@@ -7,14 +7,14 @@ modal-album-animation-duration = modal-animation-duration
     opacity 0.7
 
 .album-modal > .modal-inner
+  -webkit-overflow-scrolling touch
+  background-position center top
+  background-repeat no-repeat
+  background-size 100% auto
   background-size auto 100%
   position relative
-  background-size 100% auto
-  background-repeat no-repeat
-  background-position center top
 
   > .back
-    -webkit-overflow-scrolling touch
     display -webkit-flex
     flex-direction column
     height modal-album-height
