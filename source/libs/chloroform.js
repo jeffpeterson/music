@@ -1,1 +1,1 @@
-/Users/jeffpeterson/code/chloroform/chloroform.js
+../../../chloroform/chloroform.js
