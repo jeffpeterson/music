@@ -38,7 +38,7 @@ Component.Album.new 'Modal', parent = Component.Modal,
     @styles.css
       '.album-modal':
         '.album-modal-tracks':
-          color:           "rgb(#{@colors[1]})"
+          color: "rgb(#{@colors[1]})"
         '.shadow, .blur, .modal-inner, .back':
           backgroundColor: "rgb(#{@colors.background})"
         '.modal-inner':
@@ -54,7 +54,7 @@ Component.Album.new 'Modal', parent = Component.Modal,
   renderBlur: ->
     @model.artwork.blur (url) =>
       @$(".shadow").addClass 'translucent'
-      $(@modalInner).scrollTo(@$(".back"), 600)
+      $(@modalInner).scrollTo("100%", 800)
       @styles.css
         '.album-modal':
           '.blur':
@@ -90,7 +90,6 @@ Component.Album.new 'Modal', parent = Component.Modal,
 
           @blur.style.backgroundPosition = "center #{@scrollTop}px"
           @back.style.boxShadow = "rgba(0,0,0, #{shadowOpacity}) 0 99px 30px 99px"
-
 
   showActionMenu: (event) ->
     isInCollection = @model.get('isInCollection')
