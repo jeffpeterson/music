@@ -1,6 +1,7 @@
 class App.Router extends BetterRouter
   routes:
     'settings':              'settings'
+    'reset-colors':          'resetColors'
     'top-charts':            'topCharts'
     'notifications':         'notifications'
     'collection':            'collection'
@@ -18,6 +19,11 @@ class App.Router extends BetterRouter
   settings: ->
     alert 'settings'
 
+
+  resetColors: ->
+    App.store.set 'colors', {}
+    Backbone.history.navigate 'collection'
+    window.location.reload()
 
   topCharts: ->
     @setCollection App.catalog.top_charts
