@@ -22,6 +22,7 @@ class App.Router extends BetterRouter
 
   resetColors: ->
     App.store.set 'colors', {}
+    App.store.commitNow()
     Backbone.history.navigate 'collection'
     window.location.reload()
 
