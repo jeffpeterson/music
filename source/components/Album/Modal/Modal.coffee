@@ -25,11 +25,14 @@ Component.Album.new 'Modal', parent = Component.Modal,
     @renderBlur()
 
     @$('.content').append @tracks.render().el
-    @modalInner = @$(".modal-inner")[0]
+    @scroller   = @$(".scroller")[0]
     @blur       = @$(".blur")[0]
     @back       = @$(".back")[0]
 
-    @modalInner.addEventListener 'scroll', @onScroll.bind(@), false
+    @ticking = false
+    @onScrollTick = @onScrollTick.bind(this)
+
+    @scroller.addEventListener 'scroll', @onScroll.bind(@), false
 
     @render_click_shield()
     this
@@ -42,7 +45,7 @@ Component.Album.new 'Modal', parent = Component.Modal,
         '.shadow, .blur, .modal-inner, .back':
           backgroundColor: "rgb(#{@colors.background})"
         '.modal-inner':
-          backgroundImage: "url(#{@model.artwork.get('icon-500')})"
+          backgroundImage: "url(#{@model.artwork.get('icon-1200')}), url(#{@model.artwork.get('icon-500')})"
         '.album-name':
           color: "rgb(#{@colors[0]})"
         '.artist-name, .release-date':
@@ -54,7 +57,7 @@ Component.Album.new 'Modal', parent = Component.Modal,
   renderBlur: ->
     @model.artwork.blur (url) =>
       @$(".shadow").addClass 'translucent'
-      $(@modalInner).scrollTo("100%", 800)
+      $(@scroller).scrollTo("100%", 800)
       @styles.css
         '.album-modal':
           '.blur':
@@ -76,20 +79,14 @@ Component.Album.new 'Modal', parent = Component.Modal,
       parent::remove.apply(this, arguments)
 
   onScroll: (e) ->
-    @scrollTop = @modalInner.scrollTop
-    @alignBlur()
+    @scrollTop = @scroller.scrollTop
+    if not @ticking
+      @ticking = true
+      requestAnimationFrame @onScrollTick
 
-  alignBlur: do ->
-    ticking = false
-    ->
-      if not ticking
-        ticking = true
-        requestAnimationFrame =>
-          ticking = false
-          shadowOpacity = Math.min(@scrollTop / @modalInner.offsetHeight, 0.3)
-
-          @blur.style.backgroundPosition = "center #{@scrollTop}px"
-          @back.style.boxShadow = "rgba(0,0,0, #{shadowOpacity}) 0 99px 30px 99px"
+  onScrollTick: ->
+    @ticking = false
+    @blur.style.backgroundPosition = "center #{@scrollTop}px"
 
   showActionMenu: (event) ->
     isInCollection = @model.get('isInCollection')
