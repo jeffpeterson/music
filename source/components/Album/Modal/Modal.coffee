@@ -22,7 +22,6 @@ Component.Album.new 'Modal', parent = Component.Modal,
     @$el.html   @styles.render().el
     @$el.append @template(album: @model)
     @$el.attr(style: '')
-    @renderBlur()
 
     @$('.content').append @tracks.render().el
     @scroller   = @$(".scroller")[0]
@@ -35,6 +34,7 @@ Component.Album.new 'Modal', parent = Component.Modal,
     @scroller.addEventListener 'scroll', @onScroll.bind(@), false
 
     @render_click_shield()
+    @renderBlur()
     this
 
   render_colors: ->
