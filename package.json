@@ -3,15 +3,18 @@
   "version": "0.9.0",
   "dependencies": {
     "backbone":      "1.1.0",
-    "chai":          "1.8.1",
     "coffee-script": "1.6.3",
     "eco":           "1.1.0-rc-3",
     "glob":          "3.2.6",
     "haml-coffee":   "1.13.0",
+    "stylus":        "0.38.0",
+    "underscore":    "1.5.2"
+  },
+  "devDependencies": {
     "mocha":         "1.14.0",
     "sinon":         "1.7.3",
     "sinon-chai":    "2.4.0",
-    "stylus":        "0.38.0",
-    "underscore":        "1.5.2"
+    "chai":          "1.8.1",
+    "livereload":    "0.3.2"
   }
 }

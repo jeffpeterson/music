@@ -1,12 +1,16 @@
-http    = require 'http'
-Request = require '../Request/Request'
-cluster = require 'cluster'
+http       = require 'http'
+Request    = require '../Request/Request'
+cluster    = require 'cluster'
+livereload = require 'livereload'
 
 options = process.env
 
 address = options.address or 'localhost'
 port    = options.port    or 4321
 socket  = options.socket  or null
+
+livereloadServer = livereload.createServer()
+livereloadServer.watch(__dirname + "/..")
 
 server = http.createServer (request, response) ->
   new Request(request, response)

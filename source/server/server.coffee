@@ -3,6 +3,7 @@ os      = require 'os'
 coffee  = require 'coffee-script'
 
 module.exports = (options) ->
+
   cluster.setupMaster
     exec: __dirname + '/Worker/Worker.coffee'
 
