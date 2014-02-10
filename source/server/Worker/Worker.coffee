@@ -9,8 +9,12 @@ address = options.address or 'localhost'
 port    = options.port    or 4321
 socket  = options.socket  or null
 
-livereloadServer = livereload.createServer()
-livereloadServer.watch(__dirname + "/..")
+livereloadServer = livereload.createServer
+  exts: 'coffee js jst styl hamlc'.split(' ')
+  applyCSSLive: true
+  applyJSLive:  true
+
+livereloadServer.watch(__dirname + "/../..")
 
 server = http.createServer (request, response) ->
   new Request(request, response)

@@ -1,27 +1,25 @@
 Component.Album.Modal.new 'Track', App.Views.TrackShow,
   events:
-    'click .action-menu-button': 'showActionMenu'
+    'click .action-menu-button': 'toggleMenu'
     'click .add-to-collection':  'add_to_collection'
     'click .add-to-queue':       'add_to_queue'
     'click':                     'play_now'
     'dragstart':                 'dragstart'
 
-  showActionMenu: (event) ->
+  toggleMenu: (event) ->
     event.stopPropagation()
 
-    isInCollection   = @model.get('isInCollection')
-    isSyncedToMobile = @model.get('isSyncedToMobile')
-    offset = $(event.target).offset()
+    if @menuVisible then @hideMenu() else @showMenu()
 
-    new Component.ActionMenu
-      y: offset.top - $(window).scrollTop()
-      x: offset.left - $(window).scrollLeft()
-      items: [
-        ['Play Now',               this.play_now]
-        ['Play Next',              this.playNext]
-        ['Add to Queue',           this.add_to_queue]
-        ['Add to Collection',      this.addToCollection,      !isInCollection   ]
-        ['Sync to Mobile',         this.syncToMobile,         !isSyncedToMobile ]
-        ['Remove from Mobile',     this.removeFromMobile,      isSyncedToMobile ]
-        ['Remove from Collection', this.removeFromCollection,  isInCollection   ]
-      ]
+  hideMenu: ->
+    @menu.out(@menu.remove.bind(@menu))
+    @menuVisible = false
+
+  showMenu: ->
+    @menuVisible = true
+
+    @menu or= new Component.Album.Modal.Track.Menu(model: @model)
+
+    @$el.append @menu.render().$el.css(opacity: 0, height: 0)
+
+    @menu.in()

@@ -130,6 +130,7 @@
     = component 'Album.Modal'
     = component 'Album.Modal.Tracks'
     = component 'Album.Modal.Track'
+    = component 'Album.Modal.Track.Menu'
 
     = component 'Queue.Track'
     = component 'TopCharts'
