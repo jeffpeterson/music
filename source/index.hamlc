@@ -72,6 +72,7 @@
     = script '/components/Component/Component.js'
 
     -#= css '/libs/font-awesome/font-awesome.css'
+    = css '/libs/icomoon/icomoon.css'
     = css '//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css'
     = css '//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css'
 
