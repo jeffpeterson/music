@@ -36,6 +36,7 @@ App.initialize = ->
   new App.Views.Drag
   new Component.Header().render()
   new Component.Queue(model: App.queue).render()
+  new Component.WindowTitle().render()
 
   App.adapters.rdio.on 'change:isAuthenticated', (authed) ->
     App.go 'top-charts' unless authed

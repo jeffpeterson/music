@@ -134,6 +134,7 @@
     = component 'Queue.Track'
     = component 'TopCharts'
     = component 'HeavyRotation'
+    = component 'WindowTitle'
 
     %script{async: true, src: "//rdio.com/api/api.js?client_id=zpGC9HgrNQDdpyfQdSiwtQ", onload: "App.adapters.rdio.loaded()"}
     %script{async: true, src: "//connect.soundcloud.com/sdk.js", onload: "App.adapters.sound_cloud.loaded()"}
