@@ -1,5 +1,7 @@
 window.App or= {}
 
+module.exports = 1
+
 App.version = 5
 
 App.Views       = {}
