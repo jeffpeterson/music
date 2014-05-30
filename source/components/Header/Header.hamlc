@@ -8,7 +8,7 @@
   %a.sign-in{href: '#'} Sign In
 
 %a{href: '#top-charts'} Top Charts
-%a.notifications.fa.fa-bell-o{href: '#notifications'}
-%a.settings.fa.fa-gear{href: '#settings'}
+-# %a.notifications.fa.fa-bell-o{href: '#notifications'}
+-# %a.settings.fa.fa-gear{href: '#settings'}
 
 %button#show-sidebar.slidable.icon-chevron-left
