@@ -11,7 +11,8 @@ var deps = require('gulp-deps');
 var stylus = require('gulp-stylus');
 var filter = require('gulp-filter');
 var watch = require('gulp-watch');
-var gzip = require("gulp-gzip");
+var gzip = require('gulp-gzip');
+var amdOptimize = require('amd-optimize');
 var livereload = require('gulp-livereload');
 var manifest = require('gulp-manifest');
 var traceur = require('gulp-traceur');
@@ -19,16 +20,20 @@ var hamlc = require('gulp-hamlc');
 var uglify = require('gulp-uglify');
 var clean = require('gulp-clean');
 
-var src = 'source/**';
+var src = 'source/**/*.*';
 var dest = 'build/';
 var pipe = es.pipe;
+
+var split = function() {
+  return this;
+};
 
 var log = function() {
   return es.map(function(file, cb) {
     console.log(file.cwd, file.base, file.path);
     cb(null, file);
   });
-}
+};
 
 var err = function() {
   return plumber({
@@ -39,24 +44,26 @@ var err = function() {
   });
 };
 
-var fext = function(pattern, stream) {
+var fext = function(pattern) {
+  var streams = [].slice.call(arguments, 1);
   var fltr = filter(pattern);
-  return pipe(fltr, stream, fltr.restore());
-}
+  return pipe.apply(this, [fltr].concat(streams, fltr.restore()));
+};
 
-var tape = function(ext, stream) {
+var tape = function(ext) {
+  var streams = [].slice.call(arguments, 1);
   if (/,/.test(ext)) ext = '{' + ext + '}';
 
-  return fext('**/*.' + ext, stream);
+  return fext.apply(this, ['**/*.' + ext].concat(streams));
 };
 
 var build = function() {
   return pipe(
-    err(),
     tape('coffee', coffee()),
-    tape('hamlc',  hamlc({ext: '.jst'})),
-    tape('styl',   stylus({import: './source/views/app/vendor'})),
+    tape('js', traceur({modules: 'amd'})),
+    tape('styl', stylus({import: './source/views/app/vendor'})),
     gulp.dest(dest + 'dev'),
+    log(),
     tape('js,jst', uglify({outSourceMap: true})),
     tape('css,js,jst', pipe(rev(), gzip())),
     fext('!**/*.map', manifest({timestamp: false, reemit: true})),
@@ -66,10 +73,7 @@ var build = function() {
 
 gulp.task('build', function() {
   return pipe(
-    gulp.src('./source/scout.js'),
-    log(),
-    deps(),
-    log(),
+    gulp.src(src),
     build()
   );
 });
@@ -81,8 +85,9 @@ gulp.task('clean', function() {
 
 gulp.task('watch', function() {
   return pipe(
-    gulp.src(src),
+    gulp.src(src, {read: false}),
     watch(),
+    err(),
     build(),
     livereload()
   );

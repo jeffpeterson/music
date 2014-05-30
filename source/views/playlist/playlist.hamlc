@@ -1,3 +1,0 @@
-.text
-  .playlist-name
-    = @playlist.get('name')

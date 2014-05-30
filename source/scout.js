@@ -1,6 +1,7 @@
-require('./libs/stack_blur');
-window.chloroform = require('./libs/chloroform').chloroform;
-window.React      = require('./libs/react-0.10.0.min');
-window.D          = React.DOM;
+import stackBlur  from './libs/stack_blur';
+import chloroform from './libs/chloroform';
+import React      from './libs/react-0.10.0.min';
+import App        from './components/App';
 
-window.App        = require("./components/App");
+window.React = React;
+window.D     = React.DOM;

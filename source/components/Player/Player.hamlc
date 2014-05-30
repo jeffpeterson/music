@@ -1,8 +1,0 @@
-%button.repeat.im.im-spinner6
-%button.prev.im.im-backward2
-- if @state is 'playing'
-  %button.pause.im.im-pause
-- else
-  %button.play.im.im-play3
-%button.next.im.im-forward3
-%button.shuffle.im.im-shuffle

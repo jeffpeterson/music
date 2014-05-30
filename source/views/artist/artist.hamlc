@@ -1,3 +1,0 @@
-%img.album-art{src: @artist.get('icon')}
-.artist-name
-  = @artist.get('name')
