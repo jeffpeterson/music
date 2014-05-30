@@ -3,7 +3,7 @@ Component.new 'Search',
 
   attributes:
     type: 'text'
-    placeholder: 'search . . .'
+    placeholder: 'filter . . .'
 
   events:
     'input': 'onInput'
