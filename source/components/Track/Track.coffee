@@ -1,26 +1,19 @@
-#= require views/items/show
-
-class App.Views.TrackShow extends App.Views.ItemShow
+Component.new 'Track', App.Views.ItemShow,
   tagName: 'li'
-  className: 'track'
-
-  template: JST['templates/tracks/show']
 
   initialize: (options) ->
-    super()
-    _.bindAll this, 'play_now', 'add_to_queue', 'playNext'
-
+    @sup::initialize?.apply(this, arguments)
 
   events:
-    'click .play-now':          'play_now'
-    'click .album-art':         'play_now'
-    'click .add-to-queue':      'add_to_queue'
-    'click .add-to-collection': 'add_to_collection'
+    'click .play-now':          'playNow'
+    'click .album-art':         'playNow'
+    'click .add-to-queue':      'addToQueue'
+    'click .add-to-collection': 'addToCollection'
     'dragstart':                'dragstart'
 
   render: ->
     unless @model.get("canStream")
-      @$el.addClass "unavailable" 
+      @$el.addClass "unavailable"
       @$el.attr draggable: false
 
     @$el.html @template(track: @model)
@@ -47,7 +40,3 @@ class App.Views.TrackShow extends App.Views.ItemShow
 
     requestAnimationFrame =>
       @$el.addClass('is-highlighted')
-
-  play_now:     @::playNow
-  play_next:    @::playNext
-  add_to_queue: @::addToQueue

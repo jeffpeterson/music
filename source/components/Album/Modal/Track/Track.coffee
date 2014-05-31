@@ -1,9 +1,9 @@
-Component.Album.Modal.new 'Track', App.Views.TrackShow,
+Component.Album.Modal.new 'Track', Component.Track,
   events:
     'click .action-menu-button': 'showActionMenu'
-    'click .add-to-collection':  'add_to_collection'
-    'click .add-to-queue':       'add_to_queue'
-    'click':                     'play_now'
+    'click .add-to-collection':  'addToCollection'
+    'click .add-to-queue':       'addToQueue'
+    'click':                     'playNow'
     'dragstart':                 'dragstart'
 
   showActionMenu: (event) ->

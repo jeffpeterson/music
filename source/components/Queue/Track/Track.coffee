@@ -1,5 +1,5 @@
 Component.Queue.new 'Track', ->
-  @superClass App.Views.TrackShow
+  @superClass Component.Track
 
   @events
     'click .remove': 'remove_from_queue'

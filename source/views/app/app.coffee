@@ -19,6 +19,10 @@ App.initialize = ->
 
   App.router = new App.Router
 
+  window.addEventListener 'hashchange', ->
+    ga 'send', 'pageview',
+      page: location.pathname + location.search  + location.hash
+
   App.collection.artists        = new App.Collections.Artists
   App.collection.albums         = new App.Collections.Albums
   App.collection.tracks         = new App.Collections.Tracks
