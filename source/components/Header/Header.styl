@@ -1,6 +1,6 @@
 font-color = hsl(200, 70, 10)
 font-color = rgba(white, 0.7)
-background-color = hsl(200, 70, 1)
+background-color = rgb(40,45,55) // hsl(200, 70, 1)
 
 #bar > #show-sidebar
   display: none
@@ -15,10 +15,10 @@ background-color = hsl(200, 70, 1)
 
   font-size 16px
   white-space nowrap
-  transition: height 0.25s
   display: flex
+  transition: height 100ms
   align-items: center
-  height 60px
+  height 300px
   position: fixed
   top: 0
   left: 0
@@ -26,6 +26,7 @@ background-color = hsl(200, 70, 1)
   z-index: 100
   -webkit-border-image-source linear-gradient(to right, white, black)
   color font-color
+
   a, button
     &:active
       color: rgba(font-color, 0.8)

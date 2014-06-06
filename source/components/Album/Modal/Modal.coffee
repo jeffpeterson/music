@@ -31,7 +31,7 @@ Component.Album.new 'Modal', parent = Component.Modal,
     @ticking = false
     @onScrollTick = @onScrollTick.bind(this)
 
-    @scroller.addEventListener 'scroll', @onScroll.bind(@), false
+    @scroller.addEventListener 'scroll', @onScroll.bind(this), false
 
     @render_click_shield()
     @renderBlur()
@@ -79,14 +79,15 @@ Component.Album.new 'Modal', parent = Component.Modal,
       parent::remove.apply(this, arguments)
 
   onScroll: (e) ->
-    @scrollTop = @scroller.scrollTop
     if not @ticking
       @ticking = true
       requestAnimationFrame @onScrollTick
 
   onScrollTick: ->
     @ticking = false
-    @blur.style.backgroundPosition = "center #{@scrollTop}px"
+
+    scrollTop = @scroller.scrollTop
+    @blur.style.backgroundPosition = "center #{scrollTop}px"
 
   showActionMenu: (event) ->
     isInCollection = @model.get('isInCollection')
