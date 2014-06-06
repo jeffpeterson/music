@@ -23,7 +23,7 @@ modal-album-animation-duration = modal-animation-duration
     top 0
 
     > .back
-      display -webkit-flex
+      display flex
       flex-direction column
       height modal-album-height
       margin-top 100%
@@ -53,10 +53,10 @@ modal-album-animation-duration = modal-animation-duration
           opacity 0.7
 
       > .info
-        -webkit-flex-shrink: 0
+        flex-shrink: 0
         padding 30px 20px 0 30px
         padding-bottom 0
-        display -webkit-flex
+        display flex
         line-height 40px
 
         > .text
@@ -76,7 +76,7 @@ modal-album-animation-duration = modal-animation-duration
               opacity: 0.7
 
         > .controls
-          -webkit-flex-shrink: 0
+          flex-shrink: 0
           text-align: right
           position relative
           > .release-date
@@ -84,7 +84,7 @@ modal-album-animation-duration = modal-animation-duration
             font-weight 400
 
         > .controls-spacer
-          -webkit-flex-shrink 100
+          flex-shrink 100
           visibility hidden
           > .release-date
             white-space nowrap
@@ -104,7 +104,7 @@ modal-album-animation-duration = modal-animation-duration
   //   overflow: auto
   //   max-height: 100%
   //   > .back
-  //     -webkit-flex-shrink: 0
+  //     flex-shrink: 0
   //     height: auto
   //     overflow: hidden
 

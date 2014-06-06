@@ -2,11 +2,11 @@
   width: 300px
   z-index: 20
   position: relative
-  display: -webkit-flex
+  display: flex
   -webkit-justify-content: center
   -webkit-align-items: center
   -webkit-align-self: stretch
-  -webkit-flex-shrink: 0
+  flex-shrink: 0
   > [class *= 'icon']
     width 30px
     text-align: center
@@ -18,7 +18,7 @@
   > .shuffle, > .repeat
     opacity: 0.2
     font-size: 14px
-    -webkit-flex-grow 1
+    flex-grow 1
 
     &.is-on
       opacity: 1

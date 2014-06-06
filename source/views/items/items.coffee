@@ -36,7 +36,7 @@ class App.Views.ItemIndex extends Backbone.View
       return
 
     css = {}
-    css["#content > ul > li:not([data-index*=\"#{query}\"])"] = display: 'none !important'
+    css[".item:not([data-index*=\"#{query}\"])"] = display: 'none !important'
     @styles.css css
     @styles.render()
 

@@ -5,7 +5,7 @@ background-color = hsl(200, 70, 1)
 #bar > #show-sidebar
   display: none
   width 60px
-  -webkit-flex-shrink 0
+  flex-shrink 0
   &.slide-to-left:before
     content: '\f054'
 
@@ -16,7 +16,7 @@ background-color = hsl(200, 70, 1)
   font-size 16px
   white-space nowrap
   transition: height 0.25s
-  display: -webkit-flex
+  display: flex
   align-items: center
   height 60px
   position: fixed
@@ -32,10 +32,10 @@ background-color = hsl(200, 70, 1)
 
   > a, > button
     -webkit-align-self: stretch
-    -webkit-flex-shrink: 1
+    flex-shrink: 1
     overflow hidden
     text-overflow ellipsis
-    display: -webkit-flex
+    display: flex
     padding 2px 6px 0
     border-bottom 2px solid transparent
     transition border-color 0.5s
@@ -51,7 +51,7 @@ background-color = hsl(200, 70, 1)
   width: 60px
   text-align: center
   cursor: default
-  -webkit-flex-shrink: 0
+  flex-shrink: 0
   box-sizing: border-box
   &:active
     color rgba(font-color, 0.8)
