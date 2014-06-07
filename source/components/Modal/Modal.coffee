@@ -6,10 +6,12 @@ Component.new 'Modal',
       scale: 0.5
 
     @$(".modal-inner").transit
-      scale: 1
+      scale: 1,
+      duration: 100
 
     @$el.transit
-      opacity: 1
+      opacity: 1,
+      duration: 100
 
   out: (complete) ->
     @$(".modal-inner").transit
@@ -17,5 +19,5 @@ Component.new 'Modal',
 
     @$el.transit
       opacity: 0,
+      duration: 100,
       complete: complete
-

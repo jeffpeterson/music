@@ -1,7 +1,6 @@
 .modal
   align-items center
   animation fade-in modal-animation-duration
-  background-image radial-gradient(farthest-corner, transparent, rgba(black, 0.8))
   bottom 0
   display flex
   justify-content center
@@ -40,3 +39,11 @@
 
   @media (max-height: 400px)
     top 40px
+
+.modal-shadow
+  position absolute
+  top 0
+  left 0
+  bottom 0
+  right 0
+  background-image radial-gradient(farthest-corner, transparent, rgba(black, 0.8))

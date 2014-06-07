@@ -14,11 +14,10 @@ Component.new 'Album', ->
     render: ->
       @sup::render?.apply(this, arguments)
       unless @model.get("canStream")
-        @$el.addClass "unavailable" 
+        @$el.addClass "unavailable"
         @$el.attr draggable: false
 
-      # @$el.html @template(@model.attributes)
-      @$el.css backgroundImage: "url(#{@model.artwork.get('icon')})"
+      @$el.css backgroundImage: "url(#{@model.artwork.get('icon-500')})"
       this
 
     show: (event) ->

@@ -42,10 +42,14 @@ Component.Album.new 'Modal', parent = Component.Modal,
       '.album-modal':
         '.album-modal-tracks':
           color: "rgb(#{@colors[1]})"
+        '.album-modal-track:hover':
+          backgroundColor: "rgba(#{@colors.contrast}, 0.05)"
         '.shadow, .blur, .modal-inner, .back':
           backgroundColor: "rgb(#{@colors.background})"
         '.modal-inner':
-          backgroundImage: "url(#{@model.artwork.get('icon-1200')}), url(#{@model.artwork.get('icon-500')})"
+          backgroundImage: "url(#{@model.artwork.get('icon-500')})"
+        '.modal-artwork':
+          backgroundImage: "url(#{@model.artwork.get('icon-1200')})"
         '.album-name':
           color: "rgb(#{@colors[0]})"
         '.artist-name, .release-date':
@@ -65,11 +69,67 @@ Component.Album.new 'Modal', parent = Component.Modal,
       @styles.render()
     this
 
-
   render_click_shield: ->
     $("body").addClass('freeze')
     $("#main").addClass('blur')
     this
+
+  in: ->
+    unless @options.original
+      return @sup::in.apply(@, arguments)
+
+    $orig = @options.original.$el
+    $inner = @$(".modal-inner")
+    $shadow = @$(".modal-shadow")
+
+    scale = $orig.width() / $inner.width()
+    offset = $orig.offset()
+    offsetX = offset.left
+    offsetY = offset.top - $(window).scrollTop() - 60
+
+    $shadow.css opacity: 0
+    $shadow.transit opacity: 1, duration: 500
+
+    $inner.css
+      x: (@$el.width() - $inner.width()) / -2 + offsetX
+      y: (@$el.height() - $inner.height()) / -2 + offsetY
+      transformOrigin: '0 0'
+      scale: scale
+
+    $orig.css opacity: 0
+
+    $inner.transit
+      x: 0
+      y: 0
+      scale: 1
+      duration: 500
+
+  out: (done) ->
+    unless @options.original
+      return @sup::out.apply(@, arguments)
+
+    $orig = @options.original.$el
+    $inner = @$(".modal-inner")
+    $shadow = @$(".modal-shadow")
+
+    scale = $orig.width() / $inner.width()
+    offset = $orig.offset()
+    offsetX = offset.left
+    offsetY = offset.top - $(window).scrollTop() - 60
+
+    $shadow.transit opacity: 0, duration: 500
+    $(@scroller).transit opacity: 0, duration: 500
+
+    $inner.transit
+      x: (@$el.width() - $inner.width()) / -2 + offsetX
+      y: (@$el.height() - $inner.height()) / -2 + offsetY
+      transformOrigin: '0 0'
+      scale: scale
+      duration: 500
+      complete: ->
+        $orig.css opacity: 1
+        done()
+
 
   remove: ->
     $('body').removeClass('freeze')
