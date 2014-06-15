@@ -9,8 +9,14 @@
 #queue > #current-track
   height: 300px
   position sticky
-  top 0
+  top -240px
+  bottom -240px
+  z-index 1
+
   > .shield
+    position sticky
+    bottom 0
+    height 100%
     > .blur
       mask-image linear-gradient(to top, black, transparent 300px)
     > .shadow
