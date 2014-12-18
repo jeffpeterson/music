@@ -20,7 +20,7 @@ module.exports = React.createClass({
       var x = 0
 
       analyser.getByteTimeDomainData(data)
-      ctx.fillStyle = 'rgba(255,255,255, 0.01)'
+      ctx.fillStyle = 'rgba(255,255,255, 1)'
       ctx.fillRect(0, 0, width, height)
       // ctx.clearRect(0, 0, width, height)
       ctx.lineWidth = 4
