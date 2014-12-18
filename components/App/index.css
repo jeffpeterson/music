@@ -1,0 +1,12 @@
+.App {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+}
+
+html, body, #mount {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  position: relative;
+}

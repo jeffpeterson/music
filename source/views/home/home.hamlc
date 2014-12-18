@@ -1,9 +1,0 @@
-%h2 browse your Rdio collection with your artwork front and center
-%img.photo{src: 'http://pro.petersonj.com/expanded-album-small.png'}
-
-%h2 play songs from a queue
-%img.photo{src: 'http://pro.petersonj.com/queue-small.png'}
-
-%h2
-  %button.button.authorize sign in to Rdio and get started
-

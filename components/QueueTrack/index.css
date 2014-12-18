@@ -1,0 +1,9 @@
+.QueueTrack {
+  width: 300px;
+}
+
+.QueueTrack:first-child::before {
+  padding-top: 100%;
+  content: '';
+  display: block;
+}

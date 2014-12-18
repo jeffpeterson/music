@@ -1,0 +1,4 @@
+.Queue {
+  min-width: 250px;
+  overflow: scroll;
+}
