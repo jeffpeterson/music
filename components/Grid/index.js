@@ -11,19 +11,19 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function() {
-    // return lib.request({
-    //   method: 'get',
-    //   host: 'https://api.soundcloud.com',
-    //   path: '/users/53101589/favorites.json',
-    //   data: {
-    //     client_id: '6da9f906b6827ba161b90585f4dd3726'
-    //   }
-    // })
     return lib.request({
       method: 'get',
-      host: window.location.host,
-      path: '/mock-data/favorites.json'
+      host: 'https://api.soundcloud.com',
+      path: '/users/53101589/favorites.json',
+      data: {
+        client_id: '6da9f906b6827ba161b90585f4dd3726'
+      }
     })
+    // return lib.request({
+    //   method: 'get',
+    //   host: window.location.host,
+    //   path: '/mock-data/favorites.json'
+    // })
     .then(function(tracks) {
       this.setState({tracks: tracks})
     }.bind(this))
