@@ -230,7 +230,7 @@ module.exports = React.createClass({
       ctx.globalCompositeOperation = 'normal'
       analyser.getByteTimeDomainData(data)
       // analyser.getByteFrequencyData(data)
-      ctx.fillStyle = 'rgba(0,0,0, 0.05)'
+      ctx.fillStyle = 'rgba(0,0,0, 0.1)'
       ctx.fillRect(0, 0, width, height)
       // ctx.clearRect(0, 0, width, height)
       ctx.globalCompositeOperation = 'clear'
