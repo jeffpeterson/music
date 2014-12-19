@@ -1,7 +1,8 @@
 .App {
-  display: flex;
-  align-items: stretch;
   height: 100%;
+  position: relative;
+  background-color: black;
+  color: #888;
 }
 
 html, body, #mount {
@@ -11,22 +12,17 @@ html, body, #mount {
   position: relative;
 }
 .Content {
-  flex: 1 1;
+  height: 100%;
   display: flex;
-  flex-direction: column;
   align-items: stretch;
   position: relative;
 }
 .Grid {
-  margin-top: 150px;
-  flex: 1 1;
   transform: translate3d(0,0,0);
-  display: flex;
-  flex-flow: row wrap;
 }
 .GridTrack {
-  flex: 1 1 300px;
   background-size: cover;
+  float: left;
 }
 
 .GridTrack::before {
@@ -34,15 +30,14 @@ html, body, #mount {
   display: block;
   padding-top: 100%;
 }
+
 .Header {
-  flex: 0 0 150px;
   box-shadow: 0 1px 0 rgba(0,0,0, 0.1),
     inset 0 -1px 0 rgba(0,0,0, 0.1);
   z-index: 1;
   display: flex;
   height: 150px;
   position: absolute;
-  /* background-color: rgba(255, 255, 255, 0.95); */
   top: 0;
   left: 0;
   right: 0;
@@ -51,7 +46,7 @@ html, body, #mount {
   flex: 0 0 50%;
 }
 .Queue {
-  min-width: 250px;
+  margin-top: 150px;
   overflow: scroll;
 }
 .QueueTrack {
@@ -63,9 +58,63 @@ html, body, #mount {
   content: '';
   display: block;
 }
+.Ratio {
+}
+
+/* minus one */
+.Ratio-1 {
+}
+
+@media (min-width: 600px) {
+  /* 3 */
+
+  .Ratio {
+    width: 33%;
+  }
+  .Ratio-1 {
+    width: 50%;
+  }
+}
+
+@media (min-width: 1000px) {
+  /* 1/4 */
+
+  .Ratio {
+    width: 25%;
+  }
+  .Ratio-1 {
+    width: 33%;
+  }
+}
+
+@media (min-width: 1300px) {
+  /* 1/5 */
+
+  .Ratio {
+    width: 20%;
+  }
+  .Ratio-1 {
+    width: 25%;
+  }
+}
+
+@media (min-width: 1600px) {
+  /* 1/6 */
+
+  .Ratio {
+    width: 16.667%;
+  }
+  .Ratio-1 {
+    width: 20%;
+  }
+}
 .Scroller {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
   overflow: scroll;
+  padding-top: 150px;
 }
 
 .Grid::-webkit-scrollbar {
@@ -73,5 +122,5 @@ html, body, #mount {
 }
 .WaveForm {
   flex: 1 0 50%;
-  opacity: 0.95;
+  opacity: 0.9;
 }

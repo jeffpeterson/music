@@ -1,6 +1,6 @@
 .GridTrack {
-  flex: 1 1 300px;
   background-size: cover;
+  float: left;
 }
 
 .GridTrack::before {
@@ -8,3 +8,4 @@
   display: block;
   padding-top: 100%;
 }
+

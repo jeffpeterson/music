@@ -1,0 +1,50 @@
+.Ratio {
+}
+
+/* minus one */
+.Ratio-1 {
+}
+
+@media (min-width: 600px) {
+  /* 3 */
+
+  .Ratio {
+    width: 33%;
+  }
+  .Ratio-1 {
+    width: 50%;
+  }
+}
+
+@media (min-width: 1000px) {
+  /* 1/4 */
+
+  .Ratio {
+    width: 25%;
+  }
+  .Ratio-1 {
+    width: 33%;
+  }
+}
+
+@media (min-width: 1300px) {
+  /* 1/5 */
+
+  .Ratio {
+    width: 20%;
+  }
+  .Ratio-1 {
+    width: 25%;
+  }
+}
+
+@media (min-width: 1600px) {
+  /* 1/6 */
+
+  .Ratio {
+    width: 16.667%;
+  }
+  .Ratio-1 {
+    width: 20%;
+  }
+}

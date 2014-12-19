@@ -3,7 +3,7 @@ var React = require('react')
 var div = React.DOM.div
 
 var player = require('../../lib/player')
-var Queue = React.createFactory(require('../Queue'))
+var Header = React.createFactory(require('../Header'))
 var Content = React.createFactory(require('../Content'))
 
 function mp3Url(track) {
@@ -21,32 +21,31 @@ module.exports = React.createClass({
 
   render: function() {
     return div({className: 'App'},
-      Queue(),
+      Header({analyser: player.analyser}),
       Content({
-        play: this.play,
-        analyser: player.analyser
+        play: this.play
       })
     )
   }
 })
 
-},{"../../lib/player":"/Users/jeff/Dropbox/code/music/lib/player.js","../Content":"/Users/jeff/Dropbox/code/music/components/Content/index.js","../Queue":"/Users/jeff/Dropbox/code/music/components/Queue/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Content/index.js":[function(require,module,exports){
+},{"../../lib/player":"/Users/jeff/Dropbox/code/music/lib/player.js","../Content":"/Users/jeff/Dropbox/code/music/components/Content/index.js","../Header":"/Users/jeff/Dropbox/code/music/components/Header/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Content/index.js":[function(require,module,exports){
 var React = require('react')
 var div = React.DOM.div
-var Header = React.createFactory(require('../Header'))
 var Grid = React.createFactory(require('../Grid'))
+var Queue = React.createFactory(require('../Queue'))
 var Scroller = React.createFactory(require('../Scroller'))
 
 module.exports = React.createClass({
   render: function() {
     return div({className: 'Content'},
-      Header({analyser: this.props.analyser}),
+      Queue(),
       Scroller({}, Grid({play: this.props.play}))
     )
   }
 })
 
-},{"../Grid":"/Users/jeff/Dropbox/code/music/components/Grid/index.js","../Header":"/Users/jeff/Dropbox/code/music/components/Header/index.js","../Scroller":"/Users/jeff/Dropbox/code/music/components/Scroller/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Grid/index.js":[function(require,module,exports){
+},{"../Grid":"/Users/jeff/Dropbox/code/music/components/Grid/index.js","../Queue":"/Users/jeff/Dropbox/code/music/components/Queue/index.js","../Scroller":"/Users/jeff/Dropbox/code/music/components/Scroller/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Grid/index.js":[function(require,module,exports){
 var React = require('react')
 var div = React.DOM.div
 var lib = require('../../lib')
@@ -101,13 +100,14 @@ function artUrl(track) {
 }
 
 module.exports = React.createClass({
+  displayName: 'GridTrack',
   render: function() {
     var style = {
       backgroundImage: 'url(' + artUrl(this.props.track) + ')'
     }
 
     return div({
-      className: 'GridTrack',
+      className: 'GridTrack Ratio-1',
       style: style,
       onClick: this.props.onClick
     })
@@ -145,7 +145,7 @@ var div = React.DOM.div
 
 module.exports = React.createClass({
   render: function() {
-    return div({className: 'Queue'}, 'Queue')
+    return div({className: 'Queue Ratio'}, 'Queue')
   }
 })
 
@@ -217,6 +217,9 @@ module.exports = React.createClass({
     var height = canvas.height
     var ctx = canvas.getContext('2d')
 
+
+    analyser.fftSize = 2048 // this is the max
+
     var bufferLength = analyser.fftSize
     var data = new Uint8Array(bufferLength)
     var step = width / bufferLength
@@ -224,19 +227,24 @@ module.exports = React.createClass({
     function draw() {
       var x = 0
 
+      ctx.globalCompositeOperation = 'normal'
       analyser.getByteTimeDomainData(data)
-      ctx.fillStyle = 'rgba(255,255,255, 1)'
+      // analyser.getByteFrequencyData(data)
+      ctx.fillStyle = 'rgba(0,0,0, 0.05)'
       ctx.fillRect(0, 0, width, height)
       // ctx.clearRect(0, 0, width, height)
-      ctx.lineWidth = 4
-      ctx.strokeStyle = 'rgba(0,0,0, 1)'
+      ctx.globalCompositeOperation = 'clear'
+      ctx.lineWidth = 5
+      ctx.strokeStyle = '#555'
 
       ctx.beginPath()
 
       for(var i = 0; i < bufferLength; i++, x += step) {
         var v = data[i] / 128.0
         var y = v * height * 0.5
-
+        // var y = (1 - (v * 0.5)) * height
+        
+        
         if(i === 0) {
           ctx.moveTo(x, y);
         } else {

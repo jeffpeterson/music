@@ -7,13 +7,14 @@ function artUrl(track) {
 }
 
 module.exports = React.createClass({
+  displayName: 'GridTrack',
   render: function() {
     var style = {
       backgroundImage: 'url(' + artUrl(this.props.track) + ')'
     }
 
     return div({
-      className: 'GridTrack',
+      className: 'GridTrack Ratio-1',
       style: style,
       onClick: this.props.onClick
     })

@@ -2,7 +2,7 @@ var React = require('react')
 var div = React.DOM.div
 
 var player = require('../../lib/player')
-var Queue = React.createFactory(require('../Queue'))
+var Header = React.createFactory(require('../Header'))
 var Content = React.createFactory(require('../Content'))
 
 function mp3Url(track) {
@@ -20,10 +20,9 @@ module.exports = React.createClass({
 
   render: function() {
     return div({className: 'App'},
-      Queue(),
+      Header({analyser: player.analyser}),
       Content({
-        play: this.play,
-        analyser: player.analyser
+        play: this.play
       })
     )
   }

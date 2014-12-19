@@ -1,7 +1,8 @@
 .App {
-  display: flex;
-  align-items: stretch;
   height: 100%;
+  position: relative;
+  background-color: black;
+  color: #888;
 }
 
 html, body, #mount {

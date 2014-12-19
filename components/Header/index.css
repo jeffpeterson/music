@@ -1,12 +1,10 @@
 .Header {
-  flex: 0 0 150px;
   box-shadow: 0 1px 0 rgba(0,0,0, 0.1),
     inset 0 -1px 0 rgba(0,0,0, 0.1);
   z-index: 1;
   display: flex;
   height: 150px;
   position: absolute;
-  /* background-color: rgba(255, 255, 255, 0.95); */
   top: 0;
   left: 0;
   right: 0;

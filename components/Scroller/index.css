@@ -1,6 +1,10 @@
 .Scroller {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
   overflow: scroll;
+  padding-top: 150px;
 }
 
 .Grid::-webkit-scrollbar {
