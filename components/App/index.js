@@ -39,6 +39,7 @@ module.exports = React.createClass({
     return div({className: 'App'},
       Header({
         player: player,
+        currentTrack: this.state.queue[0],
         query: this.state.query,
         setQuery: this.setQuery
       }),

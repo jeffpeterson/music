@@ -1,6 +1,5 @@
-(function(base){
 
-base.Chloroform = function(imageUrl, options) {
+function Chloroform(imageUrl, options) {
   var o;
 
   o = this.options = options || {};
@@ -21,7 +20,7 @@ base.Chloroform = function(imageUrl, options) {
   }
 }
 
-base.Chloroform.prototype = {
+Chloroform.prototype = {
   width:    100,
   height:   100,
 
@@ -187,13 +186,13 @@ base.Chloroform.prototype = {
   ybr: function(rgb) {
     if (typeof rgb === 'string') return this.ybr(rgb.split(','));
 
-    r = rgb[0];
-    g = rgb[1];
-    b = rgb[2];
+    var r = rgb[0];
+    var g = rgb[1];
+    var b = rgb[2];
 
-    y  =       (0.299    * r) + (0.587    * g) + (0.114    * b);
-    cb = 128 - (0.168736 * r) - (0.331264 * g) + (0.5      * b);
-    cr = 128 + (0.5      * r) - (0.418688 * g) - (0.081312 * b);
+    var y  =       (0.299    * r) + (0.587    * g) + (0.114    * b);
+    var cb = 128 - (0.168736 * r) - (0.331264 * g) + (0.5      * b);
+    var cr = 128 + (0.5      * r) - (0.418688 * g) - (0.081312 * b);
 
     return [y, cb, cr];
   },
@@ -239,4 +238,4 @@ Chloroform.analyze = function(imageUrl, options, callback) {
   return new Chloroform(imageUrl, options).analyze(callback);
 }
 
-})(this);
+module.exports = Chloroform

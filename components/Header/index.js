@@ -7,7 +7,7 @@ module.exports = React.createClass({
   displayName: 'Header',
   render: function() {
     return div({className: 'Header'},
-      WaveForm({player: this.props.player}),
+      WaveForm({player: this.props.player, currentTrack: this.props.currentTrack}),
       Search({query: this.props.query, setQuery: this.props.setQuery})
     )
   }

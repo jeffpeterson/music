@@ -40,6 +40,7 @@ module.exports = React.createClass({
     return div({className: 'App'},
       Header({
         player: player,
+        currentTrack: this.state.queue[0],
         query: this.state.query,
         setQuery: this.setQuery
       }),
@@ -161,7 +162,7 @@ module.exports = React.createClass({
   displayName: 'Header',
   render: function() {
     return div({className: 'Header'},
-      WaveForm({player: this.props.player}),
+      WaveForm({player: this.props.player, currentTrack: this.props.currentTrack}),
       Search({query: this.props.query, setQuery: this.props.setQuery})
     )
   }
@@ -284,13 +285,24 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    return input({className: 'Search', value: this.props.query, onChange: this.handleChange})
+    return input({
+      className: 'Search',
+      value: this.props.query,
+      onChange: this.handleChange
+    })
   }
 })
 
 },{"react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/WaveForm/index.js":[function(require,module,exports){
 var React = require('react')
 var canvas = React.DOM.canvas
+var Chloroform = require('../../vendor/chloroform')
+
+function artUrl(track) {
+  var url = track.artwork_url || track.user.avatar_url || ''
+  return url.replace('-large', '-t500x500')
+}
+
 
 module.exports = React.createClass({
   displayName: 'WaveForm',
@@ -303,7 +315,17 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
+      backgroundRgb: '0,0,0',
+      lineRgb: '255,255,255',
+      opacity: 1
     }
+  },
+
+  componentWillReceiveProps: function(props) {
+    if (props.currentTrack !== this.props.currentTrack) {
+      this.changeColorsToMatchTrack(props.currentTrack)
+    }
+
   },
 
   componentDidMount: function() {
@@ -315,21 +337,22 @@ module.exports = React.createClass({
     var height = canvas.height
     var ctx = canvas.getContext('2d')
 
-
     analyser.fftSize = this.props.fftSize
     analyser.smoothingTimeConstant = 1
 
     var bufferLength = analyser.frequencyBinCount
     var data = new Float32Array(bufferLength)
     var step = width / bufferLength
+    var that = this
 
-    ctx.fillStyle = 'black'
     ctx.lineWidth = 5
-    ctx.strokeStyle = '#333'
 
     function draw() {
       var x = 0
       var y, v;
+
+      ctx.fillStyle = 'rgba(' + that.state.backgroundRgb + ', 1)'
+      ctx.strokeStyle = 'rgba(' + that.state.lineRgb + ', ' + that.state.opacity + ')'
 
       analyser.getFloatTimeDomainData(data)
 
@@ -338,7 +361,7 @@ module.exports = React.createClass({
       ctx.beginPath()
 
       for(var i = 0; i < bufferLength; i++, x += step) {
-        v = data[i] * 0.5 + 0.5
+        v = (data[i] * 0.5 * warp(i / bufferLength)) + 0.5
         y = v * height
 
         if(i === 0) {
@@ -358,10 +381,23 @@ module.exports = React.createClass({
 
   render: function() {
     return canvas({className: 'WaveForm'})
+  },
+
+  changeColorsToMatchTrack: function(track) {
+    Chloroform.analyze(artUrl(track), function(colors) {
+      this.setState({
+        backgroundRgb: colors.background,
+        lineRgb: colors[0]
+      })
+    }.bind(this))
   }
 })
 
-},{"react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/index.js":[function(require,module,exports){
+function warp(x) {
+  return -(x * 2 - 2) * x
+}
+
+},{"../../vendor/chloroform":"/Users/jeff/Dropbox/code/music/vendor/chloroform.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/index.js":[function(require,module,exports){
 var React = require('react')
 var App = React.createFactory(require('./components/App'))
 
@@ -387,7 +423,7 @@ source.connect(analyser)
 analyser.connect(gain)
 gain.connect(ctx.destination)
 
-gain.gain.value = 0.1
+gain.gain.value = 1
 
 module.exports = {
   play: function play(track) {
@@ -18866,4 +18902,247 @@ module.exports = warning;
 },{"./emptyFunction":"/Users/jeff/Dropbox/code/music/node_modules/react/lib/emptyFunction.js","_process":"/Users/jeff/Dropbox/code/music/node_modules/browserify/node_modules/process/browser.js"}],"/Users/jeff/Dropbox/code/music/node_modules/react/react.js":[function(require,module,exports){
 module.exports = require('./lib/React');
 
-},{"./lib/React":"/Users/jeff/Dropbox/code/music/node_modules/react/lib/React.js"}]},{},["/Users/jeff/Dropbox/code/music/index.js"]);
+},{"./lib/React":"/Users/jeff/Dropbox/code/music/node_modules/react/lib/React.js"}],"/Users/jeff/Dropbox/code/music/vendor/chloroform.js":[function(require,module,exports){
+
+function Chloroform(imageUrl, options) {
+  var o;
+
+  o = this.options = options || {};
+
+  o.count     || (o.count     = 3);
+  o.subsample || (o.subsample = 0);
+
+  this.imageUrl          = imageUrl;
+  this.colors            = {};
+  this.canvas            = document.createElement('canvas');
+  this.canvas.width      = this.width;
+  this.canvas.height     = this.height;
+  this.ctx               = this.canvas.getContext('2d');
+  this.image             = new Image();
+
+  if (!/^data:/.test(this.imageUrl)) {
+    this.image.crossOrigin = "anonymous";
+  }
+}
+
+Chloroform.prototype = {
+  width:    100,
+  height:   100,
+
+  afterImageLoads: function(fn) {
+    this.image.onload = fn.bind(this);
+    this.image.src    = this.imageUrl;
+
+    return this;
+  },
+
+  analyze: function(callback) {
+    this.afterImageLoads(function(){
+      this.analyzeNow();
+      callback && callback(this.colors);
+    });
+
+    return this;
+  },
+
+  analyzeNow: function() {
+    var colors, lastFoundColor;
+
+    this.ctx.drawImage(this.image, 0, 0, this.width, this.height);
+
+    this.colors.background = this.findBackground();
+    this.colors.contrast   = this.isDark(this.colors.background) ? '255,255,255' : '0,0,0';
+    lastFoundColor         = this.colors.contrast;
+
+    colors = this.findColors(this.imageData(), {subsample: 1});
+
+    for (var i = 0; i < this.options.count; i++) {
+      lastFoundColor = this.colors[i] = colors[i] || lastFoundColor;
+    }
+
+    return this;
+  },
+
+  imageData: function(left, top, width, height) {
+    left   || (left   = 0);
+    top    || (top    = 0);
+    width  || (width  = this.width);
+    height || (height = this.height);
+
+    return this.ctx.getImageData(left, top, width, height).data;
+  },
+
+  findBackground: function(size, offset) {
+    var edgePixels;
+
+    size   || (size   = 1);
+    offset || (offset = 0);
+
+    edgePixels = [];
+
+    // top
+    [].push.apply(edgePixels, this.imageData(
+      offset,
+      offset,
+      this.width - offset * 2,
+      size
+    ));
+
+      // right
+    [].push.apply(edgePixels, this.imageData(
+      this.width - offset - size,
+      offset,
+      size,
+      this.height - offset * 2
+    ));
+
+      // bottom
+    [].push.apply(edgePixels, this.imageData(
+      offset,
+      this.height - offset - size,
+      this.width - offset * 2,
+      size
+    ));
+
+    // left
+    [].push.apply(edgePixels, this.imageData(
+      offset,
+      offset,
+      size,
+      this.height - offset * 2
+    ));
+
+    return this.findColors(edgePixels, { count: 1 })[0]
+  },
+
+  findColors: function(pixels, options) {
+    var numberOfColors, diff, stepSize, subsample, counts, groupedCounts;
+
+    options || (options = {});
+
+    numberOfColors = options.count         || 3;
+    diff           = options.startDistance || 0;
+    stepSize       = options.stepBy        || 500;
+    subsample      = options.subsample     || 0;
+
+    counts = groupedCounts = this.countColors(pixels, subsample);
+
+    for (var i = 0; i < 10; i++) {
+      if (Object.keys(counts).length <= numberOfColors) break;
+
+      counts = groupedCounts;
+      groupedCounts = this.groupColorsByCount(counts, diff += stepSize);
+    }
+
+    return this.colorsSortedByCount(counts);
+  },
+
+  countColors: function(pixels, subsample) {
+    var counts, step, key, rgb;
+
+    counts = {};
+    step = 4 * (subsample + 1);
+
+    for (var i = 0; i < pixels.length; i += step) {
+      rgb = [pixels[i], pixels[i + 1], pixels[i + 2]];
+
+      if (this.colors.background && !this.contrastsBackground(rgb)) continue;
+
+      key = rgb.join(',');
+
+      counts[key] || (counts[key] = 0);
+      counts[key]  += 1;
+    }
+
+    return counts;
+  },
+
+  colorsSortedByCount: function(counts) {
+    return Object.keys(counts).sort(function(a, b) {
+      return counts[b] - counts[a];
+    });
+  },
+
+  groupColorsByCount: function(counts, diff) {
+    var groups, colors, i, j;
+
+    groups = {};
+    colors = this.colorsSortedByCount(counts);
+    i      = 0;
+
+    while (bucket = colors[i++]) {
+      groups[bucket] = counts[bucket];
+      j = i;
+
+      while (colors[j]) {
+        if (this.areDiffering(bucket, colors[j], diff)) {
+          j++;
+        } else {
+          groups[bucket] += counts[colors[j]];
+          colors.splice(j, 1);
+        }
+      }
+    }
+
+    return groups;
+  },
+
+
+  ybr: function(rgb) {
+    if (typeof rgb === 'string') return this.ybr(rgb.split(','));
+
+    var r = rgb[0];
+    var g = rgb[1];
+    var b = rgb[2];
+
+    var y  =       (0.299    * r) + (0.587    * g) + (0.114    * b);
+    var cb = 128 - (0.168736 * r) - (0.331264 * g) + (0.5      * b);
+    var cr = 128 + (0.5      * r) - (0.418688 * g) - (0.081312 * b);
+
+    return [y, cb, cr];
+  },
+
+  distanceSquared: function(a, b) {
+    var sum;
+
+    a   = this.ybr(a);
+    b   = this.ybr(b);
+
+    sum  = Math.pow(a[0] - b[0], 2);
+    sum += Math.pow(a[1] - b[1], 2);
+    sum += Math.pow(a[2] - b[2], 2);
+
+    return sum;
+  },
+
+  areDiffering: function(a, b, diff) {
+    diff || (diff = 3000)
+    return this.distanceSquared(a, b) > diff;
+  },
+
+  isDark: function(color) {
+    return this.ybr(color)[0] < 127;
+  },
+
+  areContrasting: function(a, b, diff) {
+    diff || (diff = 75)
+    return Math.abs(this.ybr(a)[0] - this.ybr(b)[0]) > diff;
+  },
+
+  contrastsBackground: function(colorKey) {
+    return this.areContrasting(this.colors.background, colorKey);
+  }
+}
+
+Chloroform.analyze = function(imageUrl, options, callback) {
+  if (!callback) {
+    callback = options;
+    options  = {};
+  }
+
+  return new Chloroform(imageUrl, options).analyze(callback);
+}
+
+module.exports = Chloroform
+
+},{}]},{},["/Users/jeff/Dropbox/code/music/index.js"]);
