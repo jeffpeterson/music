@@ -65,7 +65,7 @@ module.exports = React.createClass({
       ctx.beginPath()
 
       for(var i = 0; i < bufferLength; i++, x += step) {
-        v = (data[i] * 0.5 * warp(i / bufferLength)) + 0.5
+        v = data[i] * 0.5 + 0.5
         y = v * height
 
         if(i === 0) {
