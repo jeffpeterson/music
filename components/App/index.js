@@ -1,6 +1,7 @@
 var React = require('react')
 var div = React.DOM.div
 
+var Chloroform = require('../../vendor/chloroform')
 var lib = require('../../lib')
 var player = lib.player
 var Header = React.createFactory(require('../Header'))
@@ -16,6 +17,7 @@ module.exports = React.createClass({
       query: '',
       tracks: [],
       isLoading: true,
+      colors: [],
       queue: []
     }
   },
@@ -36,14 +38,22 @@ module.exports = React.createClass({
   },
 
   render: function() {
+    var style = {
+      backgroundColor: 'rgb(' + this.state.colors.background + ')'
+    }
+
     return div({className: 'App'},
       Header({
+        colors: this.state.colors,
         player: player,
         currentTrack: this.state.queue[0],
         query: this.state.query,
         setQuery: this.setQuery
       }),
-      div({className: 'AppBody'},
+      div({
+        className: 'AppBody',
+        style: style
+      },
         Queue({tracks: this.state.queue}),
         Scroller({loadNextPage: this.loadNextPage},
           Grid({
@@ -57,6 +67,7 @@ module.exports = React.createClass({
 
   play: function(track) {
     this.setState({ queue: [track] })
+    this.changeColorsToMatchTrack(track)
     player.play(track)
   },
 
@@ -81,6 +92,12 @@ module.exports = React.createClass({
         tracks: this.state.tracks.concat(tracks)
       })
     }.bind(this))
+  },
+
+  changeColorsToMatchTrack: function(track) {
+    Chloroform.analyze(artUrl(track), function(colors) {
+      this.setState({ colors: colors })
+    }.bind(this))
   }
 })
 
@@ -100,5 +117,10 @@ function search(options) {
       q: query
     }
   })
+}
+
+function artUrl(track) {
+  var url = track.artwork_url || track.user.avatar_url || ''
+  return url.replace('-large', '-t500x500')
 }
 
