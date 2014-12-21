@@ -55,10 +55,12 @@ html, body, #mount {
   display: block;
 }
 .Ratio {
+  width: 50%;
 }
 
 /* minus one */
 .Ratio-1 {
+  width: 100%;
 }
 
 @media (min-width: 600px) {
