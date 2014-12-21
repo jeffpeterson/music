@@ -1,0 +1,17 @@
+.Search {
+  background: none;
+  border: none;
+  color: white;
+  display: flex;
+  font-size: 80px;
+  height: 150px;
+  left: 0;
+  line-height: 150px;
+  outline: none;
+  padding: 0 20px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}

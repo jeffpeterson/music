@@ -8,6 +8,7 @@ function artUrl(track) {
 
 module.exports = React.createClass({
   displayName: 'GridTrack',
+
   render: function() {
     var style = {
       backgroundImage: 'url(' + artUrl(this.props.track) + ')'

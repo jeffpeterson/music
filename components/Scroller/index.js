@@ -23,7 +23,7 @@ module.exports = React.createClass({
       millisToBottom = distanceToBottom / pixelsPerMilli
 
       if (millisToBottom < 400 && millisToBottom >= 0) {
-        console.log(millisToBottom)
+        this.props.loadNextPage()
       }
     }.bind(this)
 

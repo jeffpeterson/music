@@ -1,5 +1,5 @@
 .QueueTrack {
-  width: 300px;
+  background-size: cover;
 }
 
 .QueueTrack:first-child::before {

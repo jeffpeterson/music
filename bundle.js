@@ -2,95 +2,131 @@
 var React = require('react')
 var div = React.DOM.div
 
-var player = require('../../lib/player')
+var lib = require('../../lib')
+var player = lib.player
 var Header = React.createFactory(require('../Header'))
-var Content = React.createFactory(require('../Content'))
-
-function mp3Url(track) {
-  return track.stream_url + '?client_id=6da9f906b6827ba161b90585f4dd3726'
-}
-
-module.exports = React.createClass({
-  play: function(track) {
-    player.play(mp3Url(track))
-  },
-
-  getInitialState: function() {
-    return {}
-  },
-
-  render: function() {
-    return div({className: 'App'},
-      Header({analyser: player.analyser}),
-      Content({
-        play: this.play
-      })
-    )
-  }
-})
-
-},{"../../lib/player":"/Users/jeff/Dropbox/code/music/lib/player.js","../Content":"/Users/jeff/Dropbox/code/music/components/Content/index.js","../Header":"/Users/jeff/Dropbox/code/music/components/Header/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Content/index.js":[function(require,module,exports){
-var React = require('react')
-var div = React.DOM.div
 var Grid = React.createFactory(require('../Grid'))
 var Queue = React.createFactory(require('../Queue'))
 var Scroller = React.createFactory(require('../Scroller'))
 
 module.exports = React.createClass({
-  render: function() {
-    return div({className: 'Content'},
-      Queue(),
-      Scroller({}, Grid({play: this.props.play}))
-    )
-  }
-})
+  displayName: 'App',
 
-},{"../Grid":"/Users/jeff/Dropbox/code/music/components/Grid/index.js","../Queue":"/Users/jeff/Dropbox/code/music/components/Queue/index.js","../Scroller":"/Users/jeff/Dropbox/code/music/components/Scroller/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Grid/index.js":[function(require,module,exports){
-var React = require('react')
-var div = React.DOM.div
-var lib = require('../../lib')
-var GridTrack = React.createFactory(require('../GridTrack'))
-
-module.exports = React.createClass({
   getInitialState: function() {
     return {
-      tracks: []
+      query: 'testing',
+      tracks: [],
+      isLoading: true,
+      queue: []
     }
   },
 
   componentDidMount: function() {
-    return lib.request({
-      method: 'get',
-      host: 'https://api.soundcloud.com',
-      path: '/users/53101589/favorites.json',
-      data: {
-        client_id: '6da9f906b6827ba161b90585f4dd3726'
-      }
-    })
-    // return lib.request({
-    //   method: 'get',
-    //   host: window.location.host,
-    //   path: '/mock-data/favorites.json'
-    // })
+    search()
     .then(function(tracks) {
-      this.setState({tracks: tracks})
+      if (!this.isMounted()) {
+        return
+      }
+
+
+      this.setState({
+        tracks: tracks,
+        isLoading: false
+      })
     }.bind(this))
   },
 
   render: function() {
+    return div({className: 'App'},
+      Header({
+        player: player,
+        query: this.state.query,
+        setQuery: this.setQuery
+      }),
+      div({className: 'AppBody'},
+        Queue({tracks: this.state.queue}),
+        Scroller({loadNextPage: this.loadNextPage},
+          Grid({
+            play: this.play,
+            tracks: this.state.tracks
+          })
+        )
+      )
+    )
+  },
+
+  play: function(track) {
+    this.setState({ queue: [track] })
+    player.play(track)
+  },
+
+  setQuery: function(query) {
+    this.setState({query: query})
+  },
+
+  loadNextPage: function() {
+    if (this.state.isLoading) {
+      return
+    }
+
+    this.setState({ isLoading: true })
+
+    return search({
+      offset: this.state.tracks.length + 50,
+      query: this.state.query
+    })
+    .then(function(tracks) {
+      this.setState({
+        isLoading: false,
+        tracks: this.state.tracks.concat(tracks)
+      })
+    }.bind(this))
+  }
+})
+
+function search(options) {
+  options = options || {}
+  var query = options.query
+  var offset = options.offset || 0
+
+  return lib.request({
+    method: 'get',
+    host: 'https://api.soundcloud.com',
+    path: '/users/53101589/favorites.json',
+    data: {
+      client_id: '6da9f906b6827ba161b90585f4dd3726',
+      limit: 50,
+      offset: offset,
+      q: query
+    }
+  })
+}
+
+
+},{"../../lib":"/Users/jeff/Dropbox/code/music/lib/index.js","../Grid":"/Users/jeff/Dropbox/code/music/components/Grid/index.js","../Header":"/Users/jeff/Dropbox/code/music/components/Header/index.js","../Queue":"/Users/jeff/Dropbox/code/music/components/Queue/index.js","../Scroller":"/Users/jeff/Dropbox/code/music/components/Scroller/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Grid/index.js":[function(require,module,exports){
+var React = require('react')
+var div = React.DOM.div
+var GridTrack = React.createFactory(require('../GridTrack'))
+
+module.exports = React.createClass({
+  displayName: 'Grid',
+
+  render: function() {
+    var play = this.props.play
+
     return div({className: 'Grid'},
-     this.state.tracks.map(function(track) {
+     this.props.tracks.map(function(track) {
        return GridTrack({
-         onClick: this.props.play.bind(this, track),
+         onClick: play.bind(null, track),
          track: track,
          key: track.id
        })
-     }.bind(this))
+     })
     )
   }
 })
 
-},{"../../lib":"/Users/jeff/Dropbox/code/music/lib/index.js","../GridTrack":"/Users/jeff/Dropbox/code/music/components/GridTrack/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/GridTrack/index.js":[function(require,module,exports){
+},{"../GridTrack":"/Users/jeff/Dropbox/code/music/components/GridTrack/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/GridTrack/index.js":[function(require,module,exports){
 var React = require('react')
 var div = React.DOM.div
 
@@ -101,6 +137,7 @@ function artUrl(track) {
 
 module.exports = React.createClass({
   displayName: 'GridTrack',
+
   render: function() {
     var style = {
       backgroundImage: 'url(' + artUrl(this.props.track) + ')'
@@ -118,34 +155,67 @@ module.exports = React.createClass({
 var React = require('react')
 var div = React.DOM.div
 var WaveForm = React.createFactory(require('../WaveForm'))
-var Nav = React.createFactory(require('../Nav'))
+var Search = React.createFactory(require('../Search'))
 
 module.exports = React.createClass({
+  displayName: 'Header',
   render: function() {
     return div({className: 'Header'},
-      WaveForm({analyser: this.props.analyser})
+      WaveForm({player: this.props.player}),
+      Search({query: this.props.query, setQuery: this.props.setQuery})
     )
   }
 })
 
-},{"../Nav":"/Users/jeff/Dropbox/code/music/components/Nav/index.js","../WaveForm":"/Users/jeff/Dropbox/code/music/components/WaveForm/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Nav/index.js":[function(require,module,exports){
+},{"../Search":"/Users/jeff/Dropbox/code/music/components/Search/index.js","../WaveForm":"/Users/jeff/Dropbox/code/music/components/WaveForm/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Queue/index.js":[function(require,module,exports){
 var React = require('react')
 var div = React.DOM.div
+var QueueTrack = React.createFactory(require('../QueueTrack'))
 
 module.exports = React.createClass({
-  displayName: 'Nav',
+  displayName: 'Queue',
+
+  getDefaultProps: function() {
+    return {
+      tracks: []
+    }
+  },
+
   render: function() {
-    return div({className: 'Nav'})
+    return div({className: 'Queue Ratio'},
+      this.props.tracks.map(function(track) {
+        return QueueTrack({ track: track, key: track.id })
+      })
+    )
   }
 })
 
-},{"react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Queue/index.js":[function(require,module,exports){
+},{"../QueueTrack":"/Users/jeff/Dropbox/code/music/components/QueueTrack/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/QueueTrack/index.js":[function(require,module,exports){
 var React = require('react')
 var div = React.DOM.div
 
+function artUrl(track) {
+  var url = track.artwork_url || track.user.avatar_url || ''
+  return url.replace('-large', '-t500x500')
+}
+
+
 module.exports = React.createClass({
+  displayName: 'QueueTrack',
+
+  handleClick: function() {
+  },
+
   render: function() {
-    return div({className: 'Queue Ratio'}, 'Queue')
+    var style = {
+      backgroundImage: 'url(' + artUrl(this.props.track) + ')'
+    }
+
+    return div({
+      className: 'QueueTrack',
+      style: style,
+      onClick: this.handleClick
+    })
   }
 })
 
@@ -175,7 +245,7 @@ module.exports = React.createClass({
       millisToBottom = distanceToBottom / pixelsPerMilli
 
       if (millisToBottom < 400 && millisToBottom >= 0) {
-        console.log(millisToBottom)
+        this.props.loadNextPage()
       }
     }.bind(this)
 
@@ -202,14 +272,42 @@ module.exports = React.createClass({
   }
 })
 
+},{"react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Search/index.js":[function(require,module,exports){
+var React = require('react')
+var input = React.DOM.input
+
+module.exports = React.createClass({
+  displayName: 'Search',
+
+  handleChange: function(e) {
+    this.props.setQuery(e.target.value)
+  },
+
+  render: function() {
+    return input({className: 'Search', value: this.props.query, onChange: this.handleChange})
+  }
+})
+
 },{"react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/WaveForm/index.js":[function(require,module,exports){
 var React = require('react')
 var canvas = React.DOM.canvas
 
 module.exports = React.createClass({
   displayName: 'WaveForm',
+
+  getDefaultProps: function() {
+    return {
+      fftSize: 2048
+    }
+  },
+
+  getInitialState: function() {
+    return {
+    }
+  },
+
   componentDidMount: function() {
-    var analyser = this.props.analyser
+    var analyser = this.props.player.analyser
     var canvas = this.getDOMNode()
     canvas.width = canvas.clientWidth * window.devicePixelRatio
     canvas.height = canvas.clientHeight * window.devicePixelRatio
@@ -218,33 +316,31 @@ module.exports = React.createClass({
     var ctx = canvas.getContext('2d')
 
 
-    analyser.fftSize = 2048 // this is the max
+    analyser.fftSize = this.props.fftSize
+    analyser.smoothingTimeConstant = 1
 
-    var bufferLength = analyser.fftSize
-    var data = new Uint8Array(bufferLength)
+    var bufferLength = analyser.frequencyBinCount
+    var data = new Float32Array(bufferLength)
     var step = width / bufferLength
+
+    ctx.fillStyle = 'black'
+    ctx.lineWidth = 5
+    ctx.strokeStyle = '#333'
 
     function draw() {
       var x = 0
+      var y, v;
 
-      ctx.globalCompositeOperation = 'normal'
-      analyser.getByteTimeDomainData(data)
-      // analyser.getByteFrequencyData(data)
-      ctx.fillStyle = 'rgba(0,0,0, 0.1)'
+      analyser.getFloatTimeDomainData(data)
+
       ctx.fillRect(0, 0, width, height)
-      // ctx.clearRect(0, 0, width, height)
-      ctx.globalCompositeOperation = 'clear'
-      ctx.lineWidth = 5
-      ctx.strokeStyle = '#555'
 
       ctx.beginPath()
 
       for(var i = 0; i < bufferLength; i++, x += step) {
-        var v = data[i] / 128.0
-        var y = v * height * 0.5
-        // var y = (1 - (v * 0.5)) * height
-        
-        
+        v = data[i] * 0.5 + 0.5
+        y = v * height
+
         if(i === 0) {
           ctx.moveTo(x, y);
         } else {
@@ -256,7 +352,8 @@ module.exports = React.createClass({
 
       requestAnimationFrame(draw)
     }
-    draw()
+
+    requestAnimationFrame(draw)
   },
 
   render: function() {
@@ -284,6 +381,8 @@ var source = ctx.createMediaElementSource(el)
 var analyser = ctx.createAnalyser()
 var gain = ctx.createGain()
 
+el.loop = true
+
 source.connect(analyser)
 analyser.connect(gain)
 gain.connect(ctx.destination)
@@ -291,8 +390,8 @@ gain.connect(ctx.destination)
 gain.gain.value = 0.1
 
 module.exports = {
-  play: function play(url) {
-    el.src = url
+  play: function play(track) {
+    el.src = mp3Url(track)
     el.play()
   },
 
@@ -300,6 +399,9 @@ module.exports = {
   analyser: analyser
 }
 
+function mp3Url(track) {
+  return track.stream_url + '?client_id=6da9f906b6827ba161b90585f4dd3726'
+}
 
 
 },{}],"/Users/jeff/Dropbox/code/music/lib/request.js":[function(require,module,exports){
