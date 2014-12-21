@@ -1,35 +1,16 @@
 var React = require('react')
 var canvas = React.DOM.canvas
-var Chloroform = require('../../vendor/chloroform')
-
-function artUrl(track) {
-  var url = track.artwork_url || track.user.avatar_url || ''
-  return url.replace('-large', '-t500x500')
-}
-
 
 module.exports = React.createClass({
   displayName: 'WaveForm',
 
   getDefaultProps: function() {
     return {
-      fftSize: 2048
-    }
-  },
-
-  getInitialState: function() {
-    return {
+      fftSize: 2048,
+      isDimmed: false,
       backgroundRgb: '0,0,0',
-      lineRgb: '255,255,255',
-      opacity: 1
+      lineRgb: '255,255,255'
     }
-  },
-
-  componentWillReceiveProps: function(props) {
-    if (props.currentTrack !== this.props.currentTrack) {
-      this.changeColorsToMatchTrack(props.currentTrack)
-    }
-
   },
 
   componentDidMount: function() {
@@ -55,8 +36,8 @@ module.exports = React.createClass({
       var x = 0
       var y, v;
 
-      ctx.fillStyle = 'rgba(' + that.state.backgroundRgb + ', 1)'
-      ctx.strokeStyle = 'rgba(' + that.state.lineRgb + ', ' + that.state.opacity + ')'
+      ctx.fillStyle = 'rgba(' + that.props.backgroundRgb + ', 1)'
+      ctx.strokeStyle = 'rgba(' + that.props.lineRgb + ', ' + that.opacity() + ')'
 
       analyser.getFloatTimeDomainData(data)
 
@@ -87,13 +68,8 @@ module.exports = React.createClass({
     return canvas({className: 'WaveForm'})
   },
 
-  changeColorsToMatchTrack: function(track) {
-    Chloroform.analyze(artUrl(track), function(colors) {
-      this.setState({
-        backgroundRgb: colors.background,
-        lineRgb: colors[0]
-      })
-    }.bind(this))
+  opacity: function() {
+    return this.props.isDimmed ? 0.2 : 1
   }
 })
 

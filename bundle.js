@@ -14,7 +14,7 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      query: 'testing',
+      query: '',
       tracks: [],
       isLoading: true,
       queue: []
@@ -154,21 +154,65 @@ module.exports = React.createClass({
 
 },{"react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Header/index.js":[function(require,module,exports){
 var React = require('react')
+var Chloroform = require('../../vendor/chloroform')
 var div = React.DOM.div
 var WaveForm = React.createFactory(require('../WaveForm'))
 var Search = React.createFactory(require('../Search'))
 
 module.exports = React.createClass({
   displayName: 'Header',
+
+  getInitialState: function() {
+    return {
+      colors: [],
+      searchIsActive: !!this.props.query
+    }
+  },
+
+  componentWillReceiveProps: function(props) {
+    if (props.currentTrack !== this.props.currentTrack) {
+      this.changeColorsToMatchTrack(props.currentTrack)
+    }
+  },
+
   render: function() {
     return div({className: 'Header'},
-      WaveForm({player: this.props.player, currentTrack: this.props.currentTrack}),
-      Search({query: this.props.query, setQuery: this.props.setQuery})
+      WaveForm({
+        player: this.props.player,
+        currentTrack: this.props.currentTrack,
+        backgroundRgb: this.state.colors.background,
+        lineRgb: this.state.colors[0],
+        isDimmed: this.state.searchIsActive
+      }),
+      Search({
+        query: this.props.query,
+        setQuery: this.props.setQuery,
+        color: this.state.colors[1],
+        setActive: this.setSearchActive
+      })
     )
+  },
+
+  changeColorsToMatchTrack: function(track) {
+    Chloroform.analyze(artUrl(track), function(colors) {
+      this.setState({ colors: colors })
+    }.bind(this))
+  },
+
+  setSearchActive: function(isActive) {
+    this.setState({
+      searchIsActive: isActive
+    })
   }
 })
 
-},{"../Search":"/Users/jeff/Dropbox/code/music/components/Search/index.js","../WaveForm":"/Users/jeff/Dropbox/code/music/components/WaveForm/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Queue/index.js":[function(require,module,exports){
+function artUrl(track) {
+  var url = track.artwork_url || track.user.avatar_url || ''
+  return url.replace('-large', '-t500x500')
+}
+
+
+},{"../../vendor/chloroform":"/Users/jeff/Dropbox/code/music/vendor/chloroform.js","../Search":"/Users/jeff/Dropbox/code/music/components/Search/index.js","../WaveForm":"/Users/jeff/Dropbox/code/music/components/WaveForm/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Queue/index.js":[function(require,module,exports){
 var React = require('react')
 var div = React.DOM.div
 var QueueTrack = React.createFactory(require('../QueueTrack'))
@@ -280,52 +324,54 @@ var input = React.DOM.input
 module.exports = React.createClass({
   displayName: 'Search',
 
+  getDefaultProps: function() {
+    return {
+      color: '255,255,255'
+    }
+  },
+
+  render: function() {
+    var style = {
+      color: 'rgb(' + this.props.color + ')'
+    }
+
+    return input({
+      style: style,
+      className: 'Search',
+      value: this.props.query,
+      onChange: this.handleChange,
+      onBlur: this.handleBlur,
+      onFocus: this.handleFocus
+    })
+  },
+
   handleChange: function(e) {
     this.props.setQuery(e.target.value)
   },
 
-  render: function() {
-    return input({
-      className: 'Search',
-      value: this.props.query,
-      onChange: this.handleChange
-    })
+  handleBlur: function(e) {
+    this.props.setActive(!!e.target.value)
+  },
+
+  handleFocus: function(e) {
+    this.props.setActive(true)
   }
 })
 
 },{"react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/WaveForm/index.js":[function(require,module,exports){
 var React = require('react')
 var canvas = React.DOM.canvas
-var Chloroform = require('../../vendor/chloroform')
-
-function artUrl(track) {
-  var url = track.artwork_url || track.user.avatar_url || ''
-  return url.replace('-large', '-t500x500')
-}
-
 
 module.exports = React.createClass({
   displayName: 'WaveForm',
 
   getDefaultProps: function() {
     return {
-      fftSize: 2048
-    }
-  },
-
-  getInitialState: function() {
-    return {
+      fftSize: 2048,
+      isDimmed: false,
       backgroundRgb: '0,0,0',
-      lineRgb: '255,255,255',
-      opacity: 1
+      lineRgb: '255,255,255'
     }
-  },
-
-  componentWillReceiveProps: function(props) {
-    if (props.currentTrack !== this.props.currentTrack) {
-      this.changeColorsToMatchTrack(props.currentTrack)
-    }
-
   },
 
   componentDidMount: function() {
@@ -351,8 +397,8 @@ module.exports = React.createClass({
       var x = 0
       var y, v;
 
-      ctx.fillStyle = 'rgba(' + that.state.backgroundRgb + ', 1)'
-      ctx.strokeStyle = 'rgba(' + that.state.lineRgb + ', ' + that.state.opacity + ')'
+      ctx.fillStyle = 'rgba(' + that.props.backgroundRgb + ', 1)'
+      ctx.strokeStyle = 'rgba(' + that.props.lineRgb + ', ' + that.opacity() + ')'
 
       analyser.getFloatTimeDomainData(data)
 
@@ -383,13 +429,8 @@ module.exports = React.createClass({
     return canvas({className: 'WaveForm'})
   },
 
-  changeColorsToMatchTrack: function(track) {
-    Chloroform.analyze(artUrl(track), function(colors) {
-      this.setState({
-        backgroundRgb: colors.background,
-        lineRgb: colors[0]
-      })
-    }.bind(this))
+  opacity: function() {
+    return this.props.isDimmed ? 0.2 : 1
   }
 })
 
@@ -397,7 +438,7 @@ function warp(x) {
   return -(x * 2 - 2) * x
 }
 
-},{"../../vendor/chloroform":"/Users/jeff/Dropbox/code/music/vendor/chloroform.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/index.js":[function(require,module,exports){
+},{"react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/index.js":[function(require,module,exports){
 var React = require('react')
 var App = React.createFactory(require('./components/App'))
 

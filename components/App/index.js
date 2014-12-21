@@ -13,7 +13,7 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      query: 'testing',
+      query: '',
       tracks: [],
       isLoading: true,
       queue: []
