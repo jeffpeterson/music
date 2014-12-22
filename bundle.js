@@ -456,6 +456,7 @@ module.exports = {
 var AudioContext = window.AudioContext || window.webkitAudioContext
 var ctx = new AudioContext()
 var el = document.createElement('audio')
+
 var source = ctx.createMediaElementSource(el)
 var analyser = ctx.createAnalyser()
 var gain = ctx.createGain()
@@ -463,10 +464,11 @@ var gain = ctx.createGain()
 el.loop = true
 
 source.connect(analyser)
-analyser.connect(gain)
-gain.connect(ctx.destination)
+source.connect(gain)
 
 gain.gain.value = 1
+
+gain.connect(ctx.destination)
 
 module.exports = {
   play: function play(track) {
