@@ -1,9 +1,13 @@
+require('6to5/polyfill')
+
 var React = require('react')
 var div = React.DOM.div
 
-var Chloroform = require('../../vendor/chloroform')
+var Chloroform = require('chloroform')
 var lib = require('../../lib')
+var client = require('../../client')
 var player = lib.player
+
 var Header = React.createFactory(require('../Header'))
 var Grid = React.createFactory(require('../Grid'))
 var Queue = React.createFactory(require('../Queue'))
@@ -12,109 +16,161 @@ var Scroller = React.createFactory(require('../Scroller'))
 module.exports = React.createClass({
   displayName: 'App',
 
-  getInitialState: function() {
-    return {
+  getInitialState() {
+    return Object.assign({
       query: '',
       tracks: [],
       isLoading: true,
       colors: [],
       queue: []
-    }
+    }, this.load())
   },
 
-  componentDidMount: function() {
-    search()
-    .then(function(tracks) {
-      if (!this.isMounted()) {
-        return
-      }
+  componentDidMount() {
+    this.loadFirstPage()
+    this.play(this.state.queue[0])
 
-
-      this.setState({
-        tracks: tracks,
-        isLoading: false
-      })
-    }.bind(this))
+    player.onEnded(this.advanceQueue)
   },
 
-  render: function() {
+  componentDidUpdate() {
+    this.store(this.state)
+  },
+
+  render() {
+    var controls = this.controls()
+
     var style = {
       backgroundColor: 'rgb(' + this.state.colors.background + ')'
     }
 
-    return div({className: 'App'},
-      Header({
-        colors: this.state.colors,
-        player: player,
-        currentTrack: this.state.queue[0],
-        query: this.state.query,
-        setQuery: this.setQuery
-      }),
-      div({
-        className: 'AppBody',
-        style: style
-      },
-        Queue({tracks: this.state.queue}),
-        Scroller({loadNextPage: this.loadNextPage},
-          Grid({
-            play: this.play,
-            tracks: this.state.tracks
-          })
+    return div({className: 'App', style: style },
+      Header({ player, colors: this.state.colors, currentTrack: this.currentTrack(), query: this.state.query, setQuery: this.setQuery }),
+      div({ className: 'AppBody' },
+        Queue({ controls, tracks: this.state.queue }),
+        Scroller({ loadNextPage: this.loadNextPage },
+          Grid({ controls, tracks: this.state.tracks })
         )
       )
     )
   },
 
-  play: function(track) {
-    this.setState({ queue: [track] })
+  addToQueue(track) {
+    this.setState({
+      queue: uniqTracks(this.state.queue.concat(track))
+    })
+  },
+
+  play(track) {
+    if (!track) {
+      return
+    }
+
     this.changeColorsToMatchTrack(track)
+
+    this.setState({
+      queue: uniqTracks([track].concat(this.state.queue))
+    })
+
     player.play(track)
   },
 
-  setQuery: function(query) {
-    this.setState({query: query})
+  advanceQueue() {
+    var queue = this.state.queue
+
+    this.setState({
+      queue: queue.slice(1).concat(queue[0])
+    }, () => player.play(this.state.queue[0]))
   },
 
-  loadNextPage: function() {
+  controls() {
+    return {
+      addToQueue: this.addToQueue,
+      play: this.play,
+      advanceQueue: this.advanceQueue
+    }
+  },
+
+  setQuery(query) {
+    this.setState({query: query}, this.loadFirstPage)
+  },
+
+  request: function(options) {
+    if (this.state.query) {
+      return client.tracks(options)
+    } else {
+      return client.favorites(options)
+    }
+  },
+
+  loadFirstPage() {
+    this.request({
+      query: this.state.query
+    })
+    .then(tracks => {
+      this.setState({
+        tracks: tracks,
+        isLoading: false
+      })
+    })
+  },
+
+  loadNextPage() {
     if (this.state.isLoading) {
       return
     }
 
     this.setState({ isLoading: true })
 
-    return search({
-      offset: this.state.tracks.length + 50,
+    return this.request({
+      offset: this.state.tracks.length,
       query: this.state.query
     })
-    .then(function(tracks) {
+    .then(tracks => {
       this.setState({
         isLoading: false,
-        tracks: this.state.tracks.concat(tracks)
+        tracks: uniqTracks(this.state.tracks.concat(tracks))
       })
-    }.bind(this))
+    })
   },
 
-  changeColorsToMatchTrack: function(track) {
-    Chloroform.analyze(artUrl(track), function(colors) {
+  currentTrack() {
+    return this.state.queue[0]
+  },
+
+  changeColorsToMatchTrack(track) {
+    Chloroform.analyze(artUrl(track), colors => {
       this.setState({ colors: colors })
-    }.bind(this))
+    })
+  },
+
+  store(state) {
+    var json = JSON.stringify(lib.omit(state,
+      'tracks',
+      'isLoading',
+      'colors'
+    ))
+
+    window.localStorage.setItem('App.state', json)
+  },
+
+  load() {
+    var str = window.localStorage.getItem('App.state')
+
+    if (str) {
+      return JSON.parse(str)
+    }
+
+    return {}
   }
 })
 
-function search(options) {
-  options = options || {}
-  var query = options.query
-  var offset = options.offset || 0
+function uniqTracks(tracks) {
+  var index = {}
 
-  return lib.request({
-    method: 'get',
-    host: 'https://api.soundcloud.com',
-    path: '/users/53101589/favorites.json',
-    data: {
-      client_id: '6da9f906b6827ba161b90585f4dd3726',
-      limit: 50,
-      offset: offset,
-      q: query
+  return tracks.filter(track => {
+    if (!index[track.id]) {
+      return index[track.id] = true
     }
   })
 }

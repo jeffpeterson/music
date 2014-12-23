@@ -10,9 +10,6 @@ function artUrl(track) {
 module.exports = React.createClass({
   displayName: 'QueueTrack',
 
-  handleClick: function() {
-  },
-
   render: function() {
     var style = {
       backgroundImage: 'url(' + artUrl(this.props.track) + ')'
@@ -21,7 +18,7 @@ module.exports = React.createClass({
     return div({
       className: 'QueueTrack',
       style: style,
-      onClick: this.handleClick
+      onClick: this.props.onClick
     })
   }
 })

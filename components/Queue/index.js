@@ -12,10 +12,23 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    return div({className: 'Queue Ratio'},
+    return div({className: 'Queue Ratio', onDrop: this.handleDrop, onDragOver: this.handleDragOver},
       this.props.tracks.map(function(track) {
-        return QueueTrack({ track: track, key: track.id })
-      })
+        return QueueTrack({ track: track, key: track.id, onClick: this.play.bind(null, track) })
+      }.bind(this))
     )
+  },
+
+  handleDragOver: function(e) {
+    e.preventDefault();
+  },
+
+  handleDrop: function(e) {
+    var track = JSON.parse(e.dataTransfer.getData('application/json'))
+    this.props.controls.addToQueue(track)
+  },
+
+  play: function(track) {
+    this.props.controls.play(track)
   }
 })

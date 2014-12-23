@@ -9,6 +9,10 @@ function artUrl(track) {
 module.exports = React.createClass({
   displayName: 'GridTrack',
 
+  handleDragStart: function(e) {
+    e.dataTransfer.setData('application/json', JSON.stringify(this.props.track))
+  },
+
   render: function() {
     var style = {
       backgroundImage: 'url(' + artUrl(this.props.track) + ')'
@@ -16,7 +20,9 @@ module.exports = React.createClass({
 
     return div({
       className: 'GridTrack Ratio-1',
+      draggable: true,
       style: style,
+      onDragStart: this.handleDragStart,
       onClick: this.props.onClick
     })
   }

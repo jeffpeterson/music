@@ -5,17 +5,15 @@ var GridTrack = React.createFactory(require('../GridTrack'))
 module.exports = React.createClass({
   displayName: 'Grid',
 
-  render: function() {
-    var play = this.props.play
-
+  render() {
     return div({className: 'Grid'},
-     this.props.tracks.map(function(track) {
-       return GridTrack({
-         onClick: play.bind(null, track),
-         track: track,
-         key: track.id
-       })
-     })
+      this.props.tracks.map(track => {
+        return GridTrack({ track, onClick: this.play.bind(null, track), key: track.id })
+      })
     )
+  },
+
+  play(track) {
+    return this.props.controls.play(track)
   }
 })

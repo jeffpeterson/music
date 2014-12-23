@@ -1,9 +1,20 @@
 .QueueTrack {
   background-size: cover;
+  background-position: center center;
+}
+
+.QueueTrack::before {
+  padding-top: 33.333%;
+  content: '';
+  display: block;
+}
+
+.QueueTrack:first-child {
+  position: sticky;
+  top: 0;
 }
 
 .QueueTrack:first-child::before {
   padding-top: 100%;
-  content: '';
-  display: block;
 }
+

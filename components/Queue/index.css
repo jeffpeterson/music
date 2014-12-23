@@ -1,4 +1,11 @@
 .Queue {
   margin-top: 150px;
   overflow: scroll;
+  position: relative;
+}
+
+.Queue::after {
+  display: block;
+  content: '';
+  padding-top: 33.33%
 }
