@@ -31,6 +31,7 @@ module.exports = React.createClass({
     this.play(this.state.queue[0])
 
     player.onEnded(this.advanceQueue)
+    player.onError(this.advanceQueue)
   },
 
   componentDidUpdate() {

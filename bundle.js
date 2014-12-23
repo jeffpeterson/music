@@ -89,6 +89,7 @@ module.exports = React.createClass({
     this.play(this.state.queue[0]);
 
     player.onEnded(this.advanceQueue);
+    player.onError(this.advanceQueue);
   },
 
   componentDidUpdate: function () {
@@ -648,6 +649,10 @@ module.exports = {
   play: function play(track) {
     el.src = mp3Url(track);
     el.play();
+  },
+
+  onError: function (fn) {
+    el.addEventListener("error", fn);
   },
 
   onEnded: function (fn) {
