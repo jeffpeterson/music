@@ -81,7 +81,7 @@ module.exports = React.createClass({
 
     this.setState({
       queue: queue.slice(1).concat(queue[0])
-    }, () => player.play(this.state.queue[0]))
+    }, () => this.play(this.state.queue[0]))
   },
 
   controls() {
