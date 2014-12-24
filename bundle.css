@@ -7,8 +7,14 @@
 
 .AppBody {
   height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  align-items: stretch;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
   position: relative;
 }
 
@@ -19,11 +25,13 @@ html, body, #mount {
   position: relative;
 }
 .Grid {
-  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+          transform: translate3d(0,0,0);
 }
 .GridTrack {
   background-size: cover;
   float: left;
+  position: relative;
 }
 
 .GridTrack::before {
@@ -32,8 +40,48 @@ html, body, #mount {
   padding-top: 100%;
 }
 
+.GridTrackContent {
+  position: absolute;
+  top: 0;
+  left:0;
+  bottom :0;
+  right: 0;
+  line-height: 24px;
+  color: white;
+  white-space: nowrap;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  visibility: hidden;
+}
+
+.GridTrack:hover .GridTrackContent {
+  visibility: visible;
+}
+
+
+.GridTrackText {
+  display: inline-block;
+  margin: 5px;
+  padding: 5px;
+  line-height: 1;
+  background-color: black;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipses;
+}
+
 .Header {
   z-index: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   height: 150px;
   position: absolute;
@@ -64,6 +112,7 @@ html, body, #mount {
 }
 
 .QueueTrack:first-child {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
 }
@@ -125,10 +174,23 @@ html, body, #mount {
   }
 }
 .Scroller {
-  flex: 1 1 auto;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  align-items: stretch;
-  flex-direction: column;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   overflow: scroll;
   padding-top: 150px;
 }
@@ -137,10 +199,16 @@ html, body, #mount {
   display: none;
 }
 .Search {
-  flex: 1 0 50%;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 50%;
+      -ms-flex: 1 0 50%;
+          flex: 1 0 50%;
   background: none;
   border: none;
   color: white;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   font-size: 80px;
   line-height: 150px;

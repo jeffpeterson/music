@@ -1,5 +1,6 @@
 var React = require('react')
 var div = React.DOM.div
+var span = React.DOM.span
 
 function artUrl(track) {
   var url = track.artwork_url || track.user.avatar_url || ''
@@ -18,12 +19,17 @@ module.exports = React.createClass({
       backgroundImage: 'url(' + artUrl(this.props.track) + ')'
     }
 
-    return div({
-      className: 'GridTrack Ratio-1',
-      draggable: true,
-      style: style,
-      onDragStart: this.handleDragStart,
-      onClick: this.props.onClick
-    })
+    return div(
+      {
+        className: 'GridTrack Ratio-1',
+        draggable: true,
+        style: style,
+        onDragStart: this.handleDragStart,
+        onClick: this.props.onClick
+      }
+      // ,div({className: 'GridTrackContent'}
+      //   // ,span({className: 'GridTrackText'}, this.props.track.title)
+      // )
+    )
   }
 })

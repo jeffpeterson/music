@@ -15,7 +15,7 @@ module.exports = React.createClass({
   render: function() {
     return div({className: 'Header'},
       WaveForm({
-        player: this.props.player,
+        ctx: this.props.ctx,
         currentTrack: this.props.currentTrack,
         backgroundRgb: this.props.colors.background,
         lineRgb: this.props.colors[0],

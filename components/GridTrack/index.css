@@ -1,11 +1,43 @@
 .GridTrack {
   background-size: cover;
   float: left;
+  position: relative;
 }
 
 .GridTrack::before {
   content: '';
   display: block;
   padding-top: 100%;
+}
+
+.GridTrackContent {
+  position: absolute;
+  top: 0;
+  left:0;
+  bottom :0;
+  right: 0;
+  line-height: 24px;
+  color: white;
+  white-space: nowrap;
+  display: flex;
+  align-items: flex-end;
+  visibility: hidden;
+}
+
+.GridTrack:hover .GridTrackContent {
+  visibility: visible;
+}
+
+
+.GridTrackText {
+  display: inline-block;
+  margin: 5px;
+  padding: 5px;
+  line-height: 1;
+  background-color: black;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipses;
 }
 

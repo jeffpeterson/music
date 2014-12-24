@@ -7,6 +7,7 @@
   },
   "devDependencies": {
     "6to5ify": "2.0.0",
+    "autoprefixer": "4.0.0",
     "barkeep": "0.3.0",
     "browserify": "7.0.2",
     "react": "0.12.1",

@@ -64,8 +64,9 @@ var div = React.DOM.div;
 var Chloroform = require("chloroform");
 var lib = require("../../lib");
 var client = require("../../client");
-var player = lib.player;
+var ctx = lib.ctx();
 
+var Player = React.createFactory(require("../Player"));
 var Header = React.createFactory(require("../Header"));
 var Grid = React.createFactory(require("../Grid"));
 var Queue = React.createFactory(require("../Queue"));
@@ -86,14 +87,17 @@ module.exports = React.createClass({
 
   componentDidMount: function () {
     this.loadFirstPage();
-    this.play(this.state.queue[0]);
-
-    player.onEnded(this.advanceQueue);
-    player.onError(this.advanceQueue);
+    this.changeColorsToMatchTrack(this.state.queue[0]);
   },
 
-  componentDidUpdate: function () {
+  componentDidUpdate: function (props, state) {
     this.store(this.state);
+  },
+
+  componentWillUpdate: function (props, state) {
+    if (state.queue[0] !== this.state.queue[0]) {
+      this.changeColorsToMatchTrack(state.queue[0]);
+    }
   },
 
   render: function () {
@@ -103,7 +107,29 @@ module.exports = React.createClass({
       backgroundColor: "rgb(" + this.state.colors.background + ")"
     };
 
-    return div({ className: "App", style: style }, Header({ player: player, colors: this.state.colors, currentTrack: this.currentTrack(), query: this.state.query, setQuery: this.setQuery }), div({ className: "AppBody" }, Queue({ controls: controls, tracks: this.state.queue }), Scroller({ loadNextPage: this.loadNextPage }, Grid({ controls: controls, tracks: this.state.tracks }))));
+    return div({ className: "App", style: style }, Player({
+      track: this.state.queue[0],
+      onEnded: this.advanceQueue,
+      onError: this.advanceQueue,
+      ctx: ctx
+    }), Header({
+      ctx: ctx,
+      colors: this.state.colors,
+      currentTrack: this.currentTrack(),
+      query: this.state.query,
+      setQuery: this.setQuery
+    }), div({ className: "AppBody" }, Queue({ controls: controls, tracks: this.state.queue }), Scroller({ loadNextPage: this.loadNextPage }, Grid({ controls: controls, tracks: this.state.tracks }))));
+  },
+
+  rotateQueue: function (n) {
+    var queue = this.state.queue;
+    this.setState({
+      queue: queue.slice(n).concat(queue.slice(0, n))
+    });
+  },
+
+  rotateQueueToTrack: function (track) {
+    this.rotateQueue(indexOfTrack(this.state.queue, track));
   },
 
   addToQueue: function (track) {
@@ -117,24 +143,13 @@ module.exports = React.createClass({
       return;
     }
 
-    this.changeColorsToMatchTrack(track);
-
-    this.setState({
-      queue: uniqTracks([track].concat(this.state.queue))
-    });
-
-    player.play(track);
+    this.addToQueue(track);
+    this.rotateQueueToTrack(track);
   },
 
-  advanceQueue: function () {
-    var _this = this;
-    var queue = this.state.queue;
 
-    this.setState({
-      queue: queue.slice(1).concat(queue[0])
-    }, function () {
-      return _this.play(_this.state.queue[0]);
-    });
+  advanceQueue: function () {
+    this.rotateQueue(1);
   },
 
   controls: function () {
@@ -158,11 +173,11 @@ module.exports = React.createClass({
   },
 
   loadFirstPage: function () {
-    var _this2 = this;
+    var _this = this;
     this.request({
       query: this.state.query
     }).then(function (tracks) {
-      _this2.setState({
+      _this.setState({
         tracks: tracks,
         isLoading: false
       });
@@ -170,7 +185,7 @@ module.exports = React.createClass({
   },
 
   loadNextPage: function () {
-    var _this3 = this;
+    var _this2 = this;
     if (this.state.isLoading) {
       return;
     }
@@ -181,9 +196,9 @@ module.exports = React.createClass({
       offset: this.state.tracks.length,
       query: this.state.query
     }).then(function (tracks) {
-      _this3.setState({
+      _this2.setState({
         isLoading: false,
-        tracks: uniqTracks(_this3.state.tracks.concat(tracks))
+        tracks: uniqTracks(_this2.state.tracks.concat(tracks))
       });
     });
   },
@@ -193,14 +208,14 @@ module.exports = React.createClass({
   },
 
   changeColorsToMatchTrack: function (track) {
-    var _this4 = this;
+    var _this3 = this;
     Chloroform.analyze(artUrl(track), function (colors) {
-      _this4.setState({ colors: colors });
+      _this3.setState({ colors: colors });
     });
   },
 
   store: function (state) {
-    var json = JSON.stringify(lib.omit(state, "tracks", "isLoading", "colors"));
+    var json = JSON.stringify(lib.only(state, "queue", "query"));
 
     window.localStorage.setItem("App.state", json);
   },
@@ -231,7 +246,14 @@ function artUrl(track) {
   return url.replace("-large", "-t500x500");
 }
 
-},{"../../client":"/Users/jeff/Dropbox/code/music/client/index.js","../../lib":"/Users/jeff/Dropbox/code/music/lib/index.js","../Grid":"/Users/jeff/Dropbox/code/music/components/Grid/index.js","../Header":"/Users/jeff/Dropbox/code/music/components/Header/index.js","../Queue":"/Users/jeff/Dropbox/code/music/components/Queue/index.js","../Scroller":"/Users/jeff/Dropbox/code/music/components/Scroller/index.js","6to5/polyfill":"/usr/local/lib/node_modules/6to5/polyfill.js","chloroform":"/Users/jeff/Dropbox/code/music/node_modules/chloroform/chloroform.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Grid/index.js":[function(require,module,exports){
+
+function indexOfTrack(queue, track) {
+  return queue.findIndex(function (t) {
+    return t.id === track.id;
+  });
+}
+
+},{"../../client":"/Users/jeff/Dropbox/code/music/client/index.js","../../lib":"/Users/jeff/Dropbox/code/music/lib/index.js","../Grid":"/Users/jeff/Dropbox/code/music/components/Grid/index.js","../Header":"/Users/jeff/Dropbox/code/music/components/Header/index.js","../Player":"/Users/jeff/Dropbox/code/music/components/Player/index.js","../Queue":"/Users/jeff/Dropbox/code/music/components/Queue/index.js","../Scroller":"/Users/jeff/Dropbox/code/music/components/Scroller/index.js","6to5/polyfill":"/usr/local/lib/node_modules/6to5/polyfill.js","chloroform":"/Users/jeff/Dropbox/code/music/node_modules/chloroform/chloroform.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Grid/index.js":[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -258,6 +280,7 @@ module.exports = React.createClass({
 
 var React = require("react");
 var div = React.DOM.div;
+var span = React.DOM.span;
 
 function artUrl(track) {
   var url = track.artwork_url || track.user.avatar_url || "";
@@ -282,7 +305,11 @@ module.exports = React.createClass({
       style: style,
       onDragStart: this.handleDragStart,
       onClick: this.props.onClick
-    });
+    }
+    // ,div({className: 'GridTrackContent'}
+    //   // ,span({className: 'GridTrackText'}, this.props.track.title)
+    // )
+    );
   }
 });
 
@@ -305,7 +332,7 @@ module.exports = React.createClass({
 
   render: function () {
     return div({ className: "Header" }, WaveForm({
-      player: this.props.player,
+      ctx: this.props.ctx,
       currentTrack: this.props.currentTrack,
       backgroundRgb: this.props.colors.background,
       lineRgb: this.props.colors[0],
@@ -325,7 +352,42 @@ module.exports = React.createClass({
   }
 });
 
-},{"../Search":"/Users/jeff/Dropbox/code/music/components/Search/index.js","../WaveForm":"/Users/jeff/Dropbox/code/music/components/WaveForm/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Queue/index.js":[function(require,module,exports){
+},{"../Search":"/Users/jeff/Dropbox/code/music/components/Search/index.js","../WaveForm":"/Users/jeff/Dropbox/code/music/components/WaveForm/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Player/index.js":[function(require,module,exports){
+"use strict";
+
+var React = require("react");
+
+var audio = React.DOM.audio;
+
+module.exports = React.createClass({
+  displayName: "Queue",
+
+  componentDidMount: function () {
+    this.props.ctx.setEl(this.refs.audio.getDOMNode());
+  },
+
+  render: function () {
+    console.log("playing", id(this.props.track));
+
+    return audio({
+      src: mp3url(this.props.track),
+      autoPlay: true,
+      ref: "audio",
+      onEnded: this.props.onEnded,
+      onError: this.props.onError
+    });
+  }
+});
+
+function id(track) {
+  return track && track.id || undefined;
+}
+
+function mp3url(track) {
+  return track.stream_url + "?client_id=6da9f906b6827ba161b90585f4dd3726";
+}
+
+},{"react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Queue/index.js":[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -521,7 +583,7 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function () {
-    var analyser = this.props.player.analyser;
+    var analyser = this.props.ctx.analyser;
     var canvas = this.getDOMNode();
     canvas.width = canvas.clientWidth * window.devicePixelRatio;
     canvas.height = canvas.clientHeight * window.devicePixelRatio;
@@ -530,10 +592,10 @@ module.exports = React.createClass({
     var ctx = canvas.getContext("2d");
 
     analyser.fftSize = this.props.fftSize;
-    analyser.smoothingTimeConstant = 1;
+    analyser.smoothingTimeConstant = 0;
 
     var bufferLength = analyser.frequencyBinCount;
-    var data = new Float32Array(bufferLength);
+    var data = new Uint8Array(bufferLength);
     var step = width / bufferLength;
     var that = this;
 
@@ -541,20 +603,19 @@ module.exports = React.createClass({
 
     function draw() {
       var x = 0;
-      var y, v;
+      var y;
 
       ctx.fillStyle = "rgba(" + that.props.backgroundRgb + ", 1)";
       ctx.strokeStyle = "rgba(" + that.props.lineRgb + ", " + that.opacity() + ")";
 
-      analyser.getFloatTimeDomainData(data);
+      analyser.getByteTimeDomainData(data);
 
       ctx.fillRect(0, 0, width, height);
 
       ctx.beginPath();
 
       for (var i = 0; i < bufferLength; i++, x += step) {
-        v = data[i] * 0.5 + 0.5;
-        y = v * height;
+        y = 0.00390625 * data[i] * height;
 
         if (i === 0) {
           ctx.moveTo(x, y);
@@ -600,17 +661,39 @@ module.exports = function clone(obj, props) {
   return Object.assign(child, props);
 };
 
+},{}],"/Users/jeff/Dropbox/code/music/lib/ctx.js":[function(require,module,exports){
+"use strict";
+
+var AudioContext = window.AudioContext || window.webkitAudioContext;
+
+module.exports = ctx;
+
+function ctx() {
+  var _ctx = new AudioContext();
+
+  _ctx.analyser = _ctx.createAnalyser();
+
+  _ctx.setEl = function (el) {
+    _ctx.source = _ctx.createMediaElementSource(el);
+    _ctx.source.connect(_ctx.analyser);
+    _ctx.source.connect(_ctx.destination);
+  };
+
+  return _ctx;
+}
+
 },{}],"/Users/jeff/Dropbox/code/music/lib/index.js":[function(require,module,exports){
 "use strict";
 
 module.exports = {
   request: require("./request"),
-  player: require("./player"),
+  ctx: require("./ctx"),
   clone: require("./clone"),
-  omit: require("./omit")
+  omit: require("./omit"),
+  only: require("./only")
 };
 
-},{"./clone":"/Users/jeff/Dropbox/code/music/lib/clone.js","./omit":"/Users/jeff/Dropbox/code/music/lib/omit.js","./player":"/Users/jeff/Dropbox/code/music/lib/player.js","./request":"/Users/jeff/Dropbox/code/music/lib/request.js"}],"/Users/jeff/Dropbox/code/music/lib/omit.js":[function(require,module,exports){
+},{"./clone":"/Users/jeff/Dropbox/code/music/lib/clone.js","./ctx":"/Users/jeff/Dropbox/code/music/lib/ctx.js","./omit":"/Users/jeff/Dropbox/code/music/lib/omit.js","./only":"/Users/jeff/Dropbox/code/music/lib/only.js","./request":"/Users/jeff/Dropbox/code/music/lib/request.js"}],"/Users/jeff/Dropbox/code/music/lib/omit.js":[function(require,module,exports){
 "use strict";
 
 var _slice = Array.prototype.slice;
@@ -627,45 +710,22 @@ module.exports = function omit(obj) {
   return child;
 };
 
-},{}],"/Users/jeff/Dropbox/code/music/lib/player.js":[function(require,module,exports){
+},{}],"/Users/jeff/Dropbox/code/music/lib/only.js":[function(require,module,exports){
 "use strict";
 
-var AudioContext = window.AudioContext || window.webkitAudioContext;
-var ctx = new AudioContext();
-var el = document.createElement("audio");
+var _slice = Array.prototype.slice;
+module.exports = function only(obj) {
+  var props = _slice.call(arguments, 1);
 
-var source = ctx.createMediaElementSource(el);
-var analyser = ctx.createAnalyser();
-var gain = ctx.createGain();
+  var child = {};
 
-source.connect(analyser);
-source.connect(gain);
+  for (var _iterator = props[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+    var key = _step.value;
+    child[key] = obj[key];
+  }
 
-gain.gain.value = 1;
-
-gain.connect(ctx.destination);
-
-module.exports = {
-  play: function play(track) {
-    el.src = mp3Url(track);
-    el.play();
-  },
-
-  onError: function (fn) {
-    el.addEventListener("error", fn);
-  },
-
-  onEnded: function (fn) {
-    el.addEventListener("ended", fn);
-  },
-
-  ctx: ctx,
-  analyser: analyser
+  return child;
 };
-
-function mp3Url(track) {
-  return track.stream_url + "?client_id=6da9f906b6827ba161b90585f4dd3726";
-}
 
 },{}],"/Users/jeff/Dropbox/code/music/lib/request.js":[function(require,module,exports){
 "use strict";

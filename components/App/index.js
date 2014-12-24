@@ -6,8 +6,9 @@ var div = React.DOM.div
 var Chloroform = require('chloroform')
 var lib = require('../../lib')
 var client = require('../../client')
-var player = lib.player
+var ctx = lib.ctx()
 
+var Player = React.createFactory(require('../Player'))
 var Header = React.createFactory(require('../Header'))
 var Grid = React.createFactory(require('../Grid'))
 var Queue = React.createFactory(require('../Queue'))
@@ -28,14 +29,17 @@ module.exports = React.createClass({
 
   componentDidMount() {
     this.loadFirstPage()
-    this.play(this.state.queue[0])
-
-    player.onEnded(this.advanceQueue)
-    player.onError(this.advanceQueue)
+    this.changeColorsToMatchTrack(this.state.queue[0])
   },
 
-  componentDidUpdate() {
+  componentDidUpdate(props, state) {
     this.store(this.state)
+  },
+
+  componentWillUpdate(props, state) {
+    if (state.queue[0] !== this.state.queue[0]) {
+      this.changeColorsToMatchTrack(state.queue[0])
+    }
   },
 
   render() {
@@ -46,7 +50,22 @@ module.exports = React.createClass({
     }
 
     return div({className: 'App', style: style },
-      Header({ player, colors: this.state.colors, currentTrack: this.currentTrack(), query: this.state.query, setQuery: this.setQuery }),
+      Player({
+        track: this.state.queue[0],
+        onEnded: this.advanceQueue,
+        onError: this.advanceQueue,
+        ctx: ctx
+      }),
+
+      Header(
+        {
+          ctx,
+          colors: this.state.colors,
+          currentTrack: this.currentTrack(),
+          query: this.state.query,
+          setQuery: this.setQuery
+        }
+      ),
       div({ className: 'AppBody' },
         Queue({ controls, tracks: this.state.queue }),
         Scroller({ loadNextPage: this.loadNextPage },
@@ -54,6 +73,17 @@ module.exports = React.createClass({
         )
       )
     )
+  },
+
+  rotateQueue(n) {
+    var queue = this.state.queue
+    this.setState({
+      queue: queue.slice(n).concat(queue.slice(0, n))
+    })
+  },
+
+  rotateQueueToTrack(track) {
+    this.rotateQueue(indexOfTrack(this.state.queue, track))
   },
 
   addToQueue(track) {
@@ -67,21 +97,13 @@ module.exports = React.createClass({
       return
     }
 
-    this.changeColorsToMatchTrack(track)
-
-    this.setState({
-      queue: uniqTracks([track].concat(this.state.queue))
-    })
-
-    player.play(track)
+    this.addToQueue(track)
+    this.rotateQueueToTrack(track)
   },
 
-  advanceQueue() {
-    var queue = this.state.queue
 
-    this.setState({
-      queue: queue.slice(1).concat(queue[0])
-    }, () => this.play(this.state.queue[0]))
+  advanceQueue() {
+    this.rotateQueue(1)
   },
 
   controls() {
@@ -146,10 +168,9 @@ module.exports = React.createClass({
   },
 
   store(state) {
-    var json = JSON.stringify(lib.omit(state,
-      'tracks',
-      'isLoading',
-      'colors'
+    var json = JSON.stringify(lib.only(state,
+      'queue',
+      'query'
     ))
 
     window.localStorage.setItem('App.state', json)
@@ -179,5 +200,10 @@ function uniqTracks(tracks) {
 function artUrl(track) {
   var url = track.artwork_url || track.user.avatar_url || ''
   return url.replace('-large', '-t500x500')
+}
+
+
+function indexOfTrack(queue, track) {
+  return queue.findIndex(t => t.id === track.id)
 }
 
