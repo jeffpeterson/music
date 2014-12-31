@@ -1,24 +1,62 @@
 var React = require('react')
 
+var lib = require('../../lib')
 var audio = React.DOM.audio
 
 module.exports = React.createClass({
   displayName: 'Queue',
 
   componentDidMount() {
-    this.props.ctx.setEl(this.refs.audio.getDOMNode())
+    var el = this.refs.audio.getDOMNode()
+    this.props.ctx.setEl(el)
+
+    el.addEventListener('ended', this.props.onEnded)
+    el.addEventListener('error', this.props.onError)
+    el.addEventListener('timeupdate', this.handleTimeUpdate)
+  },
+
+  componentDidUnmount() {
+    var el = this.refs.audio.getDOMNode()
+
+    el.removeEventListener('ended', this.props.onEnded)
+    el.removeEventListener('error', this.props.onError)
+    el.removeEventListener('timeupdate', this.handleTimeUpdate)
+  },
+
+  componentDidUpdate: function(props, state) {
+    // this.refs.audio.getDOMNode().load()
+
+    if (props.isPlaying ^ this.props.isPlaying) {
+      this.toggle(this.props.isPlaying)
+    }
   },
 
   render() {
-    console.log('playing', id(this.props.track))
-
     return audio({
       src: mp3url(this.props.track),
-      autoPlay: true,
       ref: 'audio',
-      onEnded: this.props.onEnded,
-      onError: this.props.onError
+      autoPlay: true,
     })
+  },
+
+  handleTimeUpdate(e) {
+    this.props.updateScrubTime(this.refs.audio.getDOMNode().currentTime)
+  },
+
+  toggle(shouldPlay) {
+    shouldPlay ? this.play() : this.pause()
+  },
+
+  play() {
+    lib.debug('playing', id(this.props.track))
+
+    this.refs.audio.getDOMNode().play()
+  },
+
+  pause() {
+    lib.debug('pausing', id(this.props.track))
+
+    this.refs.audio.getDOMNode().pause()
   }
 })
 
@@ -27,6 +65,6 @@ function id(track) {
 }
 
 function mp3url(track) {
-  return track.stream_url + '?client_id=6da9f906b6827ba161b90585f4dd3726'
+  return track && track.stream_url + '?client_id=6da9f906b6827ba161b90585f4dd3726'
 }
 

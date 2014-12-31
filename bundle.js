@@ -79,7 +79,10 @@ module.exports = React.createClass({
     return Object.assign({
       query: "",
       tracks: [],
+      favorites: [],
       isLoading: true,
+      isPlaying: true,
+      scrubTime: 0,
       colors: [],
       queue: []
     }, this.load());
@@ -108,23 +111,33 @@ module.exports = React.createClass({
     };
 
     return div({ className: "App", style: style }, Player({
+      ctx: ctx,
       track: this.state.queue[0],
+      isPlaying: this.state.isPlaying,
       onEnded: this.advanceQueue,
       onError: this.advanceQueue,
-      ctx: ctx
-    }), Header({
+      updateScrubTime: this.updateScrubTime }), Header({
       ctx: ctx,
       colors: this.state.colors,
       currentTrack: this.currentTrack(),
       query: this.state.query,
       setQuery: this.setQuery
-    }), div({ className: "AppBody" }, Queue({ controls: controls, tracks: this.state.queue }), Scroller({ loadNextPage: this.loadNextPage }, Grid({ controls: controls, tracks: this.state.tracks }))));
+    }), div({ className: "AppBody" }, Queue({ controls: controls, tracks: this.state.queue }), Scroller({ onUpdate: this.onScrollerUpdate, loadNextPage: this.loadNextPage }, Grid({ controls: controls, tracks: this.state.tracks }))));
+  },
+
+  updateScrubTime: function (time) {
+    lib.debug("time update", time);
   },
 
   rotateQueue: function (n) {
-    var queue = this.state.queue;
+    if (!n) {
+      return;
+    }
+
+    lib.debug("rotating queue", n);
+
     this.setState({
-      queue: queue.slice(n).concat(queue.slice(0, n))
+      queue: lib.rotate(this.state.queue, n)
     });
   },
 
@@ -209,13 +222,17 @@ module.exports = React.createClass({
 
   changeColorsToMatchTrack: function (track) {
     var _this3 = this;
+    if (!track) {
+      return;
+    }
+
     Chloroform.analyze(artUrl(track), function (colors) {
       _this3.setState({ colors: colors });
     });
   },
 
   store: function (state) {
-    var json = JSON.stringify(lib.only(state, "queue", "query"));
+    var json = JSON.stringify(lib.only(state, "queue", "query", "isPlaying", "colors"));
 
     window.localStorage.setItem("App.state", json);
   },
@@ -234,11 +251,11 @@ module.exports = React.createClass({
 function uniqTracks(tracks) {
   var index = {};
 
-  return tracks.filter(function (track) {
+  return tracks.reverse().filter(function (track) {
     if (!index[track.id]) {
       return index[track.id] = true;
     }
-  });
+  }).reverse();
 }
 
 function artUrl(track) {
@@ -248,9 +265,13 @@ function artUrl(track) {
 
 
 function indexOfTrack(queue, track) {
-  return queue.findIndex(function (t) {
+  var index = queue.findIndex(function (t) {
     return t.id === track.id;
   });
+
+  if (index >= 0) {
+    return index;
+  }
 }
 
 },{"../../client":"/Users/jeff/Dropbox/code/music/client/index.js","../../lib":"/Users/jeff/Dropbox/code/music/lib/index.js","../Grid":"/Users/jeff/Dropbox/code/music/components/Grid/index.js","../Header":"/Users/jeff/Dropbox/code/music/components/Header/index.js","../Player":"/Users/jeff/Dropbox/code/music/components/Player/index.js","../Queue":"/Users/jeff/Dropbox/code/music/components/Queue/index.js","../Scroller":"/Users/jeff/Dropbox/code/music/components/Scroller/index.js","6to5/polyfill":"/usr/local/lib/node_modules/6to5/polyfill.js","chloroform":"/Users/jeff/Dropbox/code/music/node_modules/chloroform/chloroform.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Grid/index.js":[function(require,module,exports){
@@ -305,11 +326,7 @@ module.exports = React.createClass({
       style: style,
       onDragStart: this.handleDragStart,
       onClick: this.props.onClick
-    }
-    // ,div({className: 'GridTrackContent'}
-    //   // ,span({className: 'GridTrackText'}, this.props.track.title)
-    // )
-    );
+    }, div({ className: "GridTrackContent" }, span({ className: "GridTrackText" }, this.props.track.title)));
   }
 });
 
@@ -331,16 +348,19 @@ module.exports = React.createClass({
   },
 
   render: function () {
-    return div({ className: "Header" }, WaveForm({
+    var style = {
+      backgroundColor: "rgba(" + this.props.colors.background + ", 0.9)"
+    };
+
+    return div({ style: style, className: "Header" }, WaveForm({
       ctx: this.props.ctx,
       currentTrack: this.props.currentTrack,
-      backgroundRgb: this.props.colors.background,
-      lineRgb: this.props.colors[0],
+      colors: this.props.colors,
       isDimmed: this.state.searchIsActive
     }), Search({
       query: this.props.query,
       setQuery: this.props.setQuery,
-      color: this.props.colors[1],
+      color: this.props.colors[2],
       setActive: this.setSearchActive
     }));
   },
@@ -357,25 +377,62 @@ module.exports = React.createClass({
 
 var React = require("react");
 
+var lib = require("../../lib");
 var audio = React.DOM.audio;
 
 module.exports = React.createClass({
   displayName: "Queue",
 
   componentDidMount: function () {
-    this.props.ctx.setEl(this.refs.audio.getDOMNode());
+    var el = this.refs.audio.getDOMNode();
+    this.props.ctx.setEl(el);
+
+    el.addEventListener("ended", this.props.onEnded);
+    el.addEventListener("error", this.props.onError);
+    el.addEventListener("timeupdate", this.handleTimeUpdate);
+  },
+
+  componentDidUnmount: function () {
+    var el = this.refs.audio.getDOMNode();
+
+    el.removeEventListener("ended", this.props.onEnded);
+    el.removeEventListener("error", this.props.onError);
+    el.removeEventListener("timeupdate", this.handleTimeUpdate);
+  },
+
+  componentDidUpdate: function (props, state) {
+    // this.refs.audio.getDOMNode().load()
+
+    if (props.isPlaying ^ this.props.isPlaying) {
+      this.toggle(this.props.isPlaying);
+    }
   },
 
   render: function () {
-    console.log("playing", id(this.props.track));
-
     return audio({
       src: mp3url(this.props.track),
-      autoPlay: true,
       ref: "audio",
-      onEnded: this.props.onEnded,
-      onError: this.props.onError
-    });
+      autoPlay: true });
+  },
+
+  handleTimeUpdate: function (e) {
+    this.props.updateScrubTime(this.refs.audio.getDOMNode().currentTime);
+  },
+
+  toggle: function (shouldPlay) {
+    shouldPlay ? this.play() : this.pause();
+  },
+
+  play: function () {
+    lib.debug("playing", id(this.props.track));
+
+    this.refs.audio.getDOMNode().play();
+  },
+
+  pause: function () {
+    lib.debug("pausing", id(this.props.track));
+
+    this.refs.audio.getDOMNode().pause();
   }
 });
 
@@ -384,10 +441,10 @@ function id(track) {
 }
 
 function mp3url(track) {
-  return track.stream_url + "?client_id=6da9f906b6827ba161b90585f4dd3726";
+  return track && track.stream_url + "?client_id=6da9f906b6827ba161b90585f4dd3726";
 }
 
-},{"react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Queue/index.js":[function(require,module,exports){
+},{"../../lib":"/Users/jeff/Dropbox/code/music/lib/index.js","react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Queue/index.js":[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -462,6 +519,18 @@ function isNextPageRequired() {}
 module.exports = React.createClass({
   displayName: "Scroller",
 
+  getDefaultProps: function () {
+    return {
+      onUpdate: function () {},
+      loadNextPage: function () {} };
+  },
+
+  render: function () {
+    return div({
+      className: "Scroller",
+      onScroll: this.handleScroll() }, this.props.children);
+  },
+
   handleScroll: function () {
     var timestamp = 0;
     var ptimestamp = 0;
@@ -476,6 +545,8 @@ module.exports = React.createClass({
       milliDelta = timestamp - ptimestamp;
       pixelsPerMilli = pixelDelta / milliDelta;
       millisToBottom = distanceToBottom / pixelsPerMilli;
+
+      this.props.onUpdate(pixelsPerMilli);
 
       if (millisToBottom < 400 && millisToBottom >= 0) {
         this.props.loadNextPage();
@@ -495,14 +566,7 @@ module.exports = React.createClass({
         requestAnimationFrame(onFrame);
       }
     };
-  },
-
-  render: function () {
-    return div({
-      className: "Scroller",
-      onScroll: this.handleScroll() }, this.props.children);
-  }
-});
+  } });
 
 },{"react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/components/Search/index.js":[function(require,module,exports){
 "use strict";
@@ -577,9 +641,7 @@ module.exports = React.createClass({
     return {
       fftSize: 2048,
       isDimmed: false,
-      backgroundRgb: "0,0,0",
-      lineRgb: "255,255,255"
-    };
+      colors: { 0: "255,255,255", 1: "255,255,255" } };
   },
 
   componentDidMount: function () {
@@ -599,18 +661,25 @@ module.exports = React.createClass({
     var step = width / bufferLength;
     var that = this;
 
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 4;
+    ctx.shadowBlur = 30;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
 
     function draw() {
+      var colors = that.props.colors;
       var x = 0;
       var y;
 
-      ctx.fillStyle = "rgba(" + that.props.backgroundRgb + ", 1)";
-      ctx.strokeStyle = "rgba(" + that.props.lineRgb + ", " + that.opacity() + ")";
+      ctx.shadowColor = rgb(colors[2]);
+
+      var gradient = ctx.strokeStyle = ctx.createLinearGradient(0, 0, width, 0);
+      gradient.addColorStop(0, rgb(colors[0]));
+      gradient.addColorStop(1, rgb(colors[1]));
 
       analyser.getByteTimeDomainData(data);
 
-      ctx.fillRect(0, 0, width, height);
+      ctx.clearRect(0, 0, width, height);
 
       ctx.beginPath();
 
@@ -624,6 +693,7 @@ module.exports = React.createClass({
         }
       }
 
+      ctx.globalAlpha = that.opacity();
       ctx.stroke();
 
       requestAnimationFrame(draw);
@@ -643,6 +713,14 @@ module.exports = React.createClass({
 
 function warp(x) {
   return -(x * 2 - 2) * x;
+}
+
+function rgba(color, alpha) {
+  return "rgba(" + color + ", " + alpha + ")";
+}
+
+function rgb(color) {
+  return "rgb(" + color + ")";
 }
 
 },{"react":"/Users/jeff/Dropbox/code/music/node_modules/react/react.js"}],"/Users/jeff/Dropbox/code/music/index.js":[function(require,module,exports){
@@ -690,10 +768,49 @@ module.exports = {
   ctx: require("./ctx"),
   clone: require("./clone"),
   omit: require("./omit"),
-  only: require("./only")
+  only: require("./only"),
+  rotate: require("./rotate"),
+
+  logger: require("./logger"),
+  debug: require("./logger")("DEBUG") };
+
+},{"./clone":"/Users/jeff/Dropbox/code/music/lib/clone.js","./ctx":"/Users/jeff/Dropbox/code/music/lib/ctx.js","./logger":"/Users/jeff/Dropbox/code/music/lib/logger.js","./omit":"/Users/jeff/Dropbox/code/music/lib/omit.js","./only":"/Users/jeff/Dropbox/code/music/lib/only.js","./request":"/Users/jeff/Dropbox/code/music/lib/request.js","./rotate":"/Users/jeff/Dropbox/code/music/lib/rotate.js"}],"/Users/jeff/Dropbox/code/music/lib/logger.js":[function(require,module,exports){
+"use strict";
+
+var _slice = Array.prototype.slice;
+var _toArray = function (arr) {
+  return Array.isArray(arr) ? arr : Array.from(arr);
 };
 
-},{"./clone":"/Users/jeff/Dropbox/code/music/lib/clone.js","./ctx":"/Users/jeff/Dropbox/code/music/lib/ctx.js","./omit":"/Users/jeff/Dropbox/code/music/lib/omit.js","./only":"/Users/jeff/Dropbox/code/music/lib/only.js","./request":"/Users/jeff/Dropbox/code/music/lib/request.js"}],"/Users/jeff/Dropbox/code/music/lib/omit.js":[function(require,module,exports){
+module.exports = logger;
+
+var disabled = {};
+var maxLength = 3;
+
+function logger(kind) {
+  kind = kind.toUpperCase();
+  maxLength = Math.max(maxLength, kind.length);
+
+  return function log() {
+    var args = _slice.call(arguments);
+
+    if (!disabled[kind]) {
+      console.log.apply(console, ["%" + maxLength + "s |", kind].concat(_toArray(args)));
+    }
+
+    return args;
+  };
+}
+
+logger.disable = function disable(kind) {
+  disabled[kind] = true;
+};
+
+logger.enable = function enable(kind) {
+  disabled[kind] = false;
+};
+
+},{}],"/Users/jeff/Dropbox/code/music/lib/omit.js":[function(require,module,exports){
 "use strict";
 
 var _slice = Array.prototype.slice;
@@ -887,6 +1004,15 @@ request.defaults = {
 };
 
 module.exports = request;
+
+},{}],"/Users/jeff/Dropbox/code/music/lib/rotate.js":[function(require,module,exports){
+"use strict";
+
+module.exports = rotate;
+
+function rotate(array, n) {
+  return array.slice(n).concat(array.slice(0, n));
+}
 
 },{}],"/Users/jeff/Dropbox/code/music/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser

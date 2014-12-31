@@ -1,38 +1,24 @@
-require('6to5/polyfill')
-
 var React = require('react')
 var div = React.DOM.div
 
-var Chloroform = require('chloroform')
 var lib = require('../../lib')
 var client = require('../../client')
-var ctx = lib.ctx()
 
-var Player = React.createFactory(require('../Player'))
-var Header = React.createFactory(require('../Header'))
 var Grid = React.createFactory(require('../Grid'))
-var Queue = React.createFactory(require('../Queue'))
 var Scroller = React.createFactory(require('../Scroller'))
 
 module.exports = React.createClass({
-  displayName: 'App',
+  displayName: 'Favorites',
 
   getInitialState() {
     return Object.assign({
-      query: '',
       tracks: [],
-      favorites: [],
       isLoading: true,
-      isPlaying: true,
-      scrubTime: 0,
-      colors: [],
-      queue: []
     }, this.load())
   },
 
   componentDidMount() {
     this.loadFirstPage()
-    this.changeColorsToMatchTrack(this.state.queue[0])
   },
 
   componentDidUpdate(props, state) {
@@ -73,8 +59,8 @@ module.exports = React.createClass({
       ),
       div({ className: 'AppBody' },
         Queue({ controls, tracks: this.state.queue }),
-        Scroller({ onUpdate: this.onScrollerUpdate, loadNextPage: this.loadNextPage },
-          Grid({ controls, tracks: this.state.tracks })
+        Scroller({ loadNextPage: this.loadNextPage },
+          Grid({ controls, tracks: this.currentList() })
         )
       )
     )
@@ -204,17 +190,25 @@ module.exports = React.createClass({
     }
 
     return {}
+  },
+
+  currentList() {
+    if (this.state.query) {
+      return this.state.tracks
+    } else {
+      return this.state.favorites
+    }
   }
 })
 
 function uniqTracks(tracks) {
   var index = {}
 
-  return tracks.reverse().filter(track => {
+  return tracks.filter(track => {
     if (!index[track.id]) {
       return index[track.id] = true
     }
-  }).reverse()
+  })
 }
 
 function artUrl(track) {

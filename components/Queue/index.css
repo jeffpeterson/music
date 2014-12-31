@@ -1,5 +1,6 @@
 .Queue {
-  margin-top: 150px;
+  transform: translate3d(0,0,0);
+  padding-top: 150px;
   overflow: scroll;
   position: relative;
 }

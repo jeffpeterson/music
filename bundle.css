@@ -3,6 +3,8 @@
   position: relative;
   background-color: black;
   color: #888;
+  font-family: 'Helvetica Neue';
+  font-weight: 200;
 }
 
 .AppBody {
@@ -24,11 +26,16 @@ html, body, #mount {
   height: 100%;
   position: relative;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
 .Grid {
   -webkit-transform: translate3d(0,0,0);
           transform: translate3d(0,0,0);
 }
 .GridTrack {
+  background-position: center;
   background-size: cover;
   float: left;
   position: relative;
@@ -48,7 +55,6 @@ html, body, #mount {
   right: 0;
   line-height: 24px;
   color: white;
-  white-space: nowrap;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -70,14 +76,13 @@ html, body, #mount {
   margin: 5px;
   padding: 5px;
   line-height: 1;
-  background-color: black;
+  background-color: rgba(0,0,0, 0.8);
   color: white;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipses;
 }
 
 .Header {
+  -webkit-transform: translate3d(0,0,0);
+          transform: translate3d(0,0,0);
   z-index: 1;
   display: -webkit-box;
   display: -webkit-flex;
@@ -90,7 +95,9 @@ html, body, #mount {
   right: 0;
 }
 .Queue {
-  margin-top: 150px;
+  -webkit-transform: translate3d(0,0,0);
+          transform: translate3d(0,0,0);
+  padding-top: 150px;
   overflow: scroll;
   position: relative;
 }
@@ -194,10 +201,6 @@ html, body, #mount {
   overflow: scroll;
   padding-top: 150px;
 }
-
-.Grid::-webkit-scrollbar {
-  display: none;
-}
 .Search {
   -webkit-box-flex: 1;
   -webkit-flex: 1 0 50%;
@@ -216,7 +219,6 @@ html, body, #mount {
   padding: 0 20px;
 }
 .WaveForm {
-  opacity: 0.9;
   left: 0;
   top: 0;
   width: 100%;

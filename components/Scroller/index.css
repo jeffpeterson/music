@@ -6,7 +6,3 @@
   overflow: scroll;
   padding-top: 150px;
 }
-
-.Grid::-webkit-scrollbar {
-  display: none;
-}

@@ -7,6 +7,23 @@ function isNextPageRequired() {
 module.exports = React.createClass({
   displayName: 'Scroller',
 
+  getDefaultProps() {
+    return {
+      onUpdate() {},
+      loadNextPage() {},
+    }
+  },
+
+  render() {
+    return div(
+      {
+        className: 'Scroller',
+        onScroll: this.handleScroll(),
+      },
+      this.props.children
+    )
+  },
+
   handleScroll: function() {
     var timestamp = 0
     var ptimestamp = 0
@@ -21,6 +38,8 @@ module.exports = React.createClass({
       milliDelta = timestamp - ptimestamp
       pixelsPerMilli = pixelDelta / milliDelta
       millisToBottom = distanceToBottom / pixelsPerMilli
+
+      this.props.onUpdate(pixelsPerMilli)
 
       if (millisToBottom < 400 && millisToBottom >= 0) {
         this.props.loadNextPage()
@@ -42,10 +61,4 @@ module.exports = React.createClass({
     }
   },
 
-  render: function() {
-    return div({
-      className: 'Scroller',
-      onScroll: this.handleScroll(),
-    }, this.props.children)
-  }
 })

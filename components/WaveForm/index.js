@@ -8,8 +8,7 @@ module.exports = React.createClass({
     return {
       fftSize: 2048,
       isDimmed: false,
-      backgroundRgb: '0,0,0',
-      lineRgb: '255,255,255'
+      colors: {0: '255,255,255', 1: '255,255,255'},
     }
   },
 
@@ -30,22 +29,29 @@ module.exports = React.createClass({
     var step = width / bufferLength
     var that = this
 
-    ctx.lineWidth = 5
+    ctx.lineWidth = 4
+    ctx.shadowBlur = 30
+    ctx.shadowOffsetX = 0
+    ctx.shadowOffsetY = 0
 
     function draw() {
+      var colors = that.props.colors
       var x = 0
       var y
 
-      ctx.fillStyle = 'rgba(' + that.props.backgroundRgb + ', 1)'
-      ctx.strokeStyle = 'rgba(' + that.props.lineRgb + ', ' + that.opacity() + ')'
+      ctx.shadowColor = rgb(colors[2])
+
+      var gradient = ctx.strokeStyle = ctx.createLinearGradient(0, 0, width, 0)
+      gradient.addColorStop(0, rgb(colors[0]))
+      gradient.addColorStop(1, rgb(colors[1]))
 
       analyser.getByteTimeDomainData(data)
 
-      ctx.fillRect(0, 0, width, height)
+      ctx.clearRect(0, 0, width, height)
 
       ctx.beginPath()
 
-      for(var i = 0; i < bufferLength; i++, x += step) {
+      for (var i = 0; i < bufferLength; i++, x += step) {
         y = 0.00390625 * data[i] * height
 
         if(i === 0) {
@@ -55,6 +61,7 @@ module.exports = React.createClass({
         }
       }
 
+      ctx.globalAlpha = that.opacity()
       ctx.stroke()
 
       requestAnimationFrame(draw)
@@ -74,4 +81,12 @@ module.exports = React.createClass({
 
 function warp(x) {
   return -(x * 2 - 2) * x
+}
+
+function rgba(color, alpha) {
+  return `rgba(${color}, ${alpha})`
+}
+
+function rgb(color) {
+  return `rgb(${color})`
 }

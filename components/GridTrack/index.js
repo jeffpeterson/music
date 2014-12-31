@@ -26,10 +26,10 @@ module.exports = React.createClass({
         style: style,
         onDragStart: this.handleDragStart,
         onClick: this.props.onClick
-      }
-      // ,div({className: 'GridTrackContent'}
-      //   // ,span({className: 'GridTrackText'}, this.props.track.title)
-      // )
+      },
+      div({className: 'GridTrackContent'},
+        span({className: 'GridTrackText'}, this.props.track.title)
+      )
     )
   }
 })

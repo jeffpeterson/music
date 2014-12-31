@@ -13,18 +13,21 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    return div({className: 'Header'},
+    var style = {
+      backgroundColor: `rgba(${this.props.colors.background}, 0.9)`
+    }
+
+    return div({style, className: 'Header'},
       WaveForm({
         ctx: this.props.ctx,
         currentTrack: this.props.currentTrack,
-        backgroundRgb: this.props.colors.background,
-        lineRgb: this.props.colors[0],
+        colors: this.props.colors,
         isDimmed: this.state.searchIsActive
       }),
       Search({
         query: this.props.query,
         setQuery: this.props.setQuery,
-        color: this.props.colors[1],
+        color: this.props.colors[2],
         setActive: this.setSearchActive
       })
     )

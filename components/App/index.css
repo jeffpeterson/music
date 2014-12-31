@@ -3,6 +3,8 @@
   position: relative;
   background-color: black;
   color: #888;
+  font-family: 'Helvetica Neue';
+  font-weight: 200;
 }
 
 .AppBody {
@@ -17,4 +19,8 @@ html, body, #mount {
   padding: 0;
   height: 100%;
   position: relative;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
