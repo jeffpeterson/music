@@ -3,10 +3,6 @@
   padding-top: 150px;
   overflow: scroll;
   position: relative;
+  flex-shrink: 0;
 }
 
-.Queue::after {
-  display: block;
-  content: '';
-  padding-top: 33.33%
-}

@@ -1,20 +1,25 @@
 .QueueTrack {
   background-size: cover;
   background-position: center center;
+  position: absolute;
+  transition: 0.5s;
 }
 
 .QueueTrack::before {
+  transition: 0.5s;
   padding-top: 33.333%;
   content: '';
   display: block;
 }
 
 .QueueTrack:first-child {
-  position: sticky;
-  top: 0;
 }
 
 .QueueTrack:first-child::before {
   padding-top: 100%;
+}
+
+.QueueTrack:last-child {
+  margin-bottom: 33%;
 }
 

@@ -1,4 +1,4 @@
-var React = require('react')
+var React = require('react/addons')
 var div = React.DOM.div
 var span = React.DOM.span
 
@@ -21,7 +21,7 @@ module.exports = React.createClass({
 
     return div(
       {
-        className: 'GridTrack Ratio-1',
+        className: 'GridTrack Ratio',
         draggable: true,
         style: style,
         onDragStart: this.handleDragStart,

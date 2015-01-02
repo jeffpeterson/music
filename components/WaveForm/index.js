@@ -1,4 +1,4 @@
-var React = require('react')
+var React = require('react/addons')
 var canvas = React.DOM.canvas
 
 module.exports = React.createClass({
@@ -30,9 +30,6 @@ module.exports = React.createClass({
     var that = this
 
     ctx.lineWidth = 4
-    ctx.shadowBlur = 30
-    ctx.shadowOffsetX = 0
-    ctx.shadowOffsetY = 0
 
     function draw() {
       var colors = that.props.colors
@@ -41,9 +38,11 @@ module.exports = React.createClass({
 
       ctx.shadowColor = rgb(colors[2])
 
-      var gradient = ctx.strokeStyle = ctx.createLinearGradient(0, 0, width, 0)
-      gradient.addColorStop(0, rgb(colors[0]))
-      gradient.addColorStop(1, rgb(colors[1]))
+      ctx.strokeStyle = rgb(colors[0])
+      // var gradient = ctx.strokeStyle = ctx.createLinearGradient(0, 0, 0, height)
+      // gradient.addColorStop(0, rgb(colors[1]))
+      // gradient.addColorStop(0.5, rgb(colors[0]))
+      // gradient.addColorStop(1, rgb(colors[1]))
 
       analyser.getByteTimeDomainData(data)
 

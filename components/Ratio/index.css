@@ -1,20 +1,12 @@
 .Ratio {
-  width: 50%;
-}
-
-/* minus one */
-.Ratio-1 {
-  width: 100%;
+  width: 50vw;
 }
 
 @media (min-width: 600px) {
-  /* 3 */
+  /* 1/3 */
 
   .Ratio {
-    width: 33%;
-  }
-  .Ratio-1 {
-    width: 50%;
+    width: 33.3333vw;
   }
 }
 
@@ -22,10 +14,7 @@
   /* 1/4 */
 
   .Ratio {
-    width: 25%;
-  }
-  .Ratio-1 {
-    width: 33%;
+    width: 25vw;
   }
 }
 
@@ -33,10 +22,7 @@
   /* 1/5 */
 
   .Ratio {
-    width: 20%;
-  }
-  .Ratio-1 {
-    width: 25%;
+    width: 20vw;
   }
 }
 
@@ -44,9 +30,6 @@
   /* 1/6 */
 
   .Ratio {
-    width: 16.667%;
-  }
-  .Ratio-1 {
-    width: 20%;
+    width: 16.6667vw;
   }
 }

@@ -1,6 +1,6 @@
 require('6to5/polyfill')
 
-var React = require('react')
+var React = require('react/addons')
 var div = React.DOM.div
 
 var Chloroform = require('chloroform')
@@ -81,29 +81,12 @@ module.exports = React.createClass({
   },
 
   updateScrubTime(time) {
-    lib.debug('time update', time)
-  },
-
-  rotateQueue(n) {
-    if (!n) {
-      return
-    }
-
-    lib.debug('rotating queue', n)
-
-    this.setState({
-      queue: lib.rotate(this.state.queue, n)
-    })
-  },
-
-  rotateQueueToTrack(track) {
-    this.rotateQueue(indexOfTrack(this.state.queue, track))
+    // lib.debug('time update', time)
   },
 
   addToQueue(track) {
-    this.setState({
-      queue: uniqTracks(this.state.queue.concat(track))
-    })
+    var queue = addTrackToQueue(this.state.queue, track)
+    return this.setState({queue})
   },
 
   play(track) {
@@ -111,13 +94,15 @@ module.exports = React.createClass({
       return
     }
 
-    this.addToQueue(track)
-    this.rotateQueueToTrack(track)
+    var queue = addTrackToQueue(this.state.queue, track)
+    queue = rotateQueueToTrack(queue, track)
+    return this.setState({queue})
   },
 
 
   advanceQueue() {
-    this.rotateQueue(1)
+    var queue = rotateQueue(this.state.queue, 1)
+    return this.setState({queue})
   },
 
   controls() {
@@ -129,7 +114,7 @@ module.exports = React.createClass({
   },
 
   setQuery(query) {
-    this.setState({query}, this.loadFirstPage)
+    return this.setState({query}, this.loadFirstPage)
   },
 
   request: function(options) {
@@ -229,5 +214,23 @@ function indexOfTrack(queue, track) {
   if (index >= 0) {
     return index
   }
+}
+
+function rotateQueue(queue, n) {
+  if (!n) {
+    return queue
+  }
+
+  lib.debug('rotating queue', n)
+
+  return lib.rotate(queue, n)
+}
+
+function addTrackToQueue(queue, track) {
+  return uniqTracks(queue.concat(track).reverse()).reverse()
+}
+
+function rotateQueueToTrack(queue, track) {
+  return rotateQueue(queue, indexOfTrack(queue, track))
 }
 

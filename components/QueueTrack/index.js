@@ -1,4 +1,4 @@
-var React = require('react')
+var React = require('react/addons')
 var div = React.DOM.div
 
 function artUrl(track) {
@@ -12,13 +12,24 @@ module.exports = React.createClass({
 
   render: function() {
     var style = {
-      backgroundImage: 'url(' + artUrl(this.props.track) + ')'
+      backgroundImage: 'url(' + artUrl(this.props.track) + ')',
+      marginTop: marginTop(this.props.index)
     }
 
     return div({
-      className: 'QueueTrack',
+      className: 'QueueTrack Ratio',
       style: style,
       onClick: this.props.onClick
     })
   }
 })
+
+function marginTop(i) {
+  if (!i) {
+    return 0
+  }
+
+  i -= 1
+
+  return i * 33 + 100 + '%'
+}

@@ -1,5 +1,6 @@
-var React = require('react')
+var React = require('react/addons')
 var div = React.DOM.div
+
 var QueueTrack = React.createFactory(require('../QueueTrack'))
 
 module.exports = React.createClass({
@@ -13,8 +14,8 @@ module.exports = React.createClass({
 
   render: function() {
     return div({className: 'Queue Ratio', onDrop: this.handleDrop, onDragOver: this.handleDragOver},
-      this.props.tracks.map(function(track) {
-        return QueueTrack({ track: track, key: track.id, onClick: this.play.bind(null, track) })
+      this.props.tracks.map(function(track, index) {
+        return QueueTrack({ track, index, key: track.id, onClick: this.play.bind(null, track) })
       }.bind(this))
     )
   },

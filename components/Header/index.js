@@ -1,4 +1,4 @@
-var React = require('react')
+var React = require('react/addons')
 var div = React.DOM.div
 var WaveForm = React.createFactory(require('../WaveForm'))
 var Search = React.createFactory(require('../Search'))

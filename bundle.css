@@ -100,51 +100,54 @@ html, body, #mount {
   padding-top: 150px;
   overflow: scroll;
   position: relative;
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
 }
 
-.Queue::after {
-  display: block;
-  content: '';
-  padding-top: 33.33%
-}
 .QueueTrack {
   background-size: cover;
   background-position: center center;
+  position: absolute;
+  -webkit-transition: 0.5s;
+          transition: 0.5s;
 }
 
 .QueueTrack::before {
+  -webkit-transition: 0.5s;
+          transition: 0.5s;
   padding-top: 33.333%;
   content: '';
   display: block;
 }
 
 .QueueTrack:first-child {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
 }
 
 .QueueTrack:first-child::before {
   padding-top: 100%;
 }
 
-.Ratio {
-  width: 50%;
+.QueueTrack:last-child {
+  margin-bottom: 33%;
 }
 
-/* minus one */
-.Ratio-1 {
-  width: 100%;
+.animateQueue-leave::before {
+}
+
+.animateQueue-leave-active::before {
+  padding-top: 0%
+}
+
+.Ratio {
+  width: 50vw;
 }
 
 @media (min-width: 600px) {
-  /* 3 */
+  /* 1/3 */
 
   .Ratio {
-    width: 33%;
-  }
-  .Ratio-1 {
-    width: 50%;
+    width: 33.3333vw;
   }
 }
 
@@ -152,10 +155,7 @@ html, body, #mount {
   /* 1/4 */
 
   .Ratio {
-    width: 25%;
-  }
-  .Ratio-1 {
-    width: 33%;
+    width: 25vw;
   }
 }
 
@@ -163,10 +163,7 @@ html, body, #mount {
   /* 1/5 */
 
   .Ratio {
-    width: 20%;
-  }
-  .Ratio-1 {
-    width: 25%;
+    width: 20vw;
   }
 }
 
@@ -174,10 +171,7 @@ html, body, #mount {
   /* 1/6 */
 
   .Ratio {
-    width: 16.667%;
-  }
-  .Ratio-1 {
-    width: 20%;
+    width: 16.6667vw;
   }
 }
 .Scroller {
