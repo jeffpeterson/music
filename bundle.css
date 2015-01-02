@@ -132,13 +132,6 @@ html, body, #mount {
   margin-bottom: 33%;
 }
 
-.animateQueue-leave::before {
-}
-
-.animateQueue-leave-active::before {
-  padding-top: 0%
-}
-
 .Ratio {
   width: 50vw;
 }

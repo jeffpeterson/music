@@ -669,34 +669,30 @@ module.exports = React.createClass({
     analyser.fftSize = this.props.fftSize;
     analyser.smoothingTimeConstant = 0;
 
-    var bufferLength = analyser.frequencyBinCount;
-    var data = new Uint8Array(bufferLength);
+    var bufferLength = analyser.fftSize;
+    var buffer = new Uint8Array(bufferLength);
     var step = width / bufferLength;
     var that = this;
 
     ctx.lineWidth = 4;
+    ctx.fillStyle = "rgba(0,0,0, 0)";
 
     function draw() {
       var colors = that.props.colors;
-      var x = 0;
-      var y;
-
-      ctx.shadowColor = rgb(colors[2]);
+      var x, y;
 
       ctx.strokeStyle = rgb(colors[0]);
-      // var gradient = ctx.strokeStyle = ctx.createLinearGradient(0, 0, 0, height)
-      // gradient.addColorStop(0, rgb(colors[1]))
-      // gradient.addColorStop(0.5, rgb(colors[0]))
-      // gradient.addColorStop(1, rgb(colors[1]))
 
-      analyser.getByteTimeDomainData(data);
+      analyser.getByteTimeDomainData(buffer);
 
-      ctx.clearRect(0, 0, width, height);
+      ctx.globalCompositeOperation = "destination-in";
+      ctx.fillRect(0, 0, width, height);
 
       ctx.beginPath();
 
-      for (var i = 0; i < bufferLength; i++, x += step) {
-        y = 0.00390625 * data[i] * height;
+      for (var i = 0; i < bufferLength; i++) {
+        x = i * step;
+        y = 0.00390625 * buffer[i] * height;
 
         if (i === 0) {
           ctx.moveTo(x, y);
@@ -705,6 +701,7 @@ module.exports = React.createClass({
         }
       }
 
+      ctx.globalCompositeOperation = "source-over";
       ctx.globalAlpha = that.opacity();
       ctx.stroke();
 
