@@ -28,7 +28,8 @@ module.exports = React.createClass({
         onClick: this.props.onClick
       },
       div({className: 'GridTrackContent'},
-        span({className: 'GridTrackText'}, this.props.track.title)
+        span({className: 'GridTrackText GridTrackArtist'}, this.props.track.user.username),
+        span({className: 'GridTrackText GridTrackTitle'}, this.props.track.title)
       )
     )
   }

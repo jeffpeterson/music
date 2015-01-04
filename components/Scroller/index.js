@@ -19,12 +19,13 @@ module.exports = React.createClass({
       {
         className: 'Scroller',
         onScroll: this.handleScroll(),
+        // onWheel: this.handleWheel,
       },
       this.props.children
     )
   },
 
-  handleScroll: function() {
+  handleScroll() {
     var timestamp = 0
     var ptimestamp = 0
     var waitingForFrame, pixelDelta, milliDelta, pixelsPerMilli, millisToBottom
@@ -61,4 +62,8 @@ module.exports = React.createClass({
     }
   },
 
+  handleWheel(e) {
+    e.preventDefault()
+    this.getDOMNode().scrollTop += e.deltaY
+  }
 })

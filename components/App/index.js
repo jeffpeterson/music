@@ -142,6 +142,8 @@ module.exports = React.createClass({
       return
     }
 
+    lib.debug('loading next page with offset:', this.state.tracks.length)
+
     this.setState({ isLoading: true })
 
     return this.request({
@@ -149,6 +151,8 @@ module.exports = React.createClass({
       query: this.state.query
     })
     .then(tracks => {
+      lib.debug('received', tracks.length, 'tracks')
+
       this.setState({
         isLoading: false,
         tracks: uniqTracks(this.state.tracks.concat(tracks))

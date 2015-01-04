@@ -186,12 +186,16 @@ module.exports = React.createClass({
       return;
     }
 
+    lib.debug("loading next page with offset:", this.state.tracks.length);
+
     this.setState({ isLoading: true });
 
     return this.request({
       offset: this.state.tracks.length,
       query: this.state.query
     }).then(function (tracks) {
+      lib.debug("received", tracks.length, "tracks");
+
       _this2.setState({
         isLoading: false,
         tracks: uniqTracks(_this2.state.tracks.concat(tracks))
@@ -327,7 +331,7 @@ module.exports = React.createClass({
       style: style,
       onDragStart: this.handleDragStart,
       onClick: this.props.onClick
-    }, div({ className: "GridTrackContent" }, span({ className: "GridTrackText" }, this.props.track.title)));
+    }, div({ className: "GridTrackContent" }, span({ className: "GridTrackText GridTrackArtist" }, this.props.track.user.username), span({ className: "GridTrackText GridTrackTitle" }, this.props.track.title)));
   }
 });
 
@@ -579,7 +583,13 @@ module.exports = React.createClass({
         requestAnimationFrame(onFrame);
       }
     };
-  } });
+  },
+
+  handleWheel: function (e) {
+    e.preventDefault();
+    this.getDOMNode().scrollTop += e.deltaY;
+  }
+});
 
 },{"react/addons":"/Users/jeff/Dropbox/code/music/node_modules/react/addons.js"}],"/Users/jeff/Dropbox/code/music/components/Search/index.js":[function(require,module,exports){
 "use strict";
@@ -647,6 +657,8 @@ module.exports = React.createClass({
 var React = require("react/addons");
 var canvas = React.DOM.canvas;
 
+var lib = require("../../lib");
+
 module.exports = React.createClass({
   displayName: "WaveForm",
 
@@ -658,6 +670,7 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function () {
+    var bassDelta = 0;
     var analyser = this.props.ctx.analyser;
     var canvas = this.getDOMNode();
     canvas.width = canvas.clientWidth * window.devicePixelRatio;
@@ -667,31 +680,37 @@ module.exports = React.createClass({
     var ctx = canvas.getContext("2d");
 
     analyser.fftSize = this.props.fftSize;
-    analyser.smoothingTimeConstant = 0;
+    analyser.smoothingTimeConstant = 0.5;
 
-    var bufferLength = analyser.fftSize;
-    var buffer = new Uint8Array(bufferLength);
-    var step = width / bufferLength;
+    var buffer = new Uint8Array(analyser.fftSize);
+    var freqBuffer = new Float32Array(analyser.frequencyBinCount);
     var that = this;
 
     ctx.lineWidth = 4;
     ctx.fillStyle = "rgba(0,0,0, 0)";
 
     function draw() {
+      if (!that.isMounted()) {
+        return;
+      }
+
+      var bassLevel = Math.max(0, calcBassLevel(freqBuffer));
       var colors = that.props.colors;
       var x, y;
 
-      ctx.strokeStyle = rgb(colors[0]);
+      ctx.strokeStyle = rgba(colors[0], bassLevel * 2);
 
       analyser.getByteTimeDomainData(buffer);
+      analyser.getFloatFrequencyData(freqBuffer);
 
       ctx.globalCompositeOperation = "destination-in";
       ctx.fillRect(0, 0, width, height);
 
       ctx.beginPath();
 
-      for (var i = 0; i < bufferLength; i++) {
-        x = i * step;
+      for (var i = 0, l = buffer.length; i < l; i++) {
+        x = i * width / l;
+        // y = -buffer[i]
         y = 0.00390625 * buffer[i] * height;
 
         if (i === 0) {
@@ -732,7 +751,21 @@ function rgb(color) {
   return "rgb(" + color + ")";
 }
 
-},{"react/addons":"/Users/jeff/Dropbox/code/music/node_modules/react/addons.js"}],"/Users/jeff/Dropbox/code/music/index.js":[function(require,module,exports){
+function incAvg(avg, x, i) {
+  return (avg * i + x) / (i + 1);
+}
+
+function avg(nums) {
+  return nums.reduce(incAvg);
+}
+
+var pBassLevel = 0;
+
+function calcBassLevel(f) {
+  return 1 - avg([f[0], f[1], f[2], f[3]]) / avg([f[50], f[100], f[300], f[600]]);
+}
+
+},{"../../lib":"/Users/jeff/Dropbox/code/music/lib/index.js","react/addons":"/Users/jeff/Dropbox/code/music/node_modules/react/addons.js"}],"/Users/jeff/Dropbox/code/music/index.js":[function(require,module,exports){
 "use strict";
 
 var React = require("react/addons");

@@ -20,7 +20,9 @@
   line-height: 24px;
   color: white;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
+  justify-content: flex-end;
+  flex-direction: column;
   visibility: hidden;
 }
 
@@ -31,10 +33,14 @@
 
 .GridTrackText {
   display: inline-block;
-  margin: 5px;
+  margin: 0 5px 5px 5px;
   padding: 5px;
   line-height: 1;
   background-color: rgba(0,0,0, 0.8);
   color: white;
 }
 
+.GridTrackArtist {
+  opacity: 0.8;
+  font-size: 0.9em;
+}
