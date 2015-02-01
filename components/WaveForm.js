@@ -1,7 +1,5 @@
-var React = require('react/addons')
-var canvas = React.DOM.canvas
-
-var lib = require('../../lib')
+import {css} from '../lib'
+import React from 'react/addons'
 
 module.exports = React.createClass({
   displayName: 'WaveForm',
@@ -76,12 +74,21 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    return canvas({className: 'WaveForm'})
+    return <canvas className={'WaveForm'} />
   },
 
   opacity: function() {
     return this.props.isDimmed ? 0.2 : 1
   }
+})
+
+css('.WaveForm', {
+  left: 0,
+  top: 0,
+  width: '100%',
+  height: '100%',
+  zIndex: -1,
+  position: 'absolute',
 })
 
 function warp(x) {
@@ -109,3 +116,4 @@ var pBassLevel = 0
 function calcBassLevel(f) {
   return 1 - avg([f[0], f[1], f[2], f[3]]) / avg([f[50], f[100], f[300], f[600]])
 }
+

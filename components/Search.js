@@ -1,7 +1,7 @@
-var React = require('react/addons')
-var input = React.DOM.input
+import {css} from '../lib'
+import React from 'react/addons'
 
-module.exports = React.createClass({
+export default React.createClass({
   displayName: 'Search',
 
   getDefaultProps() {
@@ -23,13 +23,7 @@ module.exports = React.createClass({
       color: 'rgb(' + this.props.color + ')'
     }
 
-    return input({
-      style: style,
-      className: 'Search',
-      value: this.state.query,
-      onChange: this.handleChange,
-      onKeyDown: this.handleKeyDown
-    })
+    return <input style={style} className="Search" value={this.state.query} onChange={this.handleChange} onKeyDown={this.handleKeyDown } />
   },
 
   handleChange(e) {
@@ -53,4 +47,16 @@ module.exports = React.createClass({
       this.sendQuery()
     }
   }
+})
+
+css('.Search', {
+  flex: '1 0 50%',
+  background: 'none',
+  border: 'none',
+  color: 'white',
+  display: 'flex',
+  fontSize: 80,
+  lineHeight: 150,
+  outline: 'none',
+  padding: '0 20px',
 })

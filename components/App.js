@@ -1,20 +1,20 @@
-require('6to5/polyfill')
+import './Ratio'
+import Chloroform from 'chloroform'
+import React from 'react/addons'
+import lib from '../lib'
+import client from '../client'
 
-var React = require('react/addons')
-var div = React.DOM.div
+let {css} = lib
 
-var Chloroform = require('chloroform')
-var lib = require('../../lib')
-var client = require('../../client')
-var ctx = lib.ctx()
+let ctx = lib.ctx()
 
-var Player = React.createFactory(require('../Player'))
-var Header = React.createFactory(require('../Header'))
-var Grid = React.createFactory(require('../Grid'))
-var Queue = React.createFactory(require('../Queue'))
-var Scroller = React.createFactory(require('../Scroller'))
+import Player from './Player'
+import Header from'./Header'
+import Grid from './Grid'
+import Queue from './Queue'
+import Scroller from './Scroller'
 
-module.exports = React.createClass({
+export default React.createClass({
   displayName: 'App',
 
   getInitialState() {
@@ -52,31 +52,17 @@ module.exports = React.createClass({
       backgroundColor: 'rgb(' + this.state.colors.background + ')'
     }
 
-    return div({className: 'App', style: style },
-      Player({
-        ctx,
-        track: this.state.queue[0],
-        isPlaying: this.state.isPlaying,
-        onEnded: this.advanceQueue,
-        onError: this.advanceQueue,
-        updateScrubTime: this.updateScrubTime,
-      }),
-
-      Header(
-        {
-          ctx,
-          colors: this.state.colors,
-          currentTrack: this.currentTrack(),
-          query: this.state.query,
-          setQuery: this.setQuery
-        }
-      ),
-      div({ className: 'AppBody' },
-        Queue({ controls, tracks: this.state.queue }),
-        Scroller({ onUpdate: this.onScrollerUpdate, loadNextPage: this.loadNextPage },
-          Grid({ controls, tracks: this.state.tracks })
-        )
-      )
+    return (
+      <div className="App" style={style}>
+        <Player ctx={ctx} track={this.state.queue[0]} isPlaying={this.state.isPlaying} onEnded={this.advanceQueue} onError={this.advanceQueue} updateScrubTime={this.updateScrubTime} />
+        <Header ctx={ctx} colors={this.state.colors} currentTrack={this.currentTrack()} query={this.state.query} setQuery={this.setQuery} />
+        <div className="App-body">
+          <Queue controls={controls} tracks={this.state.queue} />
+          <Scroller onUpdate={this.onScrollerUpdate} loadNextPage={this.loadNextPage}>
+            <Grid controls={controls} tracks={this.state.tracks} />
+          </Scroller>
+        </div>
+      </div>
     )
   },
 
@@ -194,6 +180,34 @@ module.exports = React.createClass({
 
     return {}
   }
+})
+
+css('.App', {
+  height: '100%',
+  position: 'relative',
+  backgroundColor: 'black',
+  color: '#888',
+  fontFamily: 'Helvetica Neue',
+  fontWeight: 200,
+})
+
+css('.App-body', {
+  height: '100%',
+  display: 'flex',
+  alignItems: 'stretch',
+  position: 'relative',
+  overflow: 'hidden',
+})
+
+css('html, body, #mount', {
+  margin: 0,
+  padding: 0,
+  height: '100%',
+  position: 'relative',
+})
+
+css('::-webkit-scrollbar', {
+  display: 'none',
 })
 
 function uniqTracks(tracks) {

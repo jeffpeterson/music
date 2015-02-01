@@ -1,10 +1,8 @@
-var React = require('react/addons')
-var div = React.DOM.div
+import {css} from '../lib'
+import React from 'react/addons'
 
-function isNextPageRequired() {
-}
 
-module.exports = React.createClass({
+export default React.createClass({
   displayName: 'Scroller',
 
   getDefaultProps() {
@@ -14,14 +12,23 @@ module.exports = React.createClass({
     }
   },
 
+  getInitialState() {
+    return {
+      scrollY: 0
+    }
+  },
+
   render() {
-    return div(
-      {
-        className: 'Scroller',
-        onScroll: this.handleScroll(),
-        // onWheel: this.handleWheel,
-      },
-      this.props.children
+    let bodyStyle = {
+      transform: `translate3d(0, ${-this.state.scrollY}px, 0)`
+    }
+
+    return (
+      <div className='Scroller' onWheel={this.handleWheel}>
+        <div className='Scroller-body' style={bodyStyle}>
+          {this.props.children}
+        </div>
+      </div>
     )
   },
 
@@ -33,7 +40,7 @@ module.exports = React.createClass({
     var distanceToBottom = 0
     var pdistanceToBottom = 0
 
-    var onFrame = function onFrame() {
+    var onFrame = () => {
       waitingForFrame = false
       pixelDelta = pdistanceToBottom - distanceToBottom
       milliDelta = timestamp - ptimestamp
@@ -45,15 +52,15 @@ module.exports = React.createClass({
       if (millisToBottom < 400 && millisToBottom >= 0) {
         this.props.loadNextPage()
       }
-    }.bind(this)
+    }
 
-    return function(e) {
+    return e => {
       var t = e.target
 
       pdistanceToBottom = distanceToBottom
       ptimestamp = timestamp
       timestamp = e.timeStamp
-      distanceToBottom = t.scrollHeight - t.scrollTop - t.clientHeight
+      distanceToBottom = t.scrollHeight - this.state.scrollY - t.clientHeight
 
       if (!waitingForFrame) {
         waitingForFrame = true
@@ -64,6 +71,27 @@ module.exports = React.createClass({
 
   handleWheel(e) {
     e.preventDefault()
-    this.getDOMNode().scrollTop += e.deltaY
+    console.log(e.deltaY)
+    this.setState({scrollY: Math.max(0, this.state.scrollY + e.deltaY)})
+    this.handleScroll()
   }
 })
+
+css('.Scroller', {
+  flex: '1 1 auto',
+  display: 'flex',
+  alignItems: 'stretch',
+  flexDirection: 'column',
+  overflow: 'hidden',
+  paddingTop: 150,
+})
+
+
+// state:
+// {
+//   scrollY: 123,
+//   time: 1234538383.383,
+// }
+
+function needsNextPage(pstate, state, expectedResponseTime) {
+}

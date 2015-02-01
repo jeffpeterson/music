@@ -1,9 +1,11 @@
 bin := node_modules/.bin
 
 build:
-	find components -name '*.css' | xargs -I{} cat {} | $(bin)/autoprefixer > bundle.css
+	$(bin)/webpack --optimize-minimize --optimize-dedupe
+
+start: watch
 
 watch:
-	$(bin)/watchify index.js -t 6to5ify -vo bundle.js & $(bin)/barkeep -p 4321 --silent
+	$(bin)/webpack-dev-server --colors --port 4321 --hot
 
-.PHONY: watch build
+.PHONY: watch build start

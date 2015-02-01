@@ -1,9 +1,7 @@
-var React = require('react/addons')
+import lib from '../lib'
+import React from 'react/addons'
 
-var lib = require('../../lib')
-var audio = React.DOM.audio
-
-module.exports = React.createClass({
+export default React.createClass({
   displayName: 'Queue',
 
   componentDidMount() {
@@ -24,19 +22,13 @@ module.exports = React.createClass({
   },
 
   componentDidUpdate: function(props, state) {
-    // this.refs.audio.getDOMNode().load()
-
     if (props.isPlaying ^ this.props.isPlaying) {
       this.toggle(this.props.isPlaying)
     }
   },
 
   render() {
-    return audio({
-      src: mp3url(this.props.track),
-      ref: 'audio',
-      autoPlay: true,
-    })
+    return <audio src={mp3url(this.props.track)} ref="audio" autoPlay={true} />
   },
 
   handleTimeUpdate(e) {

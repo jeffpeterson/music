@@ -1,8 +1,0 @@
-.Queue {
-  transform: translate3d(0,0,0);
-  padding-top: 150px;
-  overflow: scroll;
-  position: relative;
-  flex-shrink: 0;
-}
-
