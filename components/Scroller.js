@@ -1,4 +1,4 @@
-import {css} from '../lib'
+import {css, debug} from '../lib'
 import React from 'react/addons'
 
 
@@ -7,14 +7,28 @@ export default React.createClass({
 
   getDefaultProps() {
     return {
-      onUpdate() {},
-      loadNextPage() {},
+      onUpdate: null,
+      loadNextPage: null,
     }
   },
 
   getInitialState() {
     return {
-      scrollY: 0
+      scrollY: 0,
+      time: performance.now(),
+    }
+  },
+
+  componentDidUpdate(_, pstate) {
+    if (!this.props.loadNextPage) {
+      return
+    }
+
+    let body = this.refs.body.getDOMNode()
+    let height = body.scrollHeight - body.clientHeight
+
+    if (isNextPageNeeded(pstate, this.state, height)) {
+      this.props.loadNextPage()
     }
   },
 
@@ -25,56 +39,25 @@ export default React.createClass({
 
     return (
       <div className='Scroller' onWheel={this.handleWheel}>
-        <div className='Scroller-body' style={bodyStyle}>
+        <div className='Scroller-body' ref="body" style={bodyStyle}>
           {this.props.children}
         </div>
       </div>
     )
   },
 
-  handleScroll() {
-    var timestamp = 0
-    var ptimestamp = 0
-    var waitingForFrame, pixelDelta, milliDelta, pixelsPerMilli, millisToBottom
-
-    var distanceToBottom = 0
-    var pdistanceToBottom = 0
-
-    var onFrame = () => {
-      waitingForFrame = false
-      pixelDelta = pdistanceToBottom - distanceToBottom
-      milliDelta = timestamp - ptimestamp
-      pixelsPerMilli = pixelDelta / milliDelta
-      millisToBottom = distanceToBottom / pixelsPerMilli
-
-      this.props.onUpdate(pixelsPerMilli)
-
-      if (millisToBottom < 400 && millisToBottom >= 0) {
-        this.props.loadNextPage()
-      }
-    }
-
-    return e => {
-      var t = e.target
-
-      pdistanceToBottom = distanceToBottom
-      ptimestamp = timestamp
-      timestamp = e.timeStamp
-      distanceToBottom = t.scrollHeight - this.state.scrollY - t.clientHeight
-
-      if (!waitingForFrame) {
-        waitingForFrame = true
-        requestAnimationFrame(onFrame)
-      }
-    }
-  },
-
   handleWheel(e) {
     e.preventDefault()
-    console.log(e.deltaY)
-    this.setState({scrollY: Math.max(0, this.state.scrollY + e.deltaY)})
-    this.handleScroll()
-  }
+
+    if (e.deltaY === 0) {
+      return
+    }
+    
+    this.setState({
+      scrollY: Math.max(0, this.state.scrollY + e.deltaY),
+      time: performance.now()
+    })
+  },
 })
 
 css('.Scroller', {
@@ -86,12 +69,10 @@ css('.Scroller', {
   paddingTop: 150,
 })
 
+function isNextPageNeeded(pstate, state, height, expectedResponseTime = 400) {
+  return (pixelsPerMilli(pstate, state) * expectedResponseTime + state.scrollY) > height
+}
 
-// state:
-// {
-//   scrollY: 123,
-//   time: 1234538383.383,
-// }
-
-function needsNextPage(pstate, state, expectedResponseTime) {
+function pixelsPerMilli(pstate, state) {
+  return (state.scrollY - pstate.scrollY) / (state.time - pstate.time)
 }

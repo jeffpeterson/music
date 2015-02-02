@@ -6,6 +6,6 @@ build:
 start: watch
 
 watch:
-	$(bin)/webpack-dev-server --colors --port 4321 --hot
+	$(bin)/webpack-dev-server --port 4321 --hot
 
 .PHONY: watch build start

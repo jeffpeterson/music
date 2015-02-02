@@ -19,15 +19,16 @@ export default React.createClass({
     }
 
     return (
-      <div className="GridTrack Ratio" draggable={true} style={style} onDragStart={this.handleDragStart} onClick={this.props.onClick}>
-        <div className="GridTrackContent">
-          <span className="GridTrackText GridTrackArtist">{this.props.track.user.username}</span>
-          <span className="GridTrackText GridTrackTitle">{this.props.track.title}</span>
+      <div className="GridTrack Ratio" draggable style={style} onDragStart={this.handleDragStart} onClick={this.props.onClick}>
+        <div className="GridTrack-content">
+          <span className="GridTrack-text GridTrack-artist">{this.props.track.user.username}</span>
+          <span className="GridTrack-text GridTrack-title">{this.props.track.title}</span>
         </div>
       </div>
     )
   },
 })
+
 
 css('.GridTrack', {
   backgroundPosition: 'center',
@@ -42,7 +43,7 @@ css('.GridTrack::before', {
   paddingTop: '100%',
 })
 
-css('.GridTrackContent', {
+css('.GridTrack-content', {
   position: 'absolute',
   top: 0,
   left: 0,
@@ -57,12 +58,12 @@ css('.GridTrackContent', {
   visibility: 'hidden',
 })
 
-css('.GridTrack:hover .GridTrackContent', {
+css('.GridTrack:hover .GridTrack-content', {
   visibility: 'visible',
 })
 
 
-css('.GridTrackText', {
+css('.GridTrack-text', {
   display: 'inline-block',
   margin: '0 5px 5px 5px',
   padding: 5,
@@ -71,7 +72,7 @@ css('.GridTrackText', {
   color: 'white',
 })
 
-css('.GridTrackArtist', {
+css('.GridTrack-artist', {
   opacity: 0.8,
   fontSize: '0.9em',
 })
