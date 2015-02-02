@@ -14,13 +14,14 @@ module.exports = React.createClass({
 
   render: function() {
     var style = {
-      backgroundColor: `rgba(${this.props.colors.background}, 0.9)`
+      backgroundColor: `rgba(${this.props.colors.background}, 0.9)`,
+      color: `rgb(${this.props.colors[2]})`,
     }
 
     return (
       <div className="Header" style={style}>
         <WaveForm ctx={this.props.ctx} currentTrack={this.props.currentTrack} colors={this.props.colors} isDimmed={this.state.searchIsActive} />
-        <Search query={this.props.query} setQuery={this.props.setQuery} color={this.props.colors[2]} setActive={this.setSearchActive} />
+        <Search query={this.props.query} setQuery={this.props.setQuery} setActive={this.setSearchActive} />
       </div>
     )
   },
