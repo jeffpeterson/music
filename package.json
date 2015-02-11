@@ -6,7 +6,7 @@
     "chloroform": "1.1.0",
     "flux": "2.0.1",
     "immutable": "3.4.1",
-    "react": "0.12.1"
+    "react": "0.13.0-beta.1"
   },
   "devDependencies": {
     "6to5-loader": "3.0.0",

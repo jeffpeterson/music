@@ -20,6 +20,7 @@ export default React.createClass({
   },
 
   componentDidUpdate(_, pstate) {
+    return
     if (!this.props.loadNextPage) {
       return
     }
@@ -35,6 +36,8 @@ export default React.createClass({
   render() {
     let bodyStyle = {
       transform: `translate3d(0, ${-this.state.scrollY}px, 0)`
+      // transform: `translate3d(0, ${-this.state.scrollY}px, 0) scale(${this.state.scrollY / -10000 + 1})`
+      // transform: `translate3d(0, ${-this.state.scrollY}px, ${-this.state.scrollY}px) rotateY(${this.state.scrollY / 5}deg)`
     }
 
     return (
@@ -52,7 +55,7 @@ export default React.createClass({
     if (e.deltaY === 0) {
       return
     }
-    
+
     this.setState({
       scrollY: Math.max(0, this.state.scrollY + e.deltaY),
       time: performance.now()
@@ -66,7 +69,13 @@ css('.Scroller', {
   alignItems: 'stretch',
   flexDirection: 'column',
   overflow: 'hidden',
+  transformOrigin: 'center center',
+  perspective: '1000px',
   paddingTop: 150,
+})
+
+css('.Scroller-body', {
+
 })
 
 function isNextPageNeeded(pstate, state, height, expectedResponseTime = 400) {
