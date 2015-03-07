@@ -1,23 +1,18 @@
-import {css, debug} from '../lib'
-import React from 'react/addons'
+import React from 'react'
 
+import {css, debug} from 'lib'
+import {Base} from './Base'
 
-export default React.createClass({
-  displayName: 'Scroller',
+export class Scroller extends Base {
+  constructor(props) {
+    super(props)
 
-  getDefaultProps() {
-    return {
-      onUpdate: null,
-      loadNextPage: null,
-    }
-  },
-
-  getInitialState() {
-    return {
+    this.state = {
       scrollY: 0,
       time: performance.now(),
+      scrollDelta: 0,
     }
-  },
+  }
 
   componentDidUpdate(_, pstate) {
     return
@@ -25,43 +20,53 @@ export default React.createClass({
       return
     }
 
-    let body = this.refs.body.getDOMNode()
+    let body = React.findDOMNode(this.refs.body)
     let height = body.scrollHeight - body.clientHeight
 
     if (isNextPageNeeded(pstate, this.state, height)) {
       this.props.loadNextPage()
     }
-  },
+  }
 
   render() {
     let bodyStyle = {
       transform: `translate3d(0, ${-this.state.scrollY}px, 0)`
-      // transform: `translate3d(0, ${-this.state.scrollY}px, 0) scale(${this.state.scrollY / -10000 + 1})`
+      // transform: `translate3d(0, ${-this.state.scrollY}px, 0) scale(${this.state.scrollDelta / -100 + 1})`
       // transform: `translate3d(0, ${-this.state.scrollY}px, ${-this.state.scrollY}px) rotateY(${this.state.scrollY / 5}deg)`
     }
 
     return (
-      <div className='Scroller' onWheel={this.handleWheel}>
+      <div className='Scroller' onWheel={this.handleWheel()}>
         <div className='Scroller-body' ref="body" style={bodyStyle}>
           {this.props.children}
         </div>
       </div>
     )
-  },
+  }
 
-  handleWheel(e) {
-    e.preventDefault()
+  handleWheel() {
+    return (e) => {
+      e.preventDefault()
 
-    if (e.deltaY === 0) {
-      return
+      if (e.deltaY === 0) {
+        return
+      }
+
+      var scrollY = Math.max(0, this.state.scrollY + e.deltaY)
+
+      this.setState({
+        scrollY: scrollY,
+        scrollDelta: scrollY - this.state.scrollY,
+        time: performance.now()
+      })
     }
+  }
+}
 
-    this.setState({
-      scrollY: Math.max(0, this.state.scrollY + e.deltaY),
-      time: performance.now()
-    })
-  },
-})
+Scroller.defaultProps = {
+  onUpdate: null,
+  loadNextPage: null,
+}
 
 css('.Scroller', {
   flex: '1 1 auto',

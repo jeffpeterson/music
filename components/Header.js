@@ -1,18 +1,18 @@
-import {css} from '../lib'
-import React from 'react/addons'
-import WaveForm from './WaveForm'
-import Search from './Search'
+import {css} from 'lib'
+import {Base} from './Base'
+import {WaveForm} from './WaveForm'
+import {Search} from './Search'
 
-module.exports = React.createClass({
-  displayName: 'Header',
+export class Header extends Base {
+  constructor(props) {
+    super(props)
 
-  getInitialState: function() {
-    return {
+    this.state = {
       searchIsActive: !!this.props.query
     }
-  },
+  }
 
-  render: function() {
+  render() {
     var style = {
       backgroundColor: `rgba(${this.props.colors.background}, 0.9)`,
       color: `rgb(${this.props.colors[2]})`,
@@ -20,18 +20,26 @@ module.exports = React.createClass({
 
     return (
       <div className="Header" style={style}>
-        <WaveForm ctx={this.props.ctx} currentTrack={this.props.currentTrack} colors={this.props.colors} isDimmed={this.state.searchIsActive} />
-        <Search query={this.props.query} setQuery={this.props.setQuery} setActive={this.setSearchActive} />
+        <WaveForm
+          ctx={this.props.ctx}
+          currentTrack={this.props.currentTrack}
+          colors={this.props.colors}
+          isDimmed={this.state.searchIsActive} />
+
+        <Search
+          query={this.props.query}
+          setQuery={this.props.setQuery}
+          setActive={this.setSearchActive} />
       </div>
     )
-  },
+  }
 
-  setSearchActive: function(isActive) {
+  setSearchActive(isActive) {
     this.setState({
       searchIsActive: isActive
     })
   }
-})
+}
 
 css('.Header', {
   transform: 'translate3d(0,0,0)',

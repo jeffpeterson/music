@@ -1,24 +1,24 @@
-import './Ratio'
 import Chloroform from 'chloroform'
-import React from 'react/addons'
-import lib from '../lib'
-import client from '../client'
+import lib from 'lib'
+import client from 'client'
 
 let {css} = lib
 
 let ctx = lib.ctx()
 
-import Player from './Player'
-import Header from'./Header'
-import Grid from './Grid'
-import Queue from './Queue'
-import Scroller from './Scroller'
+import './Ratio'
+import {Base} from './Base'
+import {Player} from './Player'
+import {Header} from'./Header'
+import {Grid} from './Grid'
+import {Queue} from './Queue'
+import {Scroller} from './Scroller'
 
-export default React.createClass({
-  displayName: 'App',
-
-  getInitialState() {
-    return Object.assign({
+export class App extends Base {
+  constructor(props) {
+    super(props)
+    
+    this.state = Object.assign({
       query: '',
       tracks: [],
       favorites: [],
@@ -28,22 +28,22 @@ export default React.createClass({
       colors: [],
       queue: []
     }, this.load())
-  },
+  }
 
   componentDidMount() {
     this.loadFirstPage()
     this.changeColorsToMatchTrack(this.state.queue[0])
-  },
+  }
 
   componentDidUpdate(props, state) {
     this.store(this.state)
-  },
+  }
 
   componentWillUpdate(props, state) {
     if (state.queue[0] !== this.state.queue[0]) {
       this.changeColorsToMatchTrack(state.queue[0])
     }
-  },
+  }
 
   render() {
     var controls = this.controls()
@@ -64,16 +64,16 @@ export default React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   updateScrubTime(time) {
     // lib.debug('time update', time)
-  },
+  }
 
   addToQueue(track) {
     var queue = addTrackToQueue(this.state.queue, track)
     return this.setState({queue})
-  },
+  }
 
   play(track) {
     if (!track) {
@@ -83,13 +83,13 @@ export default React.createClass({
     var queue = addTrackToQueue(this.state.queue, track)
     queue = rotateQueueToTrack(queue, track)
     return this.setState({queue})
-  },
+  }
 
 
   advanceQueue() {
     var queue = rotateQueue(this.state.queue, 1)
     return this.setState({queue})
-  },
+  }
 
   controls() {
     return {
@@ -97,19 +97,19 @@ export default React.createClass({
       play: this.play,
       advanceQueue: this.advanceQueue
     }
-  },
+  }
 
   setQuery(query) {
     return this.setState({query}, this.loadFirstPage)
-  },
+  }
 
-  request: function(options) {
+  request(options) {
     if (this.state.query) {
       return client.tracks(options)
     } else {
       return client.favorites(options)
     }
-  },
+  }
 
   loadFirstPage() {
     this.request({
@@ -121,7 +121,7 @@ export default React.createClass({
         isLoading: false
       })
     })
-  },
+  }
 
   loadNextPage() {
     if (this.state.isLoading) {
@@ -144,11 +144,11 @@ export default React.createClass({
         tracks: uniqTracks(this.state.tracks.concat(tracks))
       })
     })
-  },
+  }
 
   currentTrack() {
     return this.state.queue[0]
-  },
+  }
 
   changeColorsToMatchTrack(track) {
     if (!track) {
@@ -158,7 +158,7 @@ export default React.createClass({
     Chloroform.analyze(artUrl(track), colors => {
       this.setState({ colors: colors })
     })
-  },
+  }
 
   store(state) {
     var json = JSON.stringify(lib.only(state,
@@ -169,7 +169,7 @@ export default React.createClass({
     ))
 
     window.localStorage.setItem('App.state', json)
-  },
+  }
 
   load() {
     var str = window.localStorage.getItem('App.state')
@@ -180,7 +180,7 @@ export default React.createClass({
 
     return {}
   }
-})
+}
 
 css('.App', {
   height: '100%',
@@ -251,4 +251,3 @@ function addTrackToQueue(queue, track) {
 function rotateQueueToTrack(queue, track) {
   return rotateQueue(queue, indexOfTrack(queue, track))
 }
-

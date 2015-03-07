@@ -1,5 +1,5 @@
-import {css} from '../lib'
-import React from 'react/addons'
+import {css} from 'lib'
+import {Base} from './Base'
 
 function artUrl(track) {
   var url = track.artwork_url || track.user.avatar_url || ''
@@ -7,10 +7,8 @@ function artUrl(track) {
 }
 
 
-module.exports = React.createClass({
-  displayName: 'QueueTrack',
-
-  render: function() {
+export class QueueTrack extends Base {
+  render() {
     var style = {
       backgroundImage: 'url(' + artUrl(this.props.track) + ')',
       marginTop: marginTop(this.props.index)
@@ -18,7 +16,7 @@ module.exports = React.createClass({
 
     return <div className='QueueTrack Ratio' style={style} onClick={this.props.onClick} />
   }
-})
+}
 
 css('.QueueTrack', {
   backgroundSize: 'cover',

@@ -1,21 +1,12 @@
-import {css} from '../lib'
-import React from 'react/addons'
+import {css} from 'lib'
+import {Base} from './Base'
+import React from 'react'
 
-module.exports = React.createClass({
-  displayName: 'WaveForm',
-
-  getDefaultProps: function() {
-    return {
-      fftSize: 2048,
-      isDimmed: false,
-      colors: {0: '255,255,255', 1: '255,255,255'},
-    }
-  },
-
-  componentDidMount: function() {
+export class WaveForm extends Base {
+  componentDidMount() {
     var bassDelta = 0
     var analyser = this.props.ctx.analyser
-    var canvas = this.getDOMNode()
+    var canvas = React.findDOMNode(this)
     canvas.width = canvas.clientWidth * window.devicePixelRatio
     canvas.height = canvas.clientHeight * window.devicePixelRatio
     var width = canvas.width
@@ -33,10 +24,6 @@ module.exports = React.createClass({
     ctx.fillStyle = 'rgba(0,0,0, 0)'
 
     function draw() {
-      if (!that.isMounted()) {
-        return
-      }
-
       var bassLevel = Math.max(0, calcBassLevel(freqBuffer))
       var colors = that.props.colors
       var x, y
@@ -71,16 +58,22 @@ module.exports = React.createClass({
     }
 
     requestAnimationFrame(draw)
-  },
+  }
 
-  render: function() {
-    return <canvas className={'WaveForm'} />
-  },
+  render() {
+    return <canvas className="WaveForm" />
+  }
 
-  opacity: function() {
+  opacity() {
     return this.props.isDimmed ? 0.2 : 1
   }
-})
+}
+
+WaveForm.defaultProps = {
+  fftSize: 2048,
+  isDimmed: false,
+  colors: {0: '255,255,255', 1: '255,255,255'},
+}
 
 css('.WaveForm', {
   left: 0,
@@ -116,4 +109,3 @@ var pBassLevel = 0
 function calcBassLevel(f) {
   return 1 - avg([f[0], f[1], f[2], f[3]]) / avg([f[50], f[100], f[300], f[600]])
 }
-

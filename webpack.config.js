@@ -1,6 +1,7 @@
 var webpack = require('webpack')
 
 module.exports = {
+  devtool: "source-map",
   entry: [
   'webpack-dev-server/client?http://0.0.0.0:4321',
   'webpack/hot/only-dev-server',
@@ -10,17 +11,18 @@ module.exports = {
     path: __dirname,
     filename: 'bundle.js'
   },
+
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
   ],
-  devServer: {
-    hot: true,
-    stats: { colors: true }
+
+  resolve: {
+    root: __dirname,
   },
+
   module: {
     loaders: [
-      { test: /\.js$/, exclude: /node_modules/, loaders: ['6to5-loader', 'react-hot']}
+      { test: /\.js$/, exclude: /node_modules/, loaders: ['react-hot', 'babel-loader?experimental']}
     ]
   }
 }

@@ -1,19 +1,17 @@
-import {css} from '../lib'
-import React from 'react/addons'
+import {css} from 'lib'
+import {Base} from './Base'
 
 function artUrl(track) {
   var url = track.artwork_url || track.user.avatar_url || ''
   return url.replace('-large', '-t500x500')
 }
 
-export default React.createClass({
-  displayName: 'GridTrack',
-
-  handleDragStart: function(e) {
+export class GridTrack extends Base {
+  handleDragStart(e) {
     e.dataTransfer.setData('application/json', JSON.stringify(this.props.track))
-  },
+  }
 
-  render: function() {
+  render() {
     var style = {
       backgroundImage: 'url(' + artUrl(this.props.track) + ')'
     }
@@ -26,8 +24,8 @@ export default React.createClass({
         </div>
       </div>
     )
-  },
-})
+  }
+}
 
 
 css('.GridTrack', {

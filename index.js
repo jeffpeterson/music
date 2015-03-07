@@ -1,6 +1,7 @@
-require('6to5/polyfill')
+import 'babel-core/polyfill'
 
-var React = require('react/addons')
-var App = React.createFactory(require('./components/App'))
+import React from 'react'
+import {App} from 'components/App'
 
-React.render(App(), window.mount)
+window.React = React
+React.render(<App />, window.mount)

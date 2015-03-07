@@ -1,56 +1,62 @@
-import lib from '../lib'
-import React from 'react/addons'
+import lib from 'lib'
+import {Base} from './Base'
+import React from 'react'
 
-export default React.createClass({
-  displayName: 'Queue',
-
+export class Player extends Base {
   componentDidMount() {
-    var el = this.refs.audio.getDOMNode()
+    var el = React.findDOMNode(this.refs.audio)
     this.props.ctx.setEl(el)
 
     el.addEventListener('ended', this.props.onEnded)
     el.addEventListener('error', this.props.onError)
-    el.addEventListener('timeupdate', this.handleTimeUpdate)
-  },
+    el.addEventListener('timeupdate', this.handleTimeUpdate())
+  }
 
   componentDidUnmount() {
-    var el = this.refs.audio.getDOMNode()
+    var el = React.findDOMNode(this.refs.audio)
 
     el.removeEventListener('ended', this.props.onEnded)
     el.removeEventListener('error', this.props.onError)
     el.removeEventListener('timeupdate', this.handleTimeUpdate)
-  },
+  }
 
-  componentDidUpdate: function(props, state) {
+  componentDidUpdate(props, state) {
     if (props.isPlaying ^ this.props.isPlaying) {
       this.toggle(this.props.isPlaying)
     }
-  },
+  }
 
   render() {
     return <audio src={mp3url(this.props.track)} ref="audio" autoPlay={true} />
-  },
+  }
 
-  handleTimeUpdate(e) {
-    this.props.updateScrubTime(this.refs.audio.getDOMNode().currentTime)
-  },
+  handleTimeUpdate() {
+    return (e) => {
+      this.props
+      .updateScrubTime(React.findDOMNode(this.refs.audio).currentTime)
+    }
+  }
 
   toggle(shouldPlay) {
     shouldPlay ? this.play() : this.pause()
-  },
+  }
 
   play() {
     lib.debug('playing', id(this.props.track))
 
-    this.refs.audio.getDOMNode().play()
-  },
+    React.findDOMNode(this.refs.audio).play()
+  }
 
   pause() {
     lib.debug('pausing', id(this.props.track))
 
-    this.refs.audio.getDOMNode().pause()
+    React.findDOMNode(this.refs.audio).pause()
   }
-})
+}
+
+Player.defaultProps = {
+  updateScrubTime() {},
+}
 
 function id(track) {
   return track && track.id || undefined
@@ -59,4 +65,3 @@ function id(track) {
 function mp3url(track) {
   return track && track.stream_url + '?client_id=6da9f906b6827ba161b90585f4dd3726'
 }
-

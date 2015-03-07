@@ -1,4 +1,4 @@
-import {css} from '../lib'
+import {css} from 'lib'
 
 css('.Ratio', {
   width: '50vw',

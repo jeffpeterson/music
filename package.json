@@ -2,16 +2,15 @@
   "name": "music",
   "version": "1.0.0",
   "dependencies": {
-    "6to5": "3.3.1",
     "chloroform": "1.1.0",
     "flux": "2.0.1",
-    "immutable": "3.4.1",
-    "react": "0.13.0-beta.1"
+    "immutable": "3.6.2",
+    "react": "0.13.0-rc2"
   },
   "devDependencies": {
-    "6to5-loader": "3.0.0",
-    "react-hot-loader": "1.1.4",
-    "webpack": "1.5.3",
+    "babel-loader": "4.0.0",
+    "react-hot-loader": "1.1.7",
+    "webpack": "1.7.2",
     "webpack-dev-server": "1.7.0"
   }
 }
