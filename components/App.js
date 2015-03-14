@@ -17,7 +17,7 @@ import {Scroller} from './Scroller'
 export class App extends Base {
   constructor(props) {
     super(props)
-    
+
     this.state = Object.assign({
       query: '',
       tracks: [],
@@ -93,9 +93,9 @@ export class App extends Base {
 
   controls() {
     return {
-      addToQueue: this.addToQueue,
-      play: this.play,
-      advanceQueue: this.advanceQueue
+      addToQueue: this.addToQueue.bind(this),
+      play: this.play.bind(this),
+      advanceQueue: this.advanceQueue.bind(this)
     }
   }
 

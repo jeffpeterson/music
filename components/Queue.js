@@ -4,22 +4,28 @@ import {QueueTrack} from './QueueTrack'
 
 export class Queue extends Base {
   render() {
-    let tracks = this.props.tracks
-    .map((track, index) => <QueueTrack
-      track={track}
-      index={index}
-      key={track.id}
-      onClick={this.play.bind(null, track)} />)
-
     return (
-      <div className={'Queue Ratio'} onDrop={this.handleDrop} onDragOver={this.handleDragOver}>
-        {tracks}
+      <div
+        className="Queue Ratio"
+        onDrop={this.handleDrop.bind(this)}
+        onDragOver={this.handleDragOver}>
+        {this.renderTracks()}
       </div>
     )
   }
 
+  renderTracks() {
+    return this.props.tracks.map((track, index) => (
+      <QueueTrack
+        track={track}
+        index={index}
+        key={track.id}
+        onClick={this.play.bind(this, track)} />
+    ))
+  }
+
   handleDragOver(e) {
-    e.preventDefault();
+    e.preventDefault()
   }
 
   handleDrop(e) {

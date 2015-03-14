@@ -5,7 +5,7 @@ import {GridTrack} from './GridTrack'
 export class Grid extends Base {
   render() {
     let tracks = this.props.tracks
-    .map(track => <GridTrack track={track} onClick={this.play.bind(null, track)} key={track.id} />)
+    .map(track => <GridTrack track={track} onClick={this.play.bind(this, track)} key={track.id} />)
 
     return <div className="Grid">{tracks}</div>
   }
