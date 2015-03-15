@@ -2,40 +2,36 @@ import {css} from 'lib'
 import {Base} from './Base'
 
 export class Search extends Base {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      query: this.props.query
-    }
-  }
-
   render() {
-    let {query} = this.state
+    let {query} = this.props
 
     return <input
       className="Search"
       value={query}
-      onChange={this.handleChange}
-      onKeyDown={this.handleKeyDown } />
+      onChange={this.handleChange.bind(this)}
+      onKeyDown={this.handleKeyDown.bind(this)} />
   }
 
   handleChange(e) {
-    this.props.setActive(!!e.target.value)
-
-    this.setState({ query: e.target.value })
+    this.props.onChange(e.target.value)
   }
 
-  sendQuery(query) {
-    this.props.setQuery(this.state.query)
+  handleReturn() {
+    this.props.onConfirm()
   }
 
   handleKeyDown(e) {
     switch (e.which) {
     case 13:
-      this.sendQuery()
+      this.handleReturn(e)
     }
   }
+}
+
+Search.defaultProps = {
+  onChange() {},
+  onConfirm() {},
+  query: '',
 }
 
 css('.Search', {

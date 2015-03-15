@@ -27,18 +27,25 @@ export class Player extends Base {
   }
 
   render() {
-    return <audio src={mp3url(this.props.track)} ref="audio" autoPlay={true} />
+    return <audio
+      src={mp3url(this.props.track)}
+      ref="audio"
+      autoPlay={true} />
   }
 
   handleTimeUpdate() {
     return (e) => {
       this.props
-      .updateScrubTime(React.findDOMNode(this.refs.audio).currentTime)
+      .updateScrubTime(React.findDOMNode(this.refs.audio).currentTime * 1000)
     }
   }
 
   toggle(shouldPlay) {
     shouldPlay ? this.play() : this.pause()
+  }
+
+  scrubTo(ms) {
+    React.findDOMNode(this.refs.audio).currentTime = ms / 1000
   }
 
   play() {

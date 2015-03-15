@@ -13,6 +13,9 @@ import {Header} from'./Header'
 import {Grid} from './Grid'
 import {Queue} from './Queue'
 import {Scroller} from './Scroller'
+import {Scrubber} from './Scrubber'
+import {WaveForm} from './WaveForm'
+import {Search} from './Search'
 
 export class App extends Base {
   constructor(props) {
@@ -46,28 +49,54 @@ export class App extends Base {
   }
 
   render() {
-    var controls = this.controls()
-
-    var style = {
-      backgroundColor: 'rgb(' + this.state.colors.background + ')'
-    }
+    let {queue, colors, tracks, isPlaying, query, scrubTime} = this.state
+    let currentTrack = this.currentTrack()
+    let controls = this.controls()
 
     return (
-      <div className="App" style={style}>
-        <Player ctx={ctx} track={this.state.queue[0]} isPlaying={this.state.isPlaying} onEnded={this.advanceQueue} onError={this.advanceQueue} updateScrubTime={this.updateScrubTime} />
-        <Header ctx={ctx} colors={this.state.colors} currentTrack={this.currentTrack()} query={this.state.query} setQuery={this.setQuery} />
+      <div className="App" style={this.style()}>
+        <Player {...{ctx, isPlaying}}
+          ref="player"
+          track={currentTrack}
+          onEnded={this.advanceQueue.bind(this)}
+          onError={this.advanceQueue.bind(this)}
+          updateScrubTime={this.handleScrubTimeUpdate.bind(this)} />
+
+        <Header {...{colors}} >
+          <Scrubber {...{colors, currentTrack, scrubTime}}
+            onScrub={this.handleScrub.bind(this)} />
+
+          <WaveForm {...{ctx, currentTrack, colors}}
+            isDimmed={!!query} />
+
+          <Search {...{query}}
+            onChange={this.setQuery.bind(this)}
+            onConfirm={this.loadFirstPage.bind(this)} />
+
+        </Header>
+
         <div className="App-body">
           <Queue controls={controls} tracks={this.state.queue} />
-          <Scroller onUpdate={this.onScrollerUpdate} loadNextPage={this.loadNextPage}>
-            <Grid controls={controls} tracks={this.state.tracks} />
+          <Scroller loadNextPage={this.loadNextPage.bind(this)}>
+            <Grid controls={controls} tracks={tracks} />
           </Scroller>
         </div>
       </div>
     )
   }
 
-  updateScrubTime(time) {
-    // lib.debug('time update', time)
+  style() {
+    return {
+      backgroundColor: 'rgb(' + this.state.colors.background + ')'
+    }
+  }
+
+  handleScrubTimeUpdate(scrubTime) {
+    this.setState({scrubTime})
+  }
+
+  handleScrub(ms) {
+    this.refs.player.scrubTo(ms)
   }
 
   addToQueue(track) {
@@ -100,7 +129,7 @@ export class App extends Base {
   }
 
   setQuery(query) {
-    return this.setState({query}, this.loadFirstPage)
+    return this.setState({query})
   }
 
   request(options) {

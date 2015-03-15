@@ -1,6 +1,7 @@
 import {css} from 'lib'
 import {Base} from './Base'
 import React from 'react'
+import {rgb, rgba, mix} from 'lib/color'
 
 export class WaveForm extends Base {
   componentDidMount() {
@@ -24,14 +25,15 @@ export class WaveForm extends Base {
     ctx.fillStyle = 'rgba(0,0,0, 0)'
 
     function draw() {
-      var bassLevel = Math.max(0, calcBassLevel(freqBuffer))
-      var colors = that.props.colors
-      var x, y
-
-      ctx.strokeStyle = rgba(colors[0], bassLevel * 2)
-
+      requestAnimationFrame(draw)
       analyser.getByteTimeDomainData(buffer)
       analyser.getFloatFrequencyData(freqBuffer)
+      var bassLevel = Math.max(0, calcBassLevel(freqBuffer))
+      let alpha = (bassLevel * 2)
+      let {colors} = that.props
+      var x, y
+
+      ctx.strokeStyle = rgb(mix(colors[0], colors[1], alpha))
 
       ctx.globalCompositeOperation = 'destination-in'
       ctx.fillRect(0, 0, width, height)
@@ -52,9 +54,7 @@ export class WaveForm extends Base {
 
       ctx.globalCompositeOperation = 'source-over'
       ctx.globalAlpha = that.opacity()
-      ctx.stroke()
-
-      requestAnimationFrame(draw)
+      stroke(ctx)
     }
 
     requestAnimationFrame(draw)
@@ -88,14 +88,6 @@ function warp(x) {
   return -(x * 2 - 2) * x
 }
 
-function rgba(color, alpha) {
-  return `rgba(${color}, ${alpha})`
-}
-
-function rgb(color) {
-  return `rgb(${color})`
-}
-
 function incAvg(avg, x, i) {
   return (avg * i + x) / (i + 1)
 }
@@ -108,4 +100,8 @@ var pBassLevel = 0
 
 function calcBassLevel(f) {
   return 1 - avg([f[0], f[1], f[2], f[3]]) / avg([f[50], f[100], f[300], f[600]])
+}
+
+function stroke(ctx) {
+  return ctx.stroke()
 }

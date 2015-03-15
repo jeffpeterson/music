@@ -1,48 +1,52 @@
 import {css} from 'lib'
 import {Base} from './Base'
-import {WaveForm} from './WaveForm'
-import {Search} from './Search'
+import {rgb, rgba} from 'lib/color'
 
 export class Header extends Base {
   constructor(props) {
     super(props)
 
     this.state = {
-      searchIsActive: !!this.props.query
+      alpha: 0.9,
     }
   }
 
   render() {
-    var style = {
-      backgroundColor: `rgba(${this.props.colors.background}, 0.9)`,
-      color: `rgb(${this.props.colors[2]})`,
-    }
+    let {colors, children} = this.props
 
     return (
-      <div className="Header" style={style}>
-        <WaveForm
-          ctx={this.props.ctx}
-          currentTrack={this.props.currentTrack}
-          colors={this.props.colors}
-          isDimmed={this.state.searchIsActive} />
+      <div
+        className="Header"
+        style={this.style()}
+        onMouseEnter={this.mouseEnterHandler()}
+        onMouseOut={this.mouseOutHandler()}>
 
-        <Search
-          query={this.props.query}
-          setQuery={this.props.setQuery}
-          setActive={this.setSearchActive} />
+        {children}
       </div>
     )
   }
 
-  setSearchActive(isActive) {
-    this.setState({
-      searchIsActive: isActive
-    })
+  style() {
+    let {colors} = this.props
+    let {alpha} = this.state
+
+    return {
+      backgroundColor: rgba(colors.background, alpha),
+      color: rgb(colors[2]),
+    }
+  }
+
+  mouseEnterHandler() {
+    return () => this.setState({alpha: 0.98})
+  }
+
+  mouseOutHandler() {
+    return () => this.setState({alpha: 0.9})
   }
 }
 
 css('.Header', {
-  transform: 'translate3d(0,0,0)',
+  transition: 'background-color 300ms',
   zIndex: 1,
   display: 'flex',
   height: 150,
