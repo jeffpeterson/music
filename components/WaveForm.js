@@ -61,7 +61,7 @@ export class WaveForm extends Base {
   }
 
   render() {
-    return <canvas className="WaveForm" />
+    return <canvas  className="WaveForm" />
   }
 
   opacity() {

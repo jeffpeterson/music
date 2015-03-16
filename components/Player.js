@@ -6,10 +6,11 @@ export class Player extends Base {
   componentDidMount() {
     var el = React.findDOMNode(this.refs.audio)
     this.props.ctx.setEl(el)
+    this.scrubTo(this.props.scrubTime)
 
     el.addEventListener('ended', this.props.onEnded)
     el.addEventListener('error', this.props.onError)
-    el.addEventListener('timeupdate', this.handleTimeUpdate())
+    el.addEventListener('timeupdate', this.handleTimeUpdate.bind(this))
   }
 
   componentDidUnmount() {
@@ -20,9 +21,13 @@ export class Player extends Base {
     el.removeEventListener('timeupdate', this.handleTimeUpdate)
   }
 
-  componentDidUpdate(props, state) {
-    if (props.isPlaying ^ this.props.isPlaying) {
+  componentDidUpdate(pprops, pstate) {
+    if (pprops.isPlaying ^ this.props.isPlaying) {
       this.toggle(this.props.isPlaying)
+    }
+
+    if (Math.abs(pprops.scrubTime - this.props.scrubTime) > 1000) {
+      this.scrubTo(this.props.scrubTime)
     }
   }
 
@@ -33,11 +38,9 @@ export class Player extends Base {
       autoPlay={true} />
   }
 
-  handleTimeUpdate() {
-    return (e) => {
-      this.props
-      .updateScrubTime(React.findDOMNode(this.refs.audio).currentTime * 1000)
-    }
+  handleTimeUpdate(e) {
+    this.props
+    .updateScrubTime(React.findDOMNode(this.refs.audio).currentTime * 1000)
   }
 
   toggle(shouldPlay) {
@@ -63,6 +66,7 @@ export class Player extends Base {
 
 Player.defaultProps = {
   updateScrubTime() {},
+  scrubTime: 0,
 }
 
 function id(track) {

@@ -10,18 +10,19 @@ import './Ratio'
 import {Base} from './Base'
 import {Player} from './Player'
 import {Header} from'./Header'
-import {Grid} from './Grid'
+import {GridTracks} from './GridTracks'
 import {Queue} from './Queue'
 import {Scroller} from './Scroller'
 import {Scrubber} from './Scrubber'
 import {WaveForm} from './WaveForm'
 import {Search} from './Search'
+import {Menu} from './Menu'
 
 export class App extends Base {
   constructor(props) {
     super(props)
 
-    this.state = Object.assign({
+    this.state = {
       query: '',
       tracks: [],
       favorites: [],
@@ -29,17 +30,34 @@ export class App extends Base {
       isPlaying: true,
       scrubTime: 0,
       colors: {},
-      queue: []
-    }, this.load())
+      queue: [],
+      ...this.load()
+    }
+
+    this.addToQueue = this.addToQueue.bind(this)
+    this.setQuery = this.setQuery.bind(this)
+    this.play = this.play.bind(this)
+    this.advanceQueue = this.advanceQueue.bind(this)
+    this.store = this.store.bind(this)
+    this.loadNextPage = this.loadNextPage.bind(this)
+    this.loadFirstPage = this.loadFirstPage.bind(this)
+    this.handleScrubTimeUpdate = this.handleScrubTimeUpdate.bind(this)
+
+    this.controls = {
+      addToQueue: this.addToQueue,
+      advanceQueue: this.advanceQueue,
+      play: this.play,
+    }
   }
 
   componentDidMount() {
     this.loadFirstPage()
     this.changeColorsToMatchTrack(this.state.queue[0])
+    window.addEventListener('unload', this.store)
   }
 
-  componentDidUpdate(props, state) {
-    this.store(this.state)
+  componentDidUnmount() {
+    window.removeEventListener('unload', this.store)
   }
 
   componentWillUpdate(props, state) {
@@ -51,35 +69,36 @@ export class App extends Base {
   render() {
     let {queue, colors, tracks, isPlaying, query, scrubTime} = this.state
     let currentTrack = this.currentTrack()
-    let controls = this.controls()
+    let controls = this.controls
 
     return (
       <div className="App" style={this.style()}>
         <Player {...{ctx, isPlaying}}
           ref="player"
           track={currentTrack}
-          onEnded={this.advanceQueue.bind(this)}
-          onError={this.advanceQueue.bind(this)}
-          updateScrubTime={this.handleScrubTimeUpdate.bind(this)} />
+          onEnded={this.advanceQueue}
+          onError={this.advanceQueue}
+          scrubTime={scrubTime}
+          updateScrubTime={this.handleScrubTimeUpdate} />
 
         <Header {...{colors}} >
           <Scrubber {...{colors, scrubTime}}
             duration={currentTrack && currentTrack.duration}
-            onScrub={this.handleScrub.bind(this)} />
+            onScrub={this.handleScrubTimeUpdate} />
 
           <WaveForm {...{ctx, currentTrack, colors}}
             isDimmed={!!query} />
 
           <Search {...{query}}
-            onChange={this.setQuery.bind(this)}
-            onConfirm={this.loadFirstPage.bind(this)} />
+            onChange={this.setQuery}
+            onConfirm={this.loadFirstPage} />
 
         </Header>
 
         <div className="App-body">
-          <Queue controls={controls} tracks={this.state.queue} />
-          <Scroller loadNextPage={this.loadNextPage.bind(this)}>
-            <Grid controls={controls} tracks={tracks} />
+          <Queue controls={controls} tracks={queue} />
+          <Scroller loadNextPage={this.loadNextPage}>
+            <GridTracks controls={controls} tracks={tracks} />
           </Scroller>
         </div>
       </div>
@@ -94,10 +113,6 @@ export class App extends Base {
 
   handleScrubTimeUpdate(scrubTime) {
     this.setState({scrubTime})
-  }
-
-  handleScrub(ms) {
-    this.refs.player.scrubTo(ms)
   }
 
   addToQueue(track) {
@@ -119,14 +134,6 @@ export class App extends Base {
   advanceQueue() {
     var queue = rotateQueue(this.state.queue, 1)
     return this.setState({queue})
-  }
-
-  controls() {
-    return {
-      addToQueue: this.addToQueue.bind(this),
-      play: this.play.bind(this),
-      advanceQueue: this.advanceQueue.bind(this)
-    }
   }
 
   setQuery(query) {
@@ -190,12 +197,13 @@ export class App extends Base {
     })
   }
 
-  store(state) {
-    var json = JSON.stringify(lib.only(state,
+  store() {
+    var json = JSON.stringify(lib.only(this.state,
       'queue',
       'query',
       'isPlaying',
-      'colors'
+      'colors',
+      'scrubTime'
     ))
 
     window.localStorage.setItem('App.state', json)

@@ -4,7 +4,7 @@ import {css} from 'lib/css'
 import {Base} from './Base'
 import {GridItem} from './GridItem'
 
-export class Grid extends Base {
+export class LazyGrid extends Base {
   constructor(props) {
     super(props)
 
@@ -27,7 +27,7 @@ export class Grid extends Base {
   render() {
     let {children} = this.props
 
-    return <div className="Grid">
+    return <div className="LazyGrid">
       {this.renderGridItems(children)}
     </div>
   }
@@ -37,7 +37,7 @@ export class Grid extends Base {
     let {width} = this.state
 
     let cols = width / itemSize | 0
-    let size = width / cols | 0
+    let size = width / cols
 
     return React.Children.map(children, (child, i) => {
       let x = i % cols
@@ -52,11 +52,10 @@ export class Grid extends Base {
   }
 }
 
-Grid.defaultProps = {
+LazyGrid.defaultProps = {
   itemSize: 300,
 }
 
-css(".Grid", {
-  transform: "translate3d(0,0,0)",
+css(".LazyGrid", {
   position: "relative",
 })
