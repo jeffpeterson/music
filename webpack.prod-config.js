@@ -12,6 +12,7 @@ module.exports = {
 
   plugins: [
     new webpack.NoErrorsPlugin(),
+    new webpack.optimize.OccurenceOrderPlugin(),
   ],
 
   resolve: {
