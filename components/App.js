@@ -28,7 +28,7 @@ export class App extends Base {
       isLoading: true,
       isPlaying: true,
       scrubTime: 0,
-      colors: [],
+      colors: {},
       queue: []
     }, this.load())
   }
@@ -63,7 +63,8 @@ export class App extends Base {
           updateScrubTime={this.handleScrubTimeUpdate.bind(this)} />
 
         <Header {...{colors}} >
-          <Scrubber {...{colors, currentTrack, scrubTime}}
+          <Scrubber {...{colors, scrubTime}}
+            duration={currentTrack && currentTrack.duration}
             onScrub={this.handleScrub.bind(this)} />
 
           <WaveForm {...{ctx, currentTrack, colors}}

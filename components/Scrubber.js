@@ -31,12 +31,12 @@ export class Scrubber extends Base {
   }
 
   width() {
-    let {scrubTime, currentTrack} = this.props
-    return (scrubTime / currentTrack.duration - 1) * 100 + "%"
+    let {scrubTime, duration} = this.props
+    return (scrubTime / duration - 1) * 100 + "%"
   }
 
   handleClick(e) {
-    let {duration} = this.props.currentTrack
+    let {duration} = this.props
     let {left, width} = e.currentTarget.getBoundingClientRect()
     let x = e.clientX - left
 
@@ -46,6 +46,7 @@ export class Scrubber extends Base {
 
 Scrubber.defaultProps = {
   onScrub() {},
+  duration: 1,
 }
 
 function translate(x, y = 0, z = 0) {
