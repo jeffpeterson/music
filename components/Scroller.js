@@ -1,5 +1,6 @@
 import React from 'react'
 
+import {now} from 'lib/time'
 import {css, debug} from 'lib'
 import {Base} from './Base'
 
@@ -9,7 +10,7 @@ export class Scroller extends Base {
 
     this.state = {
       scrollY: 0,
-      time: performance.now(),
+      time: now(),
       scrollDelta: 0,
     }
   }
@@ -57,7 +58,7 @@ export class Scroller extends Base {
       this.setState({
         scrollY: scrollY,
         scrollDelta: scrollY - this.state.scrollY,
-        time: performance.now()
+        time: now()
       })
     }
   }
