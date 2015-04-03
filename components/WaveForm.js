@@ -29,6 +29,7 @@ export class WaveForm extends Base {
       analyser.getByteTimeDomainData(buffer)
       analyser.getFloatFrequencyData(freqBuffer)
       var bassLevel = Math.max(0, calcBassLevel(freqBuffer))
+
       let alpha = (bassLevel * 2)
       let {colors} = that.props
       var x, y
@@ -61,7 +62,7 @@ export class WaveForm extends Base {
   }
 
   render() {
-    return <canvas  className="WaveForm" />
+    return <canvas className="WaveForm" />
   }
 
   opacity() {

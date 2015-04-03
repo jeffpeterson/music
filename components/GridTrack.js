@@ -43,6 +43,10 @@ css('.GridTrack', {
   height: '100%',
 })
 
+css('.GridTrack:active', {
+  transform: 'scale(0.9)',
+})
+
 css('.GridTrack-content', {
   position: 'absolute',
   top: 0,

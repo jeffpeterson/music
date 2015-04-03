@@ -8,13 +8,41 @@ function artUrl(track) {
 
 
 export class QueueTrack extends Base {
+  constructor(props) {
+    super(props)
+
+    this.onClick = this.onClick.bind(this)
+    this.onRemove = this.onRemove.bind(this)
+  }
+
   render() {
+    let {
+      onClick,
+      onRemove,
+      props: {track, index, controls}
+    } = this
+
     var style = {
-      backgroundImage: 'url(' + artUrl(this.props.track) + ')',
-      marginTop: marginTop(this.props.index)
+      backgroundImage: 'url(' + artUrl(track) + ')',
+      marginTop: marginTop(index)
     }
 
-    return <div className='QueueTrack Ratio' style={style} onClick={this.props.onClick} />
+    return (
+      <div className='QueueTrack Ratio' style={style} onClick={onClick}>
+        <div className='QueueTrack-remove' onClick={onRemove} />
+      </div>
+    )
+  }
+
+  onRemove(e) {
+    e.stopPropagation()
+    e.preventDefault()
+
+    this.props.controls.removeFromQueue(this.props.track)
+  }
+
+  onClick() {
+    this.props.controls.play(this.props.track)
   }
 }
 
@@ -40,6 +68,23 @@ css('.QueueTrack:last-child', {
   marginBottom: '33%',
 })
 
+css('.QueueTrack-remove', {
+  position: 'absolute',
+  right: 0,
+  bottom: 0,
+  color: 'white',
+  top: 0,
+  display: 'none'
+})
+
+css('.QueueTrack-remove::before', {
+  content: "'x'",
+  fontSize: 50
+})
+
+css('.QueueTrack:hover .QueueTrack-remove', {
+  display: 'block'
+})
 
 function marginTop(i) {
   if (!i) {

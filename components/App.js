@@ -1,7 +1,7 @@
 import Chloroform from 'chloroform'
 import lib from 'lib'
 import client from 'client'
-
+import {key} from 'lib/keyboard'
 let {css} = lib
 
 let ctx = lib.ctx()
@@ -17,6 +17,7 @@ import {Scrubber} from './Scrubber'
 import {WaveForm} from './WaveForm'
 import {Search} from './Search'
 import {Menu} from './Menu'
+import {Hue} from './Hue'
 
 export class App extends Base {
   constructor(props) {
@@ -31,10 +32,12 @@ export class App extends Base {
       scrubTime: 0,
       colors: {},
       queue: [],
+      bassLevel: 0,
       ...this.load()
     }
 
     this.addToQueue = this.addToQueue.bind(this)
+    this.removeFromQueue = this.removeFromQueue.bind(this)
     this.setQuery = this.setQuery.bind(this)
     this.play = this.play.bind(this)
     this.advanceQueue = this.advanceQueue.bind(this)
@@ -42,9 +45,12 @@ export class App extends Base {
     this.loadNextPage = this.loadNextPage.bind(this)
     this.loadFirstPage = this.loadFirstPage.bind(this)
     this.handleScrubTimeUpdate = this.handleScrubTimeUpdate.bind(this)
+    this.setBassLevel = this.setBassLevel.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
 
     this.controls = {
       addToQueue: this.addToQueue,
+      removeFromQueue: this.removeFromQueue,
       advanceQueue: this.advanceQueue,
       play: this.play,
     }
@@ -54,6 +60,7 @@ export class App extends Base {
     this.loadFirstPage()
     this.changeColorsToMatchTrack(this.state.queue[0])
     window.addEventListener('unload', this.store)
+    window.addEventListener('keydown', this.onKeyDown)
   }
 
   componentDidUnmount() {
@@ -67,12 +74,14 @@ export class App extends Base {
   }
 
   render() {
-    let {queue, colors, tracks, isPlaying, query, scrubTime} = this.state
+    let {setBassLevel} = this
+    let {bassLevel, queue, colors, tracks, isPlaying, query, scrubTime} = this.state
     let currentTrack = this.currentTrack()
     let controls = this.controls
 
     return (
       <div className="App" style={this.style()}>
+        <Hue {...{colors, bassLevel}} />
         <Player {...{ctx, isPlaying}}
           ref="player"
           track={currentTrack}
@@ -86,7 +95,7 @@ export class App extends Base {
             duration={currentTrack && currentTrack.duration}
             onScrub={this.handleScrubTimeUpdate} />
 
-          <WaveForm {...{ctx, currentTrack, colors}}
+          <WaveForm {...{ctx, currentTrack, colors, setBassLevel}}
             isDimmed={!!query} />
 
           <Search {...{query}}
@@ -97,9 +106,7 @@ export class App extends Base {
 
         <div className="App-body">
           <Queue controls={controls} tracks={queue} />
-          <Scroller loadNextPage={this.loadNextPage}>
-            <GridTracks controls={controls} tracks={tracks} />
-          </Scroller>
+          <GridTracks loadNextPage={this.loadNextPage} controls={controls} tracks={tracks} />
         </div>
       </div>
     )
@@ -115,8 +122,17 @@ export class App extends Base {
     this.setState({scrubTime})
   }
 
+  setBassLevel(bassLevel) {
+    this.setState({bassLevel})
+  }
+
   addToQueue(track) {
     var queue = addTrackToQueue(this.state.queue, track)
+    return this.setState({queue})
+  }
+
+  removeFromQueue(track) {
+    var queue = removeTrackFromQueue(this.state.queue, track)
     return this.setState({queue})
   }
 
@@ -130,6 +146,29 @@ export class App extends Base {
     return this.setState({queue})
   }
 
+  pause() {
+    this.setState({isPlaying: false})
+  }
+
+  togglePlaying() {
+    this.setState({isPlaying: !this.state.isPlaying})
+  }
+
+  onKeyDown(e) {
+    switch (key(e.which)) {
+      case 'right':
+        this.advanceQueue()
+        break
+      case 'space':
+        this.togglePlaying()
+        break
+
+      default:
+        return
+    }
+
+    e.preventDefault()
+  }
 
   advanceQueue() {
     var queue = rotateQueue(this.state.queue, 1)
@@ -161,24 +200,26 @@ export class App extends Base {
   }
 
   loadNextPage() {
-    if (this.state.isLoading) {
-      return
-    }
+    requestAnimationFrame(() => {
+      if (this.state.isLoading) {
+        return
+      }
 
-    lib.debug('loading next page with offset:', this.state.tracks.length)
+      lib.debug('loading next page with offset:', this.state.tracks.length)
 
-    this.setState({ isLoading: true })
+      this.setState({ isLoading: true })
 
-    return this.request({
-      offset: this.state.tracks.length,
-      query: this.state.query
-    })
-    .then(tracks => {
-      lib.debug('received', tracks.length, 'tracks')
+      return this.request({
+        offset: this.state.tracks.length,
+        query: this.state.query
+      })
+      .then(tracks => {
+        lib.debug('received', tracks.length, 'tracks')
 
-      this.setState({
-        isLoading: false,
-        tracks: uniqTracks(this.state.tracks.concat(tracks))
+        this.setState({
+          isLoading: false,
+          tracks: uniqTracks(this.state.tracks.concat(tracks))
+        })
       })
     })
   }
@@ -227,6 +268,7 @@ css('.App', {
   color: '#888',
   fontFamily: 'Helvetica Neue',
   fontWeight: 200,
+  overflow: 'hidden',
 })
 
 css('.App-body', {
@@ -242,6 +284,7 @@ css('html, body, #mount', {
   padding: 0,
   height: '100%',
   position: 'relative',
+  overflow: 'hidden',
 })
 
 css('::-webkit-scrollbar', {
@@ -284,6 +327,16 @@ function rotateQueue(queue, n) {
 
 function addTrackToQueue(queue, track) {
   return uniqTracks(queue.concat(track).reverse()).reverse()
+}
+
+function removeTrackFromQueue(queue, track) {
+  let i = indexOfTrack(queue, track)
+
+  if (i == null) {
+    return queue
+  }
+
+  return queue.slice(0, i).concat(queue.slice(i + 1))
 }
 
 function rotateQueueToTrack(queue, track) {

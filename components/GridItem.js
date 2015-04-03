@@ -10,7 +10,7 @@ export class GridItem extends Base {
     let {size, x, y, children} = this.props
 
     var style = {
-      transform: translate(x * size, y * size, 0),
+      transform: translate(x, y, 0),
       width: size,
       height: size,
     }
@@ -23,5 +23,6 @@ export class GridItem extends Base {
 
 css('.GridItem', {
   position: 'absolute',
-  transition: '400ms'
+  // transition: '400ms',
+  overflow: 'hidden',
 })
