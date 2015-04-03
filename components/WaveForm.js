@@ -22,47 +22,42 @@ export class WaveForm extends Base {
     var that = this
 
     ctx.lineWidth = 4
-    ctx.fillStyle = 'rgba(0,0,0, 0)'
+
+    requestAnimationFrame(draw)
 
     function draw() {
       requestAnimationFrame(draw)
       analyser.getByteTimeDomainData(buffer)
-      analyser.getFloatFrequencyData(freqBuffer)
-      var bassLevel = Math.max(0, calcBassLevel(freqBuffer))
-
-      let alpha = (bassLevel * 2)
+      // // analyser.getFloatFrequencyData(freqBuffer)
+      // // var bassLevel = Math.max(0, calcBassLevel(freqBuffer))
+      //
+      // let alpha = (bassLevel * 2)
+      let alpha = 1
       let {colors} = that.props
-      var x, y
 
       ctx.strokeStyle = rgb(mix(colors[0], colors[1], alpha))
-
-      ctx.globalCompositeOperation = 'destination-in'
-      ctx.fillRect(0, 0, width, height)
+      ctx.clearRect(0, 0, width, height)
 
       ctx.beginPath()
 
-      for (var i = 0, l = buffer.length; i < l; i++) {
-        x = i * width / l
-        // y = -buffer[i]
-        y = 0.00390625 * buffer[i] * height
-
-        if(i === 0) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
+      for (let i = 0, l = buffer.length; i < l; i++) {
+        ctx.lineTo(i * width / l, 0.00390625 * buffer[i] * height)
       }
 
-      ctx.globalCompositeOperation = 'source-over'
-      ctx.globalAlpha = that.opacity()
       stroke(ctx)
     }
-
-    requestAnimationFrame(draw)
   }
 
   render() {
-    return <canvas className="WaveForm" />
+    let {
+      props: {isDimmed}
+    } = this
+
+    let style = {
+      opacity: isDimmed ? 0.2 : 1
+    }
+
+    return <canvas style={style} className="WaveForm" />
   }
 
   opacity() {
@@ -100,7 +95,9 @@ function avg(nums) {
 var pBassLevel = 0
 
 function calcBassLevel(f) {
-  return 1 - avg([f[0], f[1], f[2], f[3]]) / avg([f[50], f[100], f[300], f[600]])
+  let l = f.length
+  let m = [2, 4, 15, 30].map(v => f[v / 100 * l | 0])
+  return 1 - avg([f[0], f[1], f[2], f[3]]) / avg(m)
 }
 
 function stroke(ctx) {

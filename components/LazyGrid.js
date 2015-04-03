@@ -16,7 +16,7 @@ export class LazyGrid extends Base {
     this.state = {
       width: 1,
       height: 1,
-      scrollY: 0, // number of grid items
+      scroll: 0, // number of grid items
     }
 
     this.onResize = this.frame(this.onResize)
@@ -33,6 +33,7 @@ export class LazyGrid extends Base {
   }
 
   render() {
+    return <div />
     return (
       <div className="LazyGrid" onWheelCapture={this.onWheel}>
         {this.renderGridItems()}
@@ -43,12 +44,12 @@ export class LazyGrid extends Base {
   renderGridItems() {
     let {
       props: {itemSize, getter},
-      state: {width, height, scrollY},
+      state: {width, height, scroll},
     } = this
 
     let size = this.adjustedItemSize()
     let cols = this.colCount()
-    let scrollRows = scrollY / cols
+    let scrollRows = scroll / cols
     let rows = height / size + 2 | 0
     let count = rows * cols
 
@@ -85,13 +86,13 @@ export class LazyGrid extends Base {
     e.stopPropagation()
 
     let delta = e.deltaY / this.adjustedItemSize() * this.colCount()
-    let scrollY = Math.max(0, this.state.scrollY + delta)
-    this.setState({scrollY})
+    let scroll = Math.max(0, this.state.scroll + delta)
+    this.setState({scroll})
   }
 }
 
 LazyGrid.defaultProps = {
-  itemSize: 200,
+  itemSize: 250,
 }
 
 css(".LazyGrid", {
