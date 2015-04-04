@@ -1,12 +1,37 @@
 import React from 'react'
+import Immutable from 'immutable'
+import {shallowEqual} from 'lib/shallowEqual'
 
 export class Base extends React.Component {
-  constructor(...o) {
-    super(...o)
-
-    this.state = this.state || this.constructor.state()
+  shouldComponentUpdate(nprops, nstate) {
+    return shallowCompare(this, nprops, nstate)
   }
 
-  static state() {
+  setInState(keyPath, fn) {
+    this.replaceState(this.state.setIn(keyPath, fn))
   }
+
+  frame(fn) {
+    let waitingForFrame = false
+
+    return () => {
+      if (waitingForFrame) {
+        return
+      }
+
+      waitingForFrame = true
+
+      requestAnimationFrame(ts => {
+        waitingForFrame = false
+        fn.call(this, ts)
+      })
+    }
+  }
+}
+
+function shallowCompare(instance, nextProps, nextState) {
+  return (
+    !shallowEqual(instance.props, nextProps) ||
+    !shallowEqual(instance.state, nextState)
+  )
 }
