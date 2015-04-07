@@ -121,42 +121,6 @@ export class App extends Base {
     }
   }
 
-  handleScrubTimeUpdate(scrubTime) {
-    this.setState({scrubTime})
-  }
-
-  setBassLevel(bassLevel) {
-    this.setState({bassLevel})
-  }
-
-  addToQueue(track) {
-    var queue = addTrackToQueue(this.state.queue, track)
-    return this.setState({queue})
-  }
-
-  removeFromQueue(track) {
-    var queue = removeTrackFromQueue(this.state.queue, track)
-    return this.setState({queue})
-  }
-
-  play(track) {
-    if (!track) {
-      return
-    }
-
-    var queue = addTrackToQueue(this.state.queue, track)
-    queue = rotateQueueToTrack(queue, track)
-    return this.setState({queue, isPlaying: true})
-  }
-
-  pause() {
-    this.setState({isPlaying: false})
-  }
-
-  togglePlaying() {
-    this.setState({isPlaying: !this.state.isPlaying})
-  }
-
   onKeyDown(e) {
     switch (key(e.which)) {
       case 'right':
@@ -173,14 +137,6 @@ export class App extends Base {
     e.preventDefault()
   }
 
-  advanceQueue() {
-    var queue = rotateQueue(this.state.queue, 1)
-    return this.setState({queue})
-  }
-
-  setQuery(query) {
-    return this.setState({query})
-  }
 
   request(options) {
     if (this.state.query) {
@@ -199,33 +155,6 @@ export class App extends Base {
     })
   }
 
-  loadNextPage() {
-    requestAnimationFrame(() => {
-      if (this.state.isLoading) {
-        return
-      }
-
-      lib.debug('loading next page with offset:', this.state.tracks.length)
-
-      this.setState({ isLoading: true })
-
-      return this.request({
-        offset: this.state.tracks.length,
-        query: this.state.query
-      })
-      .then(tracks => {
-        lib.debug('received', tracks.length, 'tracks')
-
-        this.setState({
-          isLoading: false,
-          tracks: uniqTracks(this.state.tracks.concat(tracks))
-        })
-      })
-      .catch(e => {
-        this.setState({isLoading: false})
-      })
-    })
-  }
 
   currentTrack() {
     return this.state.queue[0]
@@ -294,54 +223,7 @@ css('::-webkit-scrollbar', {
   display: 'none',
 })
 
-function uniqTracks(tracks) {
-  var index = {}
-
-  return tracks.reverse().filter(track => {
-    if (!index[track.id]) {
-      return index[track.id] = true
-    }
-  }).reverse()
-}
-
 function artUrl(track) {
   var url = track.artwork_url || track.user.avatar_url || ''
   return url.replace('-large', '-t500x500')
-}
-
-
-function indexOfTrack(queue, track) {
-  var index = queue.findIndex(t => t.id === track.id)
-
-  if (index >= 0) {
-    return index
-  }
-}
-
-function rotateQueue(queue, n) {
-  if (!n) {
-    return queue
-  }
-
-  lib.debug('rotating queue', n)
-
-  return lib.rotate(queue, n)
-}
-
-function addTrackToQueue(queue, track) {
-  return uniqTracks(queue.concat(track).reverse()).reverse()
-}
-
-function removeTrackFromQueue(queue, track) {
-  let i = indexOfTrack(queue, track)
-
-  if (i == null) {
-    return queue
-  }
-
-  return queue.slice(0, i).concat(queue.slice(i + 1))
-}
-
-function rotateQueueToTrack(queue, track) {
-  return rotateQueue(queue, indexOfTrack(queue, track))
 }
