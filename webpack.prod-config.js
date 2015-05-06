@@ -13,6 +13,10 @@ module.exports = {
   plugins: [
     new webpack.NoErrorsPlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.DefinePlugin({
+      __DEV__: "false"
+    })
   ],
 
   resolve: {

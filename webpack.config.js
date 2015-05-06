@@ -14,6 +14,9 @@ module.exports = {
 
   plugins: [
     new webpack.NoErrorsPlugin(),
+    new webpack.DefinePlugin({
+      __DEV__: "true"
+    })
   ],
 
   resolve: {

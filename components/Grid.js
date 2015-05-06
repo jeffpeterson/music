@@ -1,6 +1,7 @@
 import {css} from 'lib'
 import {Base} from './Base'
 import {GridTrack} from './GridTrack'
+import {actions} from 'core/reactor'
 
 export class Grid extends Base {
   render() {
@@ -11,7 +12,8 @@ export class Grid extends Base {
   }
 
   play(track) {
-    return this.props.controls.play(track)
+    return actions.addToQueue(track)
+    // return this.props.controls.play(track)
   }
 }
 

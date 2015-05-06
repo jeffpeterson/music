@@ -155,6 +155,35 @@ export class App extends Base {
     })
   }
 
+  loadNextPage({isLoading, tracks, query}) {
+    return new Promise((resolve, reject) => {
+      requestAnimationFrame(() => {
+        if (isLoading) {
+          return
+        }
+
+        debug('loading next page with offset:', this.state.tracks.length)
+
+        this.setState({ isLoading: true })
+
+        return this.request({
+          offset: this.state.tracks.length,
+          query: this.state.query
+        })
+        .then(tracks => {
+          lib.debug('received', tracks.length, 'tracks')
+
+          this.setState({
+            isLoading: false,
+            tracks: uniqTracks(this.state.tracks.concat(tracks))
+          })
+        })
+        .catch(e => {
+          this.setState({isLoading: false})
+        })
+      })
+    })
+  }
 
   currentTrack() {
     return this.state.queue[0]

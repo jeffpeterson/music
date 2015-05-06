@@ -2,15 +2,23 @@
   "name": "music",
   "version": "1.0.0",
   "dependencies": {
-    "chloroform": "1.1.0",
-    "flux": "2.0.1",
-    "immutable": "3.6.4",
-    "react": "0.13.0"
+    "chloroform": "*",
+    "flux": "*",
+    "immutable": "*",
+    "react": "*"
   },
   "devDependencies": {
-    "babel-loader": "4.1.0",
-    "react-hot-loader": "1.2.3",
-    "webpack": "1.7.3",
-    "webpack-dev-server": "1.7.0"
+    "babel": "*",
+    "babel-loader": "*",
+    "react-hot-loader": "*",
+    "webpack": "*",
+    "jest-cli": "*",
+    "babel-jest": "*",
+    "webpack-dev-server": "*"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "testFileExtensions": ["es6", "js"],
+    "moduleFileExtensions": ["js", "json", "es6"]
   }
 }
