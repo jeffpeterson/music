@@ -15,8 +15,12 @@ export class AppContainer extends BaseContainer {
     window.addEventListener('keydown', this.onKeyDown)
   }
 
+  calculateState(state) {
+    return state
+  }
+
   render() {
-    let props = {}
+    let props = this.state
 
     return (
       <App {...props} />

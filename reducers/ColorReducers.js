@@ -9,9 +9,9 @@ let ColorState = Record({
 }, 'ColorState')
 
 export function init() {
-  return new ColorState()
+  return ColorState()
 }
 
-export function receiveColorsFromAlbum(state, colors) {
+export function colorsReceivedFromAlbum(state, colors) {
   return state.merge(colors)
 }

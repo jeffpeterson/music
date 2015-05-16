@@ -1,23 +1,20 @@
-import {mergeReducers} from 'yak/mergeReducers'
-import {makeStoreFromReducer} from 'yak/makeStoreFromReducer'
+import {makeStoreFromNestedReducers} from 'yak/makeStoreFromNestedReducers'
 
 import {Dispatcher} from './Dispatcher'
 
-import * as PlayerReducer from 'reducers/PlayerReducer'
-import * as QueueReducer from 'reducers/QueueReducer'
+import * as ColorReducers from 'reducers/ColorReducers'
+import * as PlayStateReducers from 'reducers/PlayStateReducers'
+import * as QueueReducers from 'reducers/QueueReducers'
+import * as ScrubberReducers from 'reducers/ScrubberReducers'
+import * as SearchReducers from 'reducers/SearchReducers'
 
-let reducer = mergeReducers({
-  queue: QueueReducer,
-  player: PlayerReducer,
+export let Store = makeStoreFromNestedReducers({
+  colors: ColorReducers,
+  playState: PlayStateReducers,
+  queue: QueueReducers,
+  scrubber: ScrubberReducers,
+  search: SearchReducers,
   log: (_, action) => {console.log("Action", action.type)}
 })
 
-export let Store = makeStoreFromReducer(reducer)
 Dispatcher.register(Store.handleAction)
-
-
-// FIND HOMES FOR THIS STATE:
-// tracks: [],
-// favorites: [],
-// isLoading: true,
-// scrubTime: 0,

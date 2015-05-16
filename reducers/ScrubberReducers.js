@@ -5,9 +5,9 @@ let ScrubberState = Record({
 }, 'ScrubberState')
 
 export function init() {
-  return new ScrubberState()
+  return ScrubberState()
 }
 
-export function setScrubTime(state, time) {
+export function scrubTimeChanged(state, time) {
   return state.set('time', time)
 }

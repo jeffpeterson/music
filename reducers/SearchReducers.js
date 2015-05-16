@@ -6,9 +6,9 @@ let SearchState = Record({
 }, 'SearchState')
 
 export function init() {
-  return new SearchState()
+  return SearchState()
 }
 
-export function setSearchQuery(state, {query}) {
+export function searchQuerySet(state, {query}) {
   return state.set('query', query)
 }
