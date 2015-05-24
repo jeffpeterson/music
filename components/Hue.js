@@ -6,6 +6,11 @@ import {Base} from './Base'
 export class Hue extends Base {
   render() {
     let {props: {colors, bassLevel}} = this
+
+    if (!colors || ! colors.background) {
+      return null;
+    }
+
     let c = isBright(colors.background) ?
       colors.background : isBright(colors[0]) ?
         colors[0] : colors[1]

@@ -28,6 +28,7 @@ export class Player extends Base {
 
   render() {
     return <audio
+      crossOrigin="anonymous"
       src={mp3url(this.props.track)}
       ref="audio"
       autoPlay={true} />
