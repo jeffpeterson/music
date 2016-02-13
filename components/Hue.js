@@ -27,7 +27,7 @@ export class Hue extends Base {
 
 function send(i, data) {
   return request({
-    data: {transitiontime: 300, ...data},
+    data: {transitiontime: 3, ...data},
     url: `http://192.168.1.5/api/arsinh1234/lights/${i}/state`,
     method: 'put',
   })
