@@ -1,7 +1,7 @@
 import {css} from 'lib'
-import {Base} from './Base'
+import Base from './Base'
 
-export class GridTrack extends Base {
+export default class GridTrack extends Base {
   render() {
     let {track, onClick} = this.props
     let {handleDragStart} = this

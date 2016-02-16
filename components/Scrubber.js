@@ -1,9 +1,9 @@
 import React from 'react'
 import {css} from 'lib'
-import {Base} from './Base'
+import Base from './Base'
 import {rgb, rgba} from 'lib/color'
 
-export class Scrubber extends Base {
+export default class Scrubber extends Base {
   constructor(props) {
     super(props)
   }

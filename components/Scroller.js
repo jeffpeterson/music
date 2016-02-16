@@ -2,9 +2,9 @@ import React from 'react'
 
 import {now} from 'lib/time'
 import {css, debug} from 'lib'
-import {Base} from './Base'
+import Base from './Base'
 
-export class Scroller extends Base {
+export default class Scroller extends Base {
   constructor(props) {
     super(props)
 

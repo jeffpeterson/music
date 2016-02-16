@@ -1,8 +1,8 @@
 import {css} from 'lib'
-import {Base} from './Base'
+import Base from './Base'
 import {rgb, rgba} from 'lib/color'
 
-export class Header extends Base {
+export default class Header extends Base {
   constructor(props) {
     super(props)
 

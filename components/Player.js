@@ -1,8 +1,8 @@
 import lib from 'lib'
-import {Base} from './Base'
+import Base from './Base'
 import React from 'react'
 
-export class Player extends Base {
+export default class Player extends Base {
   componentDidMount() {
     var el = React.findDOMNode(this.refs.audio)
     this.props.ctx.setEl(el)

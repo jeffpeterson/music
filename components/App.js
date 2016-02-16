@@ -8,18 +8,18 @@ import {rgb} from 'lib/color'
 let ctx = lib.ctx()
 
 import './Ratio'
-import {Base} from './Base'
-import {Hue} from './Hue'
-import {Player} from './Player'
-import {Header} from'./Header'
-import {Grid} from './Grid'
-import {Queue} from './Queue'
-import {Scroller} from './Scroller'
-import {Scrubber} from './Scrubber'
-import {WaveForm} from './WaveForm'
-import {Search} from './Search'
+import Base from './Base'
+import Hue from './Hue'
+import Player from './Player'
+import Header from'./Header'
+import Grid from './Grid'
+import Queue from './Queue'
+import Scroller from './Scroller'
+import Scrubber from './Scrubber'
+import WaveForm from './WaveForm'
+import Search from './Search'
 
-export class App extends Base {
+export default class App extends Base {
   constructor(props) {
     super(props)
 

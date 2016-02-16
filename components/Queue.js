@@ -1,8 +1,8 @@
 import {css} from 'lib'
-import {Base} from './Base'
-import {QueueTrack} from './QueueTrack'
+import Base from './Base'
+import QueueTrack from './QueueTrack'
 
-export class Queue extends Base {
+export default class Queue extends Base {
   render() {
     return (
       <div

@@ -1,9 +1,9 @@
 import React from 'react'
 import request from 'lib/request'
 
-import {Base} from './Base'
+import Base from './Base'
 
-export class Hue extends Base {
+export default class Hue extends Base {
   render() {
     let {props: {colors, bassLevel}} = this
 

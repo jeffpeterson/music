@@ -1,5 +1,5 @@
 import {css} from 'lib'
-import {Base} from './Base'
+import Base from './Base'
 
 function artUrl(track) {
   var url = track.artwork_url || track.user.avatar_url || ''
@@ -7,7 +7,7 @@ function artUrl(track) {
 }
 
 
-export class QueueTrack extends Base {
+export default class QueueTrack extends Base {
   render() {
     var style = {
       backgroundImage: 'url(' + artUrl(this.props.track) + ')',

@@ -1,8 +1,8 @@
 import {css} from 'lib'
 import {key} from 'lib/keyboard'
-import {Base} from './Base'
+import Base from './Base'
 
-export class Search extends Base {
+export default class Search extends Base {
   constructor(props) {
     super(props)
 

@@ -1,9 +1,9 @@
 import {css} from 'lib'
-import {Base} from './Base'
+import Base from './Base'
 import React from 'react'
 import {rgb, rgba, mix} from 'lib/color'
 
-export class WaveForm extends Base {
+export default class WaveForm extends Base {
   componentDidMount() {
     var bassDelta = 0
     var analyser = this.props.ctx.analyser

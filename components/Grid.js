@@ -1,8 +1,8 @@
 import {css} from 'lib'
-import {Base} from './Base'
-import {GridTrack} from './GridTrack'
+import Base from './Base'
+import GridTrack from './GridTrack'
 
-export class Grid extends Base {
+export default class Grid extends Base {
   render() {
     let tracks = this.props.tracks
     .map(track => <GridTrack track={track} onClick={this.play.bind(this, track)} key={track.id} />)
