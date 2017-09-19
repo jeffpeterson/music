@@ -11,6 +11,7 @@ export default class Search extends Base {
     this.onChange = this.onChange.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
   }
+
   render() {
     let {
       onChange,

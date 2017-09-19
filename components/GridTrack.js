@@ -2,22 +2,33 @@ import {css} from 'lib'
 import Base from './Base'
 
 export default class GridTrack extends Base {
+  constructor(props) {
+    super(props)
+
+    this.handleClick = this.handleClick.bind(this)
+    this.handleDragStart = this.handleDragStart.bind(this)
+  }
+
   render() {
-    let {track, onClick} = this.props
-    let {handleDragStart} = this
+    let {track} = this.props
 
     var style = {
       backgroundImage: 'url(' + artUrl(track) + ')'
     }
 
     return (
-      <div className="GridTrack Ratio" draggable style={style} onDragStart={handleDragStart.bind(this)} onClick={onClick}>
+      <div className="GridTrack" draggable style={style} onDragStart={this.handleDragStart} onClick={this.handleClick}>
         <div className="GridTrack-content">
           <span className="GridTrack-text GridTrack-artist">{track.user.username}</span>
           <span className="GridTrack-text GridTrack-title">{track.title}</span>
         </div>
       </div>
     )
+  }
+
+  handleClick(e) {
+    let {track, controls} = this.props
+    controls.play(track)
   }
 
   handleDragStart(e) {
@@ -29,14 +40,15 @@ export default class GridTrack extends Base {
 css('.GridTrack', {
   backgroundPosition: 'center',
   backgroundSize: 'cover',
-  float: 'left',
-  position: 'relative',
+  width: '100%',
+  height: '100%',
+  position: 'absolute',
+  top: 0,
+  left: 0
 })
 
-css('.GridTrack::before', {
-  content: "''",
-  display: 'block',
-  paddingTop: '100%',
+css('.GridTrack:active', {
+  transform: 'scale(0.9)',
 })
 
 css('.GridTrack-content', {

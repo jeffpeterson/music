@@ -12,9 +12,8 @@ import Base from './Base'
 import Hue from './Hue'
 import Player from './Player'
 import Header from'./Header'
-import Grid from './Grid'
+import GridTracks from './GridTracks'
 import Queue from './Queue'
-import Scroller from './Scroller'
 import Scrubber from './Scrubber'
 import WaveForm from './WaveForm'
 import Search from './Search'
@@ -107,9 +106,8 @@ export default class App extends Base {
 
         <div className="App-body">
           <Queue controls={controls} tracks={queue} />
-          <Scroller loadNextPage={this.loadNextPage}>
-            <Grid controls={controls} tracks={tracks} />
-          </Scroller>
+
+          <GridTracks loadNextPage={this.loadNextPage} controls={controls} tracks={tracks} />
         </div>
       </div>
     )

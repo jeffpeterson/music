@@ -9,15 +9,21 @@ export default class Scroller extends Base {
   constructor(props) {
     super(props)
 
+    this.expectedResponseTime = 400
+
     this.state = {
       scrollY: 0,
       time: now(),
-      scrollDelta: 0,
     }
+
+    this.handleWheel = this.handleWheel.bind(this)
+  }
+
+  shouldComponentUpdate(nprops, nstate) {
+    return this.state.scrollY !== nstate.scrollY
   }
 
   componentDidUpdate(_, pstate) {
-    return
     if (!this.props.loadNextPage) {
       return
     }
@@ -25,8 +31,13 @@ export default class Scroller extends Base {
     let body = findDOMNode(this.refs.body)
     let height = body.scrollHeight - body.clientHeight
 
-    if (isNextPageNeeded(pstate, this.state, height)) {
-      this.props.loadNextPage()
+    if (isNextPageNeeded(pstate, this.state, height, this.expectedResponseTime)) {
+      let requestStartTime = now()
+      let res = this.props.loadNextPage()
+
+      res && res.then(() => {
+        this.expectedResponseTime = now() - requestStartTime
+      })
     }
   }
 
@@ -38,7 +49,7 @@ export default class Scroller extends Base {
     }
 
     return (
-      <div className='Scroller' onWheel={this.handleWheel()}>
+      <div className='Scroller' onWheel={this.handleWheel}>
         <div className='Scroller-body' ref="body" style={bodyStyle}>
           {this.props.children}
         </div>
@@ -46,27 +57,21 @@ export default class Scroller extends Base {
     )
   }
 
-  handleWheel() {
-    return (e) => {
-      e.preventDefault()
+  handleWheel(e) {
+    e.preventDefault()
 
-      if (e.deltaY === 0) {
-        return
-      }
-
-      var scrollY = Math.max(0, this.state.scrollY + e.deltaY)
-
-      this.setState({
-        scrollY: scrollY,
-        scrollDelta: scrollY - this.state.scrollY,
-        time: now()
-      })
+    if (e.deltaY === 0) {
+      return
     }
+
+    var scrollY = Math.max(0, this.state.scrollY + e.deltaY)
+    let time = now()
+
+    this.setState({scrollY, time})
   }
 }
 
 Scroller.defaultProps = {
-  onUpdate: null,
   loadNextPage: null,
 }
 

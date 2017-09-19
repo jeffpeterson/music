@@ -1,20 +1,26 @@
 import {css} from 'lib'
 import Base from './Base'
-import GridTrack from './GridTrack'
+import GridItem from './GridItem'
+import Scroller from './Scroller'
 
 export default class Grid extends Base {
   render() {
-    let tracks = this.props.tracks
-    .map(track => <GridTrack track={track} onClick={this.play.bind(this, track)} key={track.id} />)
+    let {
+      props: {children, loadNextPage}
+    } = this
 
-    return <div className="Grid">{tracks}</div>
-  }
+    let items = children.map(child => (
+      <GridItem key={child.key}>{child}</GridItem>
+    ))
 
-  play(track) {
-    return this.props.controls.play(track)
+    return (
+      <Scroller loadNextPage={loadNextPage}>
+        <div className="Grid">{items}</div>
+      </Scroller>
+    )
   }
 }
 
 css('.Grid', {
-  transform: "translate3d(0,0,0)"
+  transform: "translate3d(0,0,0)",
 })

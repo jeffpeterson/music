@@ -1,4 +1,3 @@
-import React from 'react'
 import request from 'lib/request'
 
 import Base from './Base'
@@ -27,7 +26,7 @@ export default class Hue extends Base {
 
 function send(i, data) {
   return request({
-    data: {transitiontime: 3, ...data},
+    data: {transitiontime: 0, ...data},
     url: `http://192.168.1.5/api/arsinh1234/lights/${i}/state`,
     method: 'put',
   })

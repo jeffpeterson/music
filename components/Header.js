@@ -1,5 +1,5 @@
-import {css} from 'lib'
 import Base from './Base'
+import {css, translate, linearGradient} from 'lib/css'
 import {rgb, rgba} from 'lib/color'
 
 export default class Header extends Base {
@@ -8,6 +8,7 @@ export default class Header extends Base {
 
     this.state = {
       alpha: 0.9,
+      hover: false,
     }
   }
 
@@ -18,8 +19,8 @@ export default class Header extends Base {
       <div
         className="Header"
         style={this.style()}
-        onMouseEnter={this.mouseEnterHandler()}
-        onMouseOut={this.mouseOutHandler()}>
+        onMouseEnter={this.handleMouseEnter.bind(this)}
+        onMouseOut={this.handleMouseOut.bind(this)}>
 
         {children}
       </div>
@@ -28,25 +29,29 @@ export default class Header extends Base {
 
   style() {
     let {colors} = this.props
-    let {alpha} = this.state
+    let {hover} = this.state
+
+    let alpha = hover ? 0.98 : 0.9
+    let y = hover ? '150px' : 0
 
     return {
       backgroundColor: rgba(colors.background, alpha),
       color: rgb(colors[2]),
+      // transform: translate(0, y, 0),
     }
   }
 
-  mouseEnterHandler() {
-    return () => this.setState({alpha: 0.98})
+  handleMouseEnter() {
+    this.setState({hover: true})
   }
 
-  mouseOutHandler() {
-    return () => this.setState({alpha: 0.9})
+  handleMouseOut() {
+    this.setState({hover: false})
   }
 }
 
 css('.Header', {
-  transition: 'background-color 300ms',
+  transition: 'background-color 300ms, transform 300ms',
   zIndex: 1,
   display: 'flex',
   height: 150,

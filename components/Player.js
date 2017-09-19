@@ -7,10 +7,11 @@ export default class Player extends Base {
   componentDidMount() {
     var el = findDOMNode(this.refs.audio)
     this.props.ctx.setEl(el)
+    this.scrubTo(this.props.scrubTime)
 
     el.addEventListener('ended', this.props.onEnded)
     el.addEventListener('error', this.props.onError)
-    el.addEventListener('timeupdate', this.handleTimeUpdate())
+    el.addEventListener('timeupdate', this.handleTimeUpdate.bind(this))
   }
 
   componentWillUnmount() {
@@ -21,25 +22,32 @@ export default class Player extends Base {
     el.removeEventListener('timeupdate', this.handleTimeUpdate)
   }
 
-  componentDidUpdate(props, state) {
-    if (props.isPlaying ^ this.props.isPlaying) {
+  componentDidUpdate(pprops, pstate) {
+    if (pprops.isPlaying ^ this.props.isPlaying) {
       this.toggle(this.props.isPlaying)
+    }
+
+    if (Math.abs(pprops.scrubTime - this.props.scrubTime) > 1000) {
+      this.scrubTo(this.props.scrubTime)
     }
   }
 
   render() {
+    let {
+      props: {track, isPlaying}
+    } = this
+
     return <audio
       crossOrigin="anonymous"
-      src={mp3url(this.props.track)}
+      src={mp3url(track)}
       ref="audio"
-      autoPlay={true} />
+      autoPlay={isPlaying} />
   }
 
-  handleTimeUpdate() {
-    return (e) => {
-      this.props
-      .updateScrubTime(findDOMNode(this.refs.audio).currentTime * 1000)
-    }
+
+  handleTimeUpdate(e) {
+    this.props
+    .updateScrubTime(findDOMNode(this.refs.audio).currentTime * 1000)
   }
 
   toggle(shouldPlay) {
@@ -65,6 +73,7 @@ export default class Player extends Base {
 
 Player.defaultProps = {
   updateScrubTime() {},
+  scrubTime: 0,
 }
 
 function id(track) {

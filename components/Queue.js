@@ -20,7 +20,7 @@ export default class Queue extends Base {
         track={track}
         index={index}
         key={track.id}
-        onClick={this.play.bind(this, track)} />
+        controls={this.props.controls} />
     ))
   }
 
@@ -31,10 +31,6 @@ export default class Queue extends Base {
   handleDrop(e) {
     var track = JSON.parse(e.dataTransfer.getData('application/json'))
     this.props.controls.addToQueue(track)
-  }
-
-  play(track) {
-    this.props.controls.play(track)
   }
 }
 
