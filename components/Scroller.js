@@ -19,10 +19,6 @@ export default class Scroller extends Base {
     this.handleWheel = this.handleWheel.bind(this)
   }
 
-  shouldComponentUpdate(nprops, nstate) {
-    return this.state.scrollY !== nstate.scrollY
-  }
-
   componentDidUpdate(_, pstate) {
     if (!this.props.loadNextPage) {
       return

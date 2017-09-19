@@ -193,6 +193,7 @@ export default class App extends Base {
       query: this.state.query
     })
     .then(tracks => {
+      lib.debug('loaded first page', tracks.length)
       this.setState({ tracks, isLoading: false })
     })
   }
