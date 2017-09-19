@@ -1,3 +1,5 @@
+import {findDOMNode} from 'react-dom'
+
 import {css} from 'lib'
 import {key} from 'lib/keyboard'
 import Base from './Base'
@@ -39,7 +41,7 @@ export default class Search extends Base {
     case 'return':
       this.handleReturn(e)
     case 'esc':
-      React.findDOMNode(this).blur()
+      findDOMNode(this).blur()
     }
   }
 }

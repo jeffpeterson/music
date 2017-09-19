@@ -1,3 +1,4 @@
+import lib from '../lib'
 var request = require('../lib/request')
 
 module.exports = tracks
@@ -14,7 +15,7 @@ function tracks(options) {
     path: '/tracks.json',
     data: {
       limit, offset, q,
-      client_id: '6da9f906b6827ba161b90585f4dd3726'
+      client_id: lib.CLIENT_ID
     }
   })
 }

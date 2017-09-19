@@ -1,10 +1,11 @@
 import lib from 'lib'
 import Base from './Base'
 import React from 'react'
+import {findDOMNode} from 'react-dom'
 
 export default class Player extends Base {
   componentDidMount() {
-    var el = React.findDOMNode(this.refs.audio)
+    var el = findDOMNode(this.refs.audio)
     this.props.ctx.setEl(el)
 
     el.addEventListener('ended', this.props.onEnded)
@@ -12,8 +13,8 @@ export default class Player extends Base {
     el.addEventListener('timeupdate', this.handleTimeUpdate())
   }
 
-  componentDidUnmount() {
-    var el = React.findDOMNode(this.refs.audio)
+  componentWillUnmount() {
+    var el = findDOMNode(this.refs.audio)
 
     el.removeEventListener('ended', this.props.onEnded)
     el.removeEventListener('error', this.props.onError)
@@ -37,7 +38,7 @@ export default class Player extends Base {
   handleTimeUpdate() {
     return (e) => {
       this.props
-      .updateScrubTime(React.findDOMNode(this.refs.audio).currentTime * 1000)
+      .updateScrubTime(findDOMNode(this.refs.audio).currentTime * 1000)
     }
   }
 
@@ -46,19 +47,19 @@ export default class Player extends Base {
   }
 
   scrubTo(ms) {
-    React.findDOMNode(this.refs.audio).currentTime = ms / 1000
+    findDOMNode(this.refs.audio).currentTime = ms / 1000
   }
 
   play() {
     lib.debug('playing', id(this.props.track))
 
-    React.findDOMNode(this.refs.audio).play()
+    findDOMNode(this.refs.audio).play()
   }
 
   pause() {
     lib.debug('pausing', id(this.props.track))
 
-    React.findDOMNode(this.refs.audio).pause()
+    findDOMNode(this.refs.audio).pause()
   }
 }
 
@@ -71,5 +72,5 @@ function id(track) {
 }
 
 function mp3url(track) {
-  return track && track.stream_url + '?client_id=6da9f906b6827ba161b90585f4dd3726'
+  return track && track.stream_url + '?client_id=' + lib.CLIENT_ID
 }

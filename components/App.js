@@ -63,7 +63,7 @@ export default class App extends Base {
     window.addEventListener('keydown', this.onKeyDown)
   }
 
-  componentDidUnmount() {
+  componentWillUnmount() {
     window.removeEventListener('unload', this.store)
   }
 

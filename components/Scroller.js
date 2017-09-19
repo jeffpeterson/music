@@ -1,4 +1,5 @@
 import React from 'react'
+import {findDOMNode} from 'react-dom'
 
 import {now} from 'lib/time'
 import {css, debug} from 'lib'
@@ -21,7 +22,7 @@ export default class Scroller extends Base {
       return
     }
 
-    let body = React.findDOMNode(this.refs.body)
+    let body = findDOMNode(this.refs.body)
     let height = body.scrollHeight - body.clientHeight
 
     if (isNextPageNeeded(pstate, this.state, height)) {

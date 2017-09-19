@@ -1,13 +1,14 @@
 import {css} from 'lib'
 import Base from './Base'
 import React from 'react'
+import {findDOMNode} from 'react-dom'
 import {rgb, rgba, mix} from 'lib/color'
 
 export default class WaveForm extends Base {
   componentDidMount() {
     var bassDelta = 0
     var analyser = this.props.ctx.analyser
-    var canvas = React.findDOMNode(this)
+    var canvas = findDOMNode(this)
     canvas.width = canvas.clientWidth * window.devicePixelRatio
     canvas.height = canvas.clientHeight * window.devicePixelRatio
     var width = canvas.width

@@ -1,3 +1,4 @@
+import lib from '../lib'
 var request = require('../lib/request')
 
 module.exports = favorites
@@ -13,7 +14,7 @@ function favorites(options) {
     path: '/users/53101589/favorites.json',
     data: {
       limit, offset,
-      client_id: '6da9f906b6827ba161b90585f4dd3726'
+      client_id: lib.CLIENT_ID
     }
   })
 }
