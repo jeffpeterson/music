@@ -34,8 +34,13 @@ export default class WaveForm extends Base {
       let {colors} = that.props
 
       ctx.strokeStyle = rgb(colors[0])
+
+      ctx.shadowBlur = 0
       ctx.fillStyle = rgba(colors.background, 0.08)
       ctx.fillRect(0, 0, width, height)
+
+      ctx.shadowColor = rgba(colors[1], 0.5);
+      ctx.shadowBlur = 30
 
       ctx.beginPath()
 
