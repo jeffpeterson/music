@@ -27,6 +27,9 @@ export default class WaveForm extends Base {
 
     function draw() {
       requestAnimationFrame(draw)
+
+      if (document.hidden) return;
+
       analyser.getByteTimeDomainData(buffer)
       let {colors} = that.props
 
