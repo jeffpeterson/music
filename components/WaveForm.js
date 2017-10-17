@@ -34,7 +34,8 @@ export default class WaveForm extends Base {
       let {colors} = that.props
 
       ctx.strokeStyle = rgb(colors[0])
-      ctx.clearRect(0, 0, width, height)
+      ctx.fillStyle = rgba(colors.background, 0.08)
+      ctx.fillRect(0, 0, width, height)
 
       ctx.beginPath()
 
@@ -52,7 +53,7 @@ export default class WaveForm extends Base {
     } = this
 
     let style = {
-      opacity: isDimmed ? 0.2 : 1
+      opacity: isDimmed ? 0.2 : 0.9
     }
 
     return <canvas style={style} className="WaveForm" />

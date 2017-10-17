@@ -35,7 +35,7 @@ export default class Header extends Base {
     let y = hover ? '150px' : 0
 
     return {
-      backgroundColor: rgba(colors.background, alpha),
+      // backgroundColor: rgba(colors.background, alpha),
       color: rgb(colors[2]),
       // transform: translate(0, y, 0),
     }
