@@ -17,6 +17,7 @@ import Queue from './Queue'
 import Scrubber from './Scrubber'
 import WaveForm from './WaveForm'
 import Search from './Search'
+import Nav from './Nav'
 
 export default class App extends Base {
   constructor(props) {
@@ -79,6 +80,8 @@ export default class App extends Base {
     } = this
     let currentTrack = this.currentTrack()
 
+    const tab = query ? 'search' : 'likes'
+
     return (
       <div className="App" style={this.style()} onKeyDown={onKeyDown}>
         <Hue {...{colors, bassLevel}} />
@@ -102,20 +105,28 @@ export default class App extends Base {
             onChange={this.setQuery}
             onConfirm={this.loadFirstPage} />
 
+          <Nav>
+            <Nav.Item selected={tab == 'stream'}>Stream</Nav.Item>
+            <Nav.Item selected={tab == 'likes'}>Likes</Nav.Item>
+            <Nav.Item selected={tab == 'search'}>Search</Nav.Item>
+          </Nav>
         </Header>
 
         <div className="App-body">
           <Queue controls={controls} tracks={queue} />
 
-          <GridTracks loadNextPage={this.loadNextPage} controls={controls} tracks={tracks} />
+          <GridTracks loadNextPage={this.loadNextPage} tab={tab} controls={controls} tracks={tracks} />
         </div>
       </div>
     )
   }
 
   style() {
+    const {colors} = this.state
+
     return {
-      backgroundColor: rgb(this.state.colors.background)
+      backgroundColor: rgb(colors.background),
+      color: rgb(colors[0]),
     }
   }
 

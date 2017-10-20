@@ -6,11 +6,11 @@ import Grid from './Grid'
 export default class GridTracks extends Base {
   render() {
     let {
-      props: {loadNextPage}
+      props: {loadNextPage, tab}
     } = this
 
     return (
-      <Grid loadNextPage={loadNextPage}>{this.renderTracks()}</Grid>
+      <Grid loadNextPage={loadNextPage} tab={tab}>{this.renderTracks()}</Grid>
     )
   }
 
