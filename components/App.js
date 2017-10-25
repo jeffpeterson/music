@@ -84,9 +84,11 @@ export default class App extends Base {
 
     const tab = query ? 'search' : 'likes'
 
+    // doesn't work over https:
+    // <Hue {...{colors, bassLevel}} />
+
     return (
       <div className="App" style={this.style()} onKeyDown={onKeyDown}>
-        <Hue {...{colors, bassLevel}} />
         <Player {...{ctx, isPlaying}}
           ref="player"
           track={currentTrack}
