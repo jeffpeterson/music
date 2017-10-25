@@ -59,6 +59,7 @@ export default class App extends Base {
   componentDidMount() {
     this.loadFirstPage()
     this.changeColorsToMatchTrack(this.currentTrack())
+    this.loadHash()
     window.addEventListener('unload', this.store)
     window.addEventListener('keydown', this.onKeyDown)
   }
@@ -70,6 +71,7 @@ export default class App extends Base {
   componentWillUpdate(props, state) {
     if (state.queue[0] !== this.state.queue[0]) {
       this.changeColorsToMatchTrack(state.queue[0])
+      this.setHash(state.queue[0])
     }
   }
 
@@ -155,7 +157,24 @@ export default class App extends Base {
 
     var queue = addTrackToQueue(this.state.queue, track)
     queue = rotateQueueToTrack(queue, track)
-    return this.setState({queue, isPlaying: true})
+
+    const tracks = addTrack(this.state.tracks, track)
+
+    return this.setState({
+      tracks,
+      queue,
+      isPlaying: true
+    })
+  }
+
+  playTrackId(id) {
+    const track = this.state.tracks[id]
+
+    if (track) {
+      this.play(track)
+    } else {
+      client.track(id).then(t => this.play(t))
+    }
   }
 
   pause() {
@@ -239,6 +258,22 @@ export default class App extends Base {
 
   currentTrack() {
     return this.state.queue[0]
+  }
+
+  loadHash() {
+    const hash = window.location.hash.slice(1)
+    const [_, name, id] = hash.match(/^\/(tracks)\/([^\/]+)$/) || []
+
+    if (id) {
+      this.playTrackId(id)
+    }
+  }
+
+  setHash(track) {
+    if (!track) return
+
+    const hash = `#/tracks/${track.id}`
+    history.replaceState({}, document.title, location.pathname + hash)
   }
 
   changeColorsToMatchTrack(track) {
@@ -340,6 +375,10 @@ function rotateQueue(queue, n) {
 
 function addTrackToQueue(queue, track) {
   return uniqTracks(queue.concat(track).reverse()).reverse()
+}
+
+function addTrack(tracks, track) {
+  return uniqTracks(tracks.concat(track))
 }
 
 function removeTrackFromQueue(queue, track) {

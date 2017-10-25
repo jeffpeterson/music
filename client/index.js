@@ -1,4 +1,5 @@
 module.exports = {
   favorites: require('./favorites'),
-  tracks: require('./tracks')
+  tracks: require('./tracks'),
+  track: require('./track'),
 }
