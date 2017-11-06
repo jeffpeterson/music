@@ -30,6 +30,11 @@ export default class QueueTrack extends Base {
     return (
       <div className='QueueTrack Ratio' style={style} onClick={onClick}>
         <div className='QueueTrack-remove' onClick={onRemove} />
+
+        <div className="QueueTrack-content">
+          <span className="QueueTrack-text QueueTrack-artist">{track.user.username}</span>
+          <span className="QueueTrack-text QueueTrack-title">{track.title}</span>
+        </div>
       </div>
     )
   }
@@ -71,11 +76,12 @@ css('.QueueTrack:last-child', {
 css('.QueueTrack-remove', {
   position: 'absolute',
   right: 0,
-  bottom: 0,
   color: 'white',
   top: 0,
   display: 'none',
-  padding: 5,
+  padding: '4px 2px 1px',
+  margin: 3,
+  backgroundColor: 'rgba(0,0,0, 0.4)',
 })
 
 css('.QueueTrack-remove::before', {
@@ -86,6 +92,40 @@ css('.QueueTrack-remove::before', {
 
 css('.QueueTrack:hover .QueueTrack-remove', {
   display: 'block'
+})
+
+css('.QueueTrack-content', {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  bottom: 0,
+  right: 0,
+  lineHeight: 24,
+  color: 'white',
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-end',
+  flexDirection: 'column',
+  visibility: 'hidden',
+})
+
+css('.QueueTrack:hover .QueueTrack-content', {
+  visibility: 'visible',
+})
+
+
+css('.QueueTrack-text', {
+  display: 'inline-block',
+  margin: '0 5px 5px 5px',
+  padding: 5,
+  lineHeight: '1',
+  backgroundColor: 'rgba(0,0,0, 0.8)',
+  color: 'white',
+})
+
+css('.QueueTrack-artist', {
+  opacity: 0.8,
+  fontSize: '0.9em',
 })
 
 function marginTop(i) {
