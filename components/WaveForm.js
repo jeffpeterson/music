@@ -28,16 +28,19 @@ export default class WaveForm extends Base {
     function draw() {
       requestAnimationFrame(draw)
 
-      if (document.hidden) return;
+      if (document.hidden) return
 
-      analyser.getByteTimeDomainData(buffer)
-      let {colors} = that.props
+      let {colors, isPlaying} = that.props
 
-      ctx.strokeStyle = rgb(colors[0])
 
-      ctx.shadowBlur = 0
       ctx.fillStyle = rgba(colors.background, 0.08)
       ctx.fillRect(0, 0, width, height)
+
+      if (!isPlaying) return
+
+      analyser.getByteTimeDomainData(buffer)
+      ctx.strokeStyle = rgb(colors[0])
+      ctx.shadowBlur = 0
 
       ctx.shadowColor = rgba(colors[1], 0.5);
       ctx.shadowBlur = 30

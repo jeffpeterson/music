@@ -102,7 +102,7 @@ export default class App extends Base {
             duration={currentTrack && currentTrack.duration}
             onScrub={this.handleScrubTimeUpdate} />
 
-          <WaveForm {...{ctx, currentTrack, colors, setBassLevel}}
+          <WaveForm {...{isPlaying, ctx, currentTrack, colors, setBassLevel}}
             isDimmed={!!query} />
 
           <Search {...{query}}
