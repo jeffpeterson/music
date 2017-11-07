@@ -1,6 +1,11 @@
 bin := node_modules/.bin
 
+all: open watch
+
 start: watch
+
+open:
+	open http://localhost:4321
 
 build:
 	NODE_ENV=production $(bin)/webpack --optimize-minimize --optimize-dedupe --config webpack.prod-config.js

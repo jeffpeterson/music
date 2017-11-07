@@ -11,14 +11,19 @@ export default class WaveForm extends Base {
     var canvas = findDOMNode(this)
     canvas.width = canvas.clientWidth * window.devicePixelRatio
     canvas.height = canvas.clientHeight * window.devicePixelRatio
-    var width = canvas.width
-    var height = canvas.height
-    var ctx = canvas.getContext('2d')
 
     analyser.fftSize = this.props.fftSize
-    analyser.smoothingTimeConstant = 0.5
 
-    var buffer = new Uint8Array(analyser.fftSize)
+    var timeBuffer = new Uint8Array(analyser.fftSize)
+
+    var width = canvas.width
+    var height = canvas.height
+    var h = 0.00390625 * height
+    var l = timeBuffer.length
+    var w = width / l
+    var ctx = canvas.getContext('2d')
+
+    // var freqBuffer = new Uint8Array(analyser.frequencyBinCount)
     var that = this
 
     ctx.lineWidth = 4
@@ -33,22 +38,37 @@ export default class WaveForm extends Base {
       let {colors, isPlaying} = that.props
 
 
-      ctx.fillStyle = rgba(colors.background, 0.08)
+      ctx.fillStyle = rgba(colors.background, 0.1)
       ctx.fillRect(0, 0, width, height)
 
       if (!isPlaying) return
 
-      analyser.getByteTimeDomainData(buffer)
-      ctx.strokeStyle = rgb(colors[0])
-      ctx.shadowBlur = 0
+      // analyser.getByteFrequencyData(freqBuffer)
 
+      // ctx.shadowBlur = 0
+      // ctx.fillStyle = rgba(colors[1], 0.9)
+
+      // for (let i = 0, l = freqBuffer.length, w = width / l; i < l; i++) {
+      //   let f = 0.00390625 * freqBuffer[i] / 2
+
+      //   ctx.fillRect(
+      //     i * w,
+      //     (1 - f) * height,
+      //     (i + 1) * w,
+      //     f * height,
+      //   )
+      // }
+
+      analyser.getByteTimeDomainData(timeBuffer)
+      ctx.strokeStyle = rgba(colors[0], 1)
       ctx.shadowColor = rgba(colors[1], 0.5);
       ctx.shadowBlur = 30
 
       ctx.beginPath()
 
-      for (let i = 0, l = buffer.length; i < l; i++) {
-        ctx.lineTo(i * width / l, 0.00390625 * buffer[i] * height)
+      for (let i = 0; i < l; i++) {
+        let scale = i / l
+        ctx.lineTo(i * w, h * timeBuffer[i])
       }
 
       stroke(ctx)
