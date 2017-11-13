@@ -205,7 +205,7 @@ export default class App extends Base {
 
   advanceQueue() {
     var queue = rotateQueue(this.state.queue, 1)
-    return this.setState({queue})
+    return this.setState({queue, scrubTime: 0})
   }
 
   setQuery(query) {
@@ -284,6 +284,7 @@ export default class App extends Base {
     }
 
     Chloroform.analyze(artUrl(track), colors => {
+      lib.debug("Colors changed: ", colors)
       this.setState({ colors: colors })
     })
   }

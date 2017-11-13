@@ -9,7 +9,7 @@ export default class Player extends Base {
     this.props.ctx.setEl(el)
     this.scrubTo(this.props.scrubTime)
 
-    el.addEventListener('ended', this.props.onEnded)
+    el.addEventListener('ended', this.ended)
     el.addEventListener('error', this.props.onError)
     el.addEventListener('timeupdate', this.handleTimeUpdate.bind(this))
   }
@@ -68,6 +68,11 @@ export default class Player extends Base {
     lib.debug('pausing', id(this.props.track))
 
     findDOMNode(this.refs.audio).pause()
+  }
+
+  ended = e => {
+    this.props.onEnded()
+    this.play()
   }
 }
 

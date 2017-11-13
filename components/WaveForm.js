@@ -1,4 +1,4 @@
-import {css} from 'lib'
+import {css, debug} from 'lib'
 import Base from './Base'
 import React from 'react'
 import {findDOMNode} from 'react-dom'
@@ -37,7 +37,7 @@ export default class WaveForm extends Base {
 
       let {colors, isPlaying} = that.props
 
-
+      ctx.shadowBlur = 0
       ctx.fillStyle = rgba(colors.background, 0.1)
       ctx.fillRect(0, 0, width, height)
 
@@ -60,6 +60,7 @@ export default class WaveForm extends Base {
       // }
 
       analyser.getByteTimeDomainData(timeBuffer)
+
       ctx.strokeStyle = rgba(colors[0], 1)
       ctx.shadowColor = rgba(colors[1], 0.5);
       ctx.shadowBlur = 30
@@ -71,7 +72,7 @@ export default class WaveForm extends Base {
         ctx.lineTo(i * w, h * timeBuffer[i])
       }
 
-      stroke(ctx)
+      ctx.stroke()
     }
   }
 
@@ -89,7 +90,7 @@ export default class WaveForm extends Base {
 }
 
 WaveForm.defaultProps = {
-  fftSize: 2048,
+  fftSize: 1024,
   isDimmed: false,
   colors: {0: '255,255,255', 1: '255,255,255'},
 }
@@ -113,8 +114,4 @@ function incAvg(avg, x, i) {
 
 function avg(nums) {
   return nums.reduce(incAvg)
-}
-
-function stroke(ctx) {
-  return ctx.stroke()
 }

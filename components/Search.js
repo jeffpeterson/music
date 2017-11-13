@@ -64,14 +64,20 @@ css({
     lineHeight: 150,
     outline: 'none',
     padding: '0 20px',
+    transition: 'all 300ms ease-in-out',
   },
 
-  ".Search::-webkit-input-placeholder": {
+  ".Search::placeholder": {
     opacity: '0',
     color: 'inherit',
+    transition: 'all 300ms ease-in-out',
   },
 
-  ".Search:focus::-webkit-input-placeholder": {
-    opacity: '0.2'
-  }
+  ".Search:hover::placeholder": {
+    opacity: '0.9'
+  },
+
+  ".Search:focus::placeholder": {
+    opacity: '0.5'
+  },
 })
