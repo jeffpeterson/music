@@ -7,47 +7,32 @@ export default class Player extends Base {
   componentDidMount() {
     var el = findDOMNode(this.refs.audio)
     this.props.ctx.setEl(el)
-    this.scrubTo(this.props.scrubTime)
-
-    el.addEventListener('ended', this.ended)
-    el.addEventListener('error', this.props.onError)
-    el.addEventListener('timeupdate', this.handleTimeUpdate.bind(this))
-  }
-
-  componentWillUnmount() {
-    var el = findDOMNode(this.refs.audio)
-
-    el.removeEventListener('ended', this.props.onEnded)
-    el.removeEventListener('error', this.props.onError)
-    el.removeEventListener('timeupdate', this.handleTimeUpdate)
+    this.scrubTo(this.props.playState.scrubTime)
   }
 
   componentDidUpdate(pprops, pstate) {
-    if (pprops.isPlaying ^ this.props.isPlaying) {
-      this.toggle(this.props.isPlaying)
+    if (pprops.playState.isPlaying ^ this.props.playState.isPlaying) {
+      this.toggle(this.props.playState.isPlaying)
     }
 
-    if (Math.abs(pprops.scrubTime - this.props.scrubTime) > 1000) {
-      this.scrubTo(this.props.scrubTime)
+    if (Math.abs(pprops.playState.scrubTime - this.props.playState.scrubTime) > 1000) {
+      this.scrubTo(this.props.playState.scrubTime)
     }
   }
 
   render() {
-    let {
-      props: {track, isPlaying}
+    const {
+      props: {track, playState}
     } = this
 
     return <audio
+      ref="audio"
       crossOrigin="anonymous"
       src={mp3url(track)}
-      ref="audio"
-      autoPlay={isPlaying} />
-  }
-
-
-  handleTimeUpdate(e) {
-    this.props
-    .updateScrubTime(findDOMNode(this.refs.audio).currentTime * 1000)
+      onEnded={this.ended}
+      onError={this.error}
+      onTimeUpdate={this.timeUpdate}
+      autoPlay={playState.isPlaying} />
   }
 
   toggle(shouldPlay) {
@@ -70,14 +55,21 @@ export default class Player extends Base {
     findDOMNode(this.refs.audio).pause()
   }
 
+  timeUpdate = e => {
+    const t = findDOMNode(this.refs.audio).currentTime * 1000
+    this.props.dispatch('PLAY_TIME_UPDATED', t)
+  }
+
   ended = e => {
-    this.props.onEnded()
-    this.play()
+    this.props.dispatch('PLAY_ENDED', null)
+  }
+
+  error = e => {
+    this.props.dispatch('PLAY_ERRORED', null)
   }
 }
 
 Player.defaultProps = {
-  updateScrubTime() {},
   scrubTime: 0,
 }
 

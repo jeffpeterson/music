@@ -4,6 +4,7 @@ import client from 'client'
 import {key} from 'lib/keyboard'
 import {css} from 'lib/css'
 import {rgb} from 'lib/color'
+import {currentTrack} from '../logic/State'
 
 let ctx = lib.ctx()
 
@@ -18,96 +19,42 @@ import Scrubber from './Scrubber'
 import WaveForm from './WaveForm'
 import Search from './Search'
 import Nav from './Nav'
+import Window from './Window'
 
 export default class App extends Base {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      query: '',
-      tracks: [],
-      favorites: [],
-      isLoading: true,
-      isPlaying: true,
-      scrubTime: 0,
-      colors: {},
-      queue: [],
-      bassLevel: 0,
-      ...this.load()
-    }
-
-    this.addToQueue = this.addToQueue.bind(this)
-    this.removeFromQueue = this.removeFromQueue.bind(this)
-    this.setQuery = this.setQuery.bind(this)
-    this.play = this.play.bind(this)
-    this.advanceQueue = this.advanceQueue.bind(this)
-    this.store = this.store.bind(this)
-    this.loadNextPage = this.loadNextPage.bind(this)
-    this.loadFirstPage = this.loadFirstPage.bind(this)
-    this.handleScrubTimeUpdate = this.handleScrubTimeUpdate.bind(this)
-    this.setBassLevel = this.setBassLevel.bind(this)
-    this.onKeyDown = this.onKeyDown.bind(this)
-
-    this.controls = {
-      addToQueue: this.addToQueue,
-      removeFromQueue: this.removeFromQueue,
-      advanceQueue: this.advanceQueue,
-      play: this.play,
-    }
-  }
-
-  componentDidMount() {
-    this.loadFirstPage()
-    this.changeColorsToMatchTrack(this.currentTrack())
-    this.loadHash()
-    window.addEventListener('unload', this.store)
-    window.addEventListener('keydown', this.onKeyDown)
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('unload', this.store)
-  }
-
-  componentWillUpdate(props, state) {
-    if (state.queue[0] !== this.state.queue[0]) {
-      this.changeColorsToMatchTrack(state.queue[0])
-      this.setHash(state.queue[0])
-    }
-  }
-
   render() {
-    let {
-      setBassLevel, onKeyDown, controls,
-      state: {bassLevel, queue, colors, tracks, isPlaying, query, scrubTime}
-    } = this
-    let currentTrack = this.currentTrack()
+    const {state, dispatch} = this.props
 
-    const tab = query ? 'search' : 'likes'
+    const {
+      colors, playState, query, queue, favorites, tracks, tab,
+    } = state
+    const {isPlaying, scrubTime} = playState
+
+    const trackIds = favorites
 
     // doesn't work over https:
     // <Hue {...{colors, bassLevel}} />
 
     return (
-      <div className="App" style={this.style()} onKeyDown={onKeyDown}>
-        <Player {...{ctx, isPlaying}}
+      <div className="App" style={this.style()}>
+        <Window
+          onKeyDown={this.onKeyDown}
+          onUnload={this.store}
+        />
+
+        <Player {...{ctx, playState}}
           ref="player"
-          track={currentTrack}
-          onEnded={this.advanceQueue}
-          onError={this.advanceQueue}
-          scrubTime={scrubTime}
-          updateScrubTime={this.handleScrubTimeUpdate} />
+          track={currentTrack(state)}
+          dispatch={dispatch} />
 
         <Header {...{colors}} >
-          <Scrubber {...{colors, scrubTime}}
-            duration={currentTrack && currentTrack.duration}
-            onScrub={this.handleScrubTimeUpdate} />
+          <Scrubber {...{colors, scrubTime, dispatch}}
+            duration={currentTrack && currentTrack.duration} />
 
-          <WaveForm {...{isPlaying, ctx, currentTrack, colors, setBassLevel}}
+          <WaveForm {...{isPlaying, ctx, currentTrack, colors}}
             isDimmed={!!query} />
 
-          <Search {...{query}}
-            onChange={this.setQuery}
-            onConfirm={this.loadFirstPage} />
+          <Search {...{query, dispatch}} />
 
           <Nav>
             <Nav.Item selected={tab == 'stream'}>Stream</Nav.Item>
@@ -117,16 +64,18 @@ export default class App extends Base {
         </Header>
 
         <div className="App-body">
-          <Queue controls={controls} tracks={queue} />
+          <Queue dispatch={dispatch} tracks={queue} />
 
-          <GridTracks loadNextPage={this.loadNextPage} tab={tab} controls={controls} tracks={tracks} />
+          <GridTracks
+            tracks={trackIds.map(id => tracks.get(id))}
+            {...{tab, dispatch}} />
         </div>
       </div>
     )
   }
 
   style() {
-    const {colors} = this.state
+    const {colors} = this.props.state
 
     return {
       backgroundColor: rgb(colors.background),
@@ -134,66 +83,20 @@ export default class App extends Base {
     }
   }
 
-  handleScrubTimeUpdate(scrubTime) {
-    this.setState({scrubTime})
-  }
+  onKeyDown = e => {
+    const {dispatch} = this.props
 
-  setBassLevel(bassLevel) {
-    this.setState({bassLevel})
-  }
-
-  addToQueue(track) {
-    var queue = addTrackToQueue(this.state.queue, track)
-    return this.setState({queue})
-  }
-
-  removeFromQueue(track) {
-    var queue = removeTrackFromQueue(this.state.queue, track)
-    return this.setState({queue})
-  }
-
-  play(track) {
-    if (!track) {
-      return
-    }
-
-    var queue = addTrackToQueue(this.state.queue, track)
-    queue = rotateQueueToTrack(queue, track)
-
-    const tracks = addTrack(this.state.tracks, track)
-
-    return this.setState({
-      tracks,
-      queue,
-      isPlaying: true
-    })
-  }
-
-  playTrackId(id) {
-    const track = this.state.tracks[id]
-
-    if (track) {
-      this.play(track)
-    } else {
-      client.track(id).then(t => this.play(t))
-    }
-  }
-
-  pause() {
-    this.setState({isPlaying: false})
-  }
-
-  togglePlaying() {
-    this.setState({isPlaying: !this.state.isPlaying})
-  }
-
-  onKeyDown(e) {
     switch (key(e.which)) {
       case 'right':
-        this.advanceQueue()
+        dispatch('RIGHT_KEY_PRESSED', null)
         break
+
+      case 'left':
+        dispatch('LEFT_KEY_PRESSED', null)
+        break
+
       case 'space':
-        this.togglePlaying()
+        dispatch('SPACE_KEY_PRESSED', null)
         break
 
       default:
@@ -201,114 +104,6 @@ export default class App extends Base {
     }
 
     e.preventDefault()
-  }
-
-  advanceQueue() {
-    var queue = rotateQueue(this.state.queue, 1)
-    return this.setState({queue, scrubTime: 0})
-  }
-
-  setQuery(query) {
-    return this.setState({query})
-  }
-
-  request(options) {
-    if (this.state.query) {
-      return client.tracks(options)
-    } else {
-      return client.favorites(options)
-    }
-  }
-
-  loadFirstPage() {
-    this.request({
-      query: this.state.query
-    })
-    .then(tracks => {
-      lib.debug('loaded first page', tracks.length)
-      this.setState({ tracks, isLoading: false })
-    })
-  }
-
-  loadNextPage() {
-    requestAnimationFrame(() => {
-      if (this.state.isLoading) {
-        return
-      }
-
-      lib.debug('loading next page with offset:', this.state.tracks.length)
-
-      this.setState({ isLoading: true })
-
-      return this.request({
-        offset: this.state.tracks.length,
-        query: this.state.query
-      })
-      .then(tracks => {
-        lib.debug('received', tracks.length, 'tracks')
-
-        this.setState({
-          isLoading: false,
-          tracks: uniqTracks(this.state.tracks.concat(tracks))
-        })
-      })
-      .catch(e => {
-        this.setState({isLoading: false})
-      })
-    })
-  }
-
-  currentTrack() {
-    return this.state.queue[0]
-  }
-
-  loadHash() {
-    const hash = window.location.hash.slice(1)
-    const [_, name, id] = hash.match(/^\/(tracks)\/([^\/]+)$/) || []
-
-    if (id) {
-      this.playTrackId(id)
-    }
-  }
-
-  setHash(track) {
-    if (!track) return
-
-    const hash = `#/tracks/${track.id}`
-    history.replaceState({}, document.title, location.pathname + hash)
-  }
-
-  changeColorsToMatchTrack(track) {
-    if (!track) {
-      return
-    }
-
-    Chloroform.analyze(artUrl(track), colors => {
-      lib.debug("Colors changed: ", colors)
-      this.setState({ colors: colors })
-    })
-  }
-
-  store() {
-    var json = JSON.stringify(lib.only(this.state,
-      'queue',
-      'query',
-      'isPlaying',
-      'colors',
-      'scrubTime'
-    ))
-
-    window.localStorage.setItem('App.state', json)
-  }
-
-  load() {
-    var str = window.localStorage.getItem('App.state')
-
-    if (str) {
-      return JSON.parse(str)
-    }
-
-    return {}
   }
 }
 
