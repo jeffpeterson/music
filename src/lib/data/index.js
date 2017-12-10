@@ -3,13 +3,13 @@ import {mapObjIndexed} from 'ramda'
 
 export const ID = String
 
+/// Record({id: ID})({id: 3}).toJS() -> {id: "3"}
 export const Record = (types, name) => {
   const convert = values =>
-    mapObjIndexed((f, k) => f(values[k]),types)
+    mapObjIndexed((f, k) => f(values[k]), types)
 
   const Parent = I.Record(convert({}))
 
-  return values =>
 
 }
 

@@ -4,7 +4,7 @@ module.exports = {
   devtool: "source-map",
   entry: [
   'webpack-dev-server/client?http://0.0.0.0:4321',
-  './index.js'
+  './src/index.js'
   ],
   output: {
     path: __dirname,
@@ -16,7 +16,7 @@ module.exports = {
   ],
 
   resolve: {
-    root: __dirname,
+    root: `${__dirname}/src`,
   },
 
   module: {
