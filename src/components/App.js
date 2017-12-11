@@ -4,7 +4,7 @@ import client from 'client'
 import {key} from 'lib/keyboard'
 import {css} from 'lib/css'
 import {rgb} from 'lib/color'
-import {currentTrack} from '../logic/State'
+import {currentTrack, tracks, queue} from '../logic/State'
 
 let ctx = lib.ctx()
 
@@ -26,11 +26,9 @@ export default class App extends Base {
     const {state, dispatch} = this.props
 
     const {
-      colors, playState, query, queue, favorites, tracks, tab,
+      colors, playState, query, tab,
     } = state
     const {isPlaying, scrubTime} = playState
-
-    const trackIds = favorites
 
     // doesn't work over https:
     // <Hue {...{colors, bassLevel}} />
@@ -64,10 +62,10 @@ export default class App extends Base {
         </Header>
 
         <div className="App-body">
-          <Queue dispatch={dispatch} tracks={queue} />
+          <Queue dispatch={dispatch} tracks={Debug.trace('queue', queue(state))} />
 
           <GridTracks
-            tracks={trackIds.map(id => tracks.get(id))}
+            tracks={tracks(state)}
             {...{tab, dispatch}} />
         </div>
       </div>

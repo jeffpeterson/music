@@ -1,28 +1,21 @@
 import {Status} from '../records/Request'
-
-import client from '../client'
+import {start} from '../logic/Request'
 
 export default dispatch => state => {
   state.requests.map(req => {
     switch (req.status) {
       case Status.Queued:
-        start(req)
-        .then(response => {
-          dispatch('REQUEST_SUCCEEDED', {id: req.id, response})
-        },
-        dispatch('REQUEST_FAILED'))
+        console.log("Starting request:", req)
 
-        dispatch('REQUEST_STARTED', {id: req.id})
+        start(req)
+        .then(result => {
+          dispatch(req.success, {id: req.id, result})
+        },
+        error => dispatch(req.failure, {error}))
+
+        dispatch(req.start, {id: req.id})
+
         break
     }
   })
-}
-
-const start = req => {
-  console.log("Starting request", req)
-
-  switch (req.type) {
-    case 'GET_LIKES':
-      return client.tracks(req.options)
-  }
 }

@@ -2,22 +2,15 @@ import {css} from 'lib'
 import Base from './Base'
 
 export default class GridTrack extends Base {
-  constructor(props) {
-    super(props)
-
-    this.handleClick = this.handleClick.bind(this)
-    this.handleDragStart = this.handleDragStart.bind(this)
-  }
-
   render() {
-    let {track} = this.props
+    let {track, dispatch} = this.props
 
     var style = {
       backgroundImage: 'url(' + artUrl(track) + ')'
     }
 
     return (
-      <div className="GridTrack" draggable style={style} onDragStart={this.handleDragStart} onClick={this.handleClick}>
+      <div className="GridTrack" draggable style={style} onDragStart={this.dragStart} onClick={this.click}>
         <div className="GridTrack-content">
           <span className="GridTrack-text GridTrack-artist">{track.user.username}</span>
           <span className="GridTrack-text GridTrack-title">{track.title}</span>
@@ -26,12 +19,12 @@ export default class GridTrack extends Base {
     )
   }
 
-  handleClick(e) {
-    let {track, controls} = this.props
-    controls.play(track)
+  click = e => {
+    const {dispatch, track} = this.props
+    dispatch('TRACK_CLICKED', {id: track.id})
   }
 
-  handleDragStart(e) {
+  dragStart = e => {
     let {track} = this.props
     e.dataTransfer.setData('application/json', JSON.stringify(track))
   }
@@ -85,6 +78,6 @@ css('.GridTrack-artist', {
 })
 
 function artUrl(track) {
-  var url = track.artwork_url || track.user.avatar_url || ''
+  var url = track.artworkUrl || track.user.avatarUrl || ''
   return url.replace('-large', '-t500x500')
 }

@@ -7,8 +7,8 @@ export default class Queue extends Base {
     return (
       <div
         className="Queue Ratio"
-        onDrop={this.handleDrop.bind(this)}
-        onDragOver={this.handleDragOver}>
+        onDrop={this.drop}
+        onDragOver={this.dragOver}>
         {this.renderTracks()}
       </div>
     )
@@ -24,11 +24,11 @@ export default class Queue extends Base {
     ))
   }
 
-  handleDragOver(e) {
+  dragOver = e => {
     e.preventDefault()
   }
 
-  handleDrop(e) {
+  drop = e => {
     var track = JSON.parse(e.dataTransfer.getData('application/json'))
     this.props.controls.addToQueue(track)
   }

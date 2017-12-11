@@ -2,25 +2,13 @@ import {css} from 'lib'
 import Base from './Base'
 
 function artUrl(track) {
-  var url = track.artwork_url || track.user.avatar_url || ''
+  var url = track.artworkUrl || track.user.avatarUrl || ''
   return url.replace('-large', '-t500x500')
 }
 
-
 export default class QueueTrack extends Base {
-  constructor(props) {
-    super(props)
-
-    this.onClick = this.onClick.bind(this)
-    this.onRemove = this.onRemove.bind(this)
-  }
-
   render() {
-    let {
-      onClick,
-      onRemove,
-      props: {track, index, controls}
-    } = this
+    let {track, index, controls} = this.props
 
     var style = {
       backgroundImage: 'url(' + artUrl(track) + ')',
@@ -28,8 +16,8 @@ export default class QueueTrack extends Base {
     }
 
     return (
-      <div className='QueueTrack Ratio' style={style} onClick={onClick}>
-        <div className='QueueTrack-remove' onClick={onRemove} />
+      <div className='QueueTrack Ratio' style={style} onClick={this.click}>
+        <div className='QueueTrack-remove' onClick={this.remove} />
 
         <div className="QueueTrack-content">
           <span className="QueueTrack-text QueueTrack-artist">{track.user.username}</span>
@@ -39,14 +27,14 @@ export default class QueueTrack extends Base {
     )
   }
 
-  onRemove(e) {
+  remove = e => {
     e.stopPropagation()
     e.preventDefault()
 
     this.props.controls.removeFromQueue(this.props.track)
   }
 
-  onClick() {
+  click = () => {
     this.props.controls.play(this.props.track)
   }
 }

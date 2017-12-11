@@ -1,9 +1,10 @@
-import {identity, pipe, compose, not, indexBy, prop} from 'ramda'
+import {identity, pipe, compose, not, indexBy, prop, map} from 'ramda'
 
-import {addIn, getIn, setIn, mergeIn, updateIn, update} from '../logic/Immutable'
+import {add, addIn, getIn, setIn, mergeIn, updateIn, update, push, concat, rotateTo} from '../logic/Immutable'
 import * as Req from '../logic/Request'
 
 import State from '../records/State'
+import * as SoundCloud from '../logic/SoundCloud'
 
 export default (action) => {
   console.log("Action:", action)
@@ -12,7 +13,7 @@ export default (action) => {
     case 'INIT':
       return pipe(
         State,
-        request('GET_LIKES', {}),
+        request(SoundCloud.favorites()),
       )
 
     case 'SPACE_KEY_PRESSED':
@@ -20,53 +21,63 @@ export default (action) => {
       return togglePlaying
 
     case 'TRACK_CLICKED':
-      return pipe(
-        play,
-        addToQueue(action.id),
-        rotateQueueTo(action.id),
-      )
+      return play(action.id)
 
     case 'REQUEST_STARTED':
       return pipe(
-        update('requests', Req.started(action.id)),
+        updateRequests(Req.started(action.id)),
+      )
+
+    case 'FAVORITES_RECEIVED':
+      return pipe(
+        requestSuccess(action.id),
+        addFavorites(action.result),
       )
 
     case 'REQUEST_SUCCEEDED':
-      return pipe(
-        requestSucceeded(action.id),
-        withRequest(action.id, req => {
-          switch (req.type) {
-            case 'GET_LIKES':
-              return pipe(
-                mergeIn(['tracks'], indexById(action.response)),
-                // addIn(['likes'], action.response.map(prop('id'))),
-              )
-
-            default:
-              return identity
-          }
-        })
-      )
+      return requestSuccess(action.id)
 
     default:
       return identity
   }
 }
 
+const updateFavorites = update('favorites')
+const updateRequests = update('requests')
+const updateQueue = update('queue')
+
+const mergeTracks = mergeIn(['tracks'])
+const ids = map(pipe(prop('id'), String))
+
+const addFavorites = tracks =>
+  pipe(
+    mergeTracks(indexById(SoundCloud.reifyTracks(tracks))),
+    updateFavorites(concat(ids(tracks)))
+  )
+
 const indexById = indexBy(prop('id'))
 
 const withRequest = (id, f) => state => f(state.getIn(['requests', id]))(state)
-const request = compose(update('requests'), Req.push)
-const requestSucceeded = compose(update('requests'), Req.succeeded)
+const requestSuccess = compose(update('requests'), Req.succeeded)
+
+const request = req =>
+  updateRequests(Req.push(req))
 
 // const togglePlaying = updateIn(['playState', 'isPlaying'], not)
-// const play = setIn(['playState', 'isPlaying'], true)
 
-// const addToQueue = id =>
-//   addIn(['queue'], id)
+const playing = setIn(['playState', 'isPlaying'])
 
-// const rotateQueueTo = id => state =>
-//   state.setIn([])
+const play = id =>
+  pipe(
+    playing(true),
+    updateQueue(add(id)),
+    Debug.trace('before rotate'),
+    rotateQueueTo(id),
+    Debug.trace('after rotate'),
+  )
+
+const rotateQueueTo = id =>
+  updateQueue(rotateTo(id))
 
 // var queue = addTrackToQueue(this.state.queue, track)
 // queue = rotateQueueToTrack(queue, track)

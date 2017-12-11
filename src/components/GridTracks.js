@@ -3,26 +3,10 @@ import Base from './Base'
 import GridTrack from './GridTrack'
 import Grid from './Grid'
 
-export default class GridTracks extends Base {
-  render() {
-    let {
-      props: {loadNextPage, tab}
-    } = this
+export default ({tracks, tab, dispatch}) =>
+    <Grid dispatch={dispatch} tab={tab}>
+      {tracks.map(track =>
+        <GridTrack track={track} dispatch={dispatch} key={track.id} />
+      )}
+    </Grid>
 
-    return (
-      <Grid loadNextPage={loadNextPage} tab={tab}>{this.renderTracks()}</Grid>
-    )
-  }
-
-  renderTracks() {
-    let {props: {tracks, controls}} = this
-
-    return tracks.map(track => (
-      <GridTrack track={track} controls={controls} key={track.id} />
-    ))
-  }
-}
-
-GridTracks.defaultProps = {
-  loadNextPage() {},
-}

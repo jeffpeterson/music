@@ -1,16 +1,21 @@
 import I from 'immutable'
 import {mapObjIndexed} from 'ramda'
 
-export const ID = String
+export const defaulted = (T, def) => x =>
+  x != null ? T(x) : def
 
-/// Record({id: ID})({id: 3}).toJS() -> {id: "3"}
+export const ID = String
+export const URL = String
+
+// Record({id: ID})({id: 3}).toJS() -> {id: "3"}
 export const Record = (types, name) => {
-  const convert = values =>
-    mapObjIndexed((f, k) => f(values[k]), types)
+  const convert = (values = {}) =>
+    mapObjIndexed((f, k) => values[k] != null ? f(values[k]) : f(), types)
 
   const Parent = I.Record(convert({}))
 
-
+  return vals =>
+    Parent(convert(vals))
 }
 
 // export const Record = (types, name) => {
@@ -26,5 +31,7 @@ export const Record = (types, name) => {
 //   return Record
 // }
 
-export const Map = (x = {}) => x
-export const List = (x = []) => x
+export const Map = I.Map
+export const List = I.List
+export const OrderedSet = I.OrderedSet
+export const OrderedMap = I.OrderedMap

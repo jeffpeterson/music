@@ -1,14 +1,24 @@
-import {curry, compose, mergeDeepRight} from 'ramda'
+import {compose, mergeDeepRight} from 'ramda'
+import {toJS} from './Immutable'
 import Request, {Status} from '../records/Request'
+import makeRequest from 'lib/request'
 
-export const endpoint = defaults =>
-  compose(Request, mergeDeepRight(defaults))
+export const endpoint = defaults => req =>
+  Request(defaults).mergeDeep(req)
 
-export const push = curry((type, options, reqs) =>
-  reqs.push(Request({id: reqs.size, type, options})))
+export const push = req => reqs =>
+  reqs.push(req.set('id', reqs.size))
 
-export const started = curry((id, reqs) =>
-  reqs.setIn([id, 'status'], Status.Pending))
+export const started = id => reqs =>
+  reqs.setIn([id, 'status'], Status.Pending)
 
-export const succeeded = curry((id, reqs) =>
-  reqs.setIn([id, 'status'], Status.Succeeded))
+export const succeeded = id => reqs =>
+  reqs.setIn([id, 'status'], Status.Succeeded)
+
+export const start = req =>
+  makeRequest({
+    method: req.method,
+    host: req.host,
+    path: req.path,
+    data: toJS(req.params),
+  })
