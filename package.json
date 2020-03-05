@@ -2,6 +2,7 @@
   "name": "music",
   "version": "1.0.0",
   "dependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-polyfill": "^6.5.0",
     "chloroform": "1.1.0",
     "immutable": "4.0.0-rc.9",
